@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
@@ -7,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
@@ -62,25 +62,18 @@
 
             <div>
                 <label for="username" class="block text-sm font-medium text-gray-700">Usuário:</label>
-
-
                 <input type="text" id="username" name="username"
                     class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
 
             </div>
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700">Senha:</label>
-
                 <input type="password" id="password" name="password"
-                    class="mt-1 block w-full px-3 py-2 
-bg-gray-50 border 
-border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                    class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
             </div>
             <button type="submit"
-                class="w-full px-6 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-lg 
-                hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
+                class="w-full px-6 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
                 Entrar
-
             </button>
             <p id="login-message" class="text-red-500 text-sm text-center mt-2 hidden">Usuário ou senha inválidos.
             </p>
@@ -95,8 +88,6 @@ border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-
 
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Lançamento de Corridas</h1>
             </div>
-
-
             <button id="logout-btn"
                 class="absolute top-0 right-0 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded-lg hover:bg-gray-400">Sair</button>
         </div>
@@ -106,13 +97,11 @@ border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-
         <form id="form-corrida" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
 
             <div class="form-row-align">
-
                 <div class="flex-grow">
                     <label for="motorista" class="block text-sm font-medium text-gray-700">Motorista:</label>
                     <input type="text" id="motorista" name="motorista" list="motoristas-list"
                         onfocus="this.classList.remove('error-border')"
-                        class="mt-1 
-                        block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                        class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                     <datalist id="motoristas-list">
                     </datalist>
                 </div>
@@ -126,7 +115,6 @@ border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-
                 <button type="button" id="add-solicitante-btn"
                     class="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-150 ease-in-out">
                     + Adicionar Outro Solicitante
-
                 </button>
             </div>
 
@@ -140,7 +128,6 @@ border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-
             <div class="md:col-span-2 flex justify-center">
                 <button type="button" id="add-passageiro-btn"
                     class="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-150 ease-in-out">
-
                     + Adicionar Outro Passageiro
                 </button>
 
@@ -165,8 +152,8 @@ border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-
                 <div class="flex-grow">
 
                     <label for="origem" class="block text-sm font-medium text-gray-700">Origem:</label>
-                    <input type="text" id="origem" name="origem" onfocus="this.classList.remove('error-border')" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition 
-duration-150 ease-in-out">
+                    <input type="text" id="origem" name="origem" onfocus="this.classList.remove('error-border')"
+                        class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                 </div>
             </div>
 
@@ -176,7 +163,6 @@ duration-150 ease-in-out">
                     <label for="partida" class="block text-sm font-medium text-gray-700">Partida:</label>
                     <input type="time" id="partida" name="partida" onfocus="this.classList.remove('error-border')"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
-
                 </div>
             </div>
 
@@ -189,7 +175,6 @@ duration-150 ease-in-out">
                     <button type="button" id="add-destino-btn"
                         class="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-150 ease-in-out">
                         + Adicionar Outro Destino
-
                     </button>
                 </div>
             </div>
@@ -203,26 +188,20 @@ duration-150 ease-in-out">
                     <button type="button" id="add-valor-btn"
                         class="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-150 ease-in-out">
                         + Adicionar Valor
-
                     </button>
                 </div>
             </div>
 
 
             <div class="md:col-span-2">
-                <label for="observacao" class="block
-text-sm font-medium text-gray-700">Observação:</label>
+                <label for="observacao" class="block text-sm font-medium text-gray-700">Observação:</label>
                 <textarea id="observacao" name="observacao" rows="4"
                     class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"></textarea>
-
             </div>
 
             <div class="md:col-span-2 flex justify-center mt-4">
                 <button type="submit"
-                    class="w-full md:w-1/2 px-6 
-                    py-3
-bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
-
+                    class="w-full md:w-1/2 px-6 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
                     Salvar Lançamento
                 </button>
             </div>
@@ -233,37 +212,27 @@ bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 focus:ou
 
 
         <div class="flex flex-col gap-4 mb-6">
-
-
             <h2 class="text-xl font-bold text-gray-800">Gerar Relatório CSV</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label for="start-date" class="block text-sm font-medium text-gray-700">Data de Início:</label>
-
-
                     <input type="date" id="start-date"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                 </div>
                 <div>
-
                     <label for="end-date" class="block text-sm font-medium text-gray-700">Data de Fim:</label>
-
-
                     <input type="date" id="end-date"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
-
                 </div>
             </div>
 
             <div class="flex flex-col md:flex-row gap-4">
-                <button type="button" id="download-csv" class="flex-1 px-6 py-3 bg-lime-500 text-white font-bold 
-                        rounded-lg shadow-lg hover:bg-lime-600 focus:outline-none focus:ring-4
-focus:ring-lime-400 focus:ring-opacity-50 transition duration-150 ease-in-out">
+                <button type="button" id="download-csv"
+                    class="flex-1 px-6 py-3 bg-lime-500 text-white font-bold rounded-lg shadow-lg hover:bg-lime-600 focus:outline-none focus:ring-4 focus:ring-lime-400 focus:ring-opacity-50 transition duration-150 ease-in-out">
                     Baixar Relatório CSV (Detalhado)
                 </button>
-                <button type="button" id="download-csv-custom" class="flex-1 px-6 py-3 bg-cyan-500 text-white font-bold 
-                        rounded-lg shadow-lg hover:bg-cyan-600 focus:outline-none focus:ring-4
-focus:ring-cyan-400 focus:ring-opacity-50 transition duration-150 ease-in-out">
+                <button type="button" id="download-csv-custom"
+                    class="flex-1 px-6 py-3 bg-cyan-500 text-white font-bold rounded-lg shadow-lg hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-400 focus:ring-opacity-50 transition duration-150 ease-in-out">
                     Baixar Relatório CSV (Simples)
                 </button>
             </div>
@@ -272,21 +241,17 @@ focus:ring-cyan-400 focus:ring-opacity-50 transition duration-150 ease-in-out">
         <hr class="my-6 md:my-8 border-gray-300">
 
         <div class="flex flex-col md:flex-row justify-center gap-4">
-            <button type="button" id="open-lancamentos-modal" class="px-6 py-3 bg-teal-600 text-white font-bold rounded-lg shadow-lg hover:bg-teal-700 focus:outline-none focus:ring-4
-focus:ring-teal-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
-
+            <button type="button" id="open-lancamentos-modal"
+                class="px-6 py-3 bg-teal-600 text-white font-bold rounded-lg shadow-lg hover:bg-teal-700 focus:outline-none focus:ring-4 focus:ring-teal-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
                 Gerenciar Lançamentos
             </button>
 
-            <button type="button" id="open-transportados-modal" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-lg shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-4
-focus:ring-purple-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
+            <button type="button" id="open-transportados-modal"
+                class="px-6 py-3 bg-purple-600 text-white font-bold rounded-lg shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
                 Gerenciar Transportados
             </button>
-            <button type="button" id="open-motoristas-modal" class="px-6 
-                py-3 bg-indigo-600 text-white font-bold rounded-lg shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4
-focus:ring-indigo-500 focus:ring-opacity-50 transition duration-150 ease-in-out hidden">
-
-
+            <button type="button" id="open-motoristas-modal"
+                class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 transition duration-150 ease-in-out hidden">
                 Gerenciar Motoristas
             </button>
         </div>
@@ -294,105 +259,69 @@ focus:ring-indigo-500 focus:ring-opacity-50 transition duration-150 ease-in-out 
 
     <div id="transportados-modal"
         class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl modal-content max-h-[90vh]
-overflow-y-auto">
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl modal-content max-h-[90vh] overflow-y-auto">
 
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl md:text-2xl font-bold text-gray-800">Gerenciar Transportados</h2>
-
                 <button id="close-transportados-modal"
                     class="text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
-
             </div>
             <div class="flex flex-col md:flex-row gap-4 items-start md:items-center mb-4 md:mb-6">
-
                 <span class="text-sm font-medium text-gray-700">Ordenar por:</span>
                 <select id="sort-transportados-key"
                     class="w-full md:w-auto border border-gray-300 rounded-lg py-1 px-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-
                     <option value="nome">Nome</option>
-
                     <option value="re">RE</option>
                 </select>
-
                 <select id="sort-transportados-order"
                     class="w-full md:w-auto border border-gray-300 rounded-lg py-1 px-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-
                     <option value="asc">A-Z</option>
-
                     <option value="desc">Z-A</option>
-
                 </select>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-6">
                 <div>
-
-                    <label for="new-re" class="block text-sm font-medium 
-                        text-gray-700">Novo
-
-                        RE:</label>
+                    <label for="new-re" class="block text-sm font-medium text-gray-700">Novo RE:</label>
                     <input type="text" id="new-re"
                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-
                 </div>
-
                 <div>
                     <label for="new-nome" class="block text-sm font-medium text-gray-700">Novo Transportado:</label>
                     <input type="text" id="new-nome"
                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-
                 </div>
-                <button type="button" id="add-transportado" class="px-6 py-2 bg-purple-600 text-white font-bold rounded-lg shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-4
-focus:ring-purple-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
-
+                <button type="button" id="add-transportado"
+                    class="px-6 py-2 bg-purple-600 text-white font-bold rounded-lg shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
                     Adicionar
                 </button>
             </div>
 
             <div class="overflow-x-auto rounded-lg shadow-md border border-gray-200">
-
                 <table class="min-w-full table-auto" id="transportados-table">
                     <thead class="bg-gray-50">
-
                         <tr>
-
                             <th scope="col"
                                 class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 <input type="checkbox" id="selectAllTransportados" class="rounded-sm">
-
-
-
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
-
-
                                 RE</th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-3/4">
-
-
                                 Nome</th>
-
                         </tr>
                     </thead>
-
                     <tbody class="bg-white divide-y divide-gray-200">
                     </tbody>
-
                 </table>
-
             </div>
             <div class="flex justify-end mt-4">
-
                 <button type="button" id="delete-selected-transportados"
                     class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg shadow-lg hover:bg-red-700">
-
                     Excluir Selecionados
                 </button>
-
             </div>
-
         </div>
     </div>
 
@@ -400,166 +329,141 @@ focus:ring-purple-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
         class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4">
         <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl modal-content max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4">
-
-
                 <h2 class="text-xl md:text-2xl font-bold text-gray-800">Gerenciar Motoristas</h2>
-                <button id="close-motoristas-modal" class="text-gray-500
-hover:text-gray-800 text-xl font-bold">&times;</button>
+                <button id="close-motoristas-modal"
+                    class="text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
             </div>
             <div class="flex flex-col md:flex-row gap-4 items-start md:items-center mb-4 md:mb-6">
-
                 <span class="text-sm font-medium text-gray-700">Ordenar por:</span>
-
                 <select id="sort-motoristas-order"
                     class="w-full md:w-auto border border-gray-300 rounded-lg py-1 px-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-
                     <option value="asc">A-Z</option>
-
                     <option value="desc">Z-A</option>
                 </select>
-
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end mb-6">
-                <div>
-
-
-                    <label for="new-motorista-nome" class="block text-sm font-medium text-gray-700">Novo
-                        Motorista:</label>
-
-                    <input type="text" id="new-motorista-nome"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            
+            <div class="border-t border-b border-gray-200 py-6 my-4">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Adicionar Novo Motorista/Usuário</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="new-motorista-nome" class="block text-sm font-medium text-gray-700">Nome do Motorista:</label>
+                        <input type="text" id="new-motorista-nome" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label for="new-motorista-username" class="block text-sm font-medium text-gray-700">Usuário (login):</label>
+                        <input type="text" id="new-motorista-username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label for="new-motorista-password" class="block text-sm font-medium text-gray-700">Senha:</label>
+                        <input type="password" id="new-motorista-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div class="flex items-end">
+                        <div class="flex items-center h-full">
+                           <input type="checkbox" id="new-motorista-is-admin" class="h-4 w-4 rounded border-gray-300 text-indigo-600">
+                           <label for="new-motorista-is-admin" class="ml-2 block text-sm text-gray-900">É Administrador?</label>
+                        </div>
+                    </div>
                 </div>
-                <button type="button" id="add-motorista" class="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4
-focus:ring-indigo-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
-
-
-
-                    Adicionar
-                </button>
+                <div class="flex justify-end">
+                    <button type="button" id="add-motorista" class="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow-lg hover:bg-indigo-700">
+                        Adicionar Motorista
+                    </button>
+                </div>
             </div>
+
+
             <div class="overflow-x-auto rounded-lg shadow-md border border-gray-200">
-
                 <table class="min-w-full table-auto" id="motoristas-table">
-
-
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col"
                                 class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-
                                 <input type="checkbox" id="selectAllMotoristas" class="rounded-sm">
-
                             </th>
-
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-full">
-
                                 Nome</th>
                         </tr>
-
                     </thead>
-
                     <tbody class="bg-white divide-y divide-gray-200">
-
                     </tbody>
                 </table>
             </div>
             <div class="flex justify-end mt-4">
-
-
                 <button type="button" id="delete-selected-motoristas"
                     class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg shadow-lg hover:bg-red-700">
                     Excluir Selecionados
                 </button>
             </div>
         </div>
-
     </div>
 
     <div id="lancamentos-modal"
         class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4">
-
-        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl modal-content modal-lg max-h-[90vh] flex flex-col">
+        <div
+            class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl modal-content modal-lg max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-4 relative">
                 <div class="flex-grow flex justify-center">
-
                     <h2 class="text-xl md:text-2xl font-bold text-gray-800">Gerenciar Lançamentos</h2>
-
                 </div>
                 <button id="close-lancamentos-modal"
                     class="absolute top-0 right-0 text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
-
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
-
                     <label for="filter-start-date" class="block text-sm font-medium text-gray-700">De:</label>
-
                     <input type="date" id="filter-start-date"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 </div>
-
                 <div>
-
                     <label for="filter-end-date" class="block text-sm font-medium text-gray-700">Até:</label>
                     <input type="date" id="filter-end-date"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
-
                 </div>
-
                 <div class="flex items-end">
                     <button id="filter-lancamentos-btn"
                         class="w-full px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700">Filtrar</button>
                 </div>
-
             </div>
 
 
             <div class="overflow-y-auto flex-grow">
-
                 <table class="min-w-full table-auto" id="lancamentos-table">
                     <thead class="bg-gray-50 sticky top-0">
-
                         <tr>
-
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider hidden">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Data</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Motorista</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Nº Borderô</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Solicitante(s)</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Transportado(s)</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Origem</th>
-
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Destino(s)</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Partida</th>
-                            <th class="px-6 py-3 text-left 
-                                text-xs font-medium text-gray-500 
-uppercase tracking-wider">Valor Total</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Valor Extra Total</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Observação</th>
-
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 
-uppercase tracking-wider">Ações</th>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden">
+                                ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Data</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Motorista</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Nº Borderô</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Solicitante(s)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Transportado(s)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Origem</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Destino(s)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Partida</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Valor Total</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Valor Extra Total</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Observação</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Ações</th>
                         </tr>
                     </thead>
-
-
                     <tbody class="bg-white divide-y divide-gray-200">
-
                     </tbody>
                 </table>
             </div>
@@ -568,15 +472,11 @@ uppercase tracking-wider">Ações</th>
 
     <div id="edit-lancamento-modal"
         class="fixed inset-0 bg-gray-800 bg-opacity-75 hidden flex items-center justify-center p-4 z-50">
-
         <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl modal-content max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 relative">
                 <div class="flex-grow flex justify-center">
-
-
                     <h2 class="text-xl md:text-2xl font-bold text-gray-800">Editar Lançamento</h2>
                 </div>
-
                 <button id="close-edit-lancamento-modal"
                     class="absolute top-0 right-0 text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
             </div>
@@ -585,19 +485,14 @@ uppercase tracking-wider">Ações</th>
                 <input type="hidden" id="edit-lancamento-id">
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
                     <div>
-                        <label for="edit-motorista" class="block text-sm font-medium text-gray-700">Motorista:</label>
-
-                        <input type="text" id="edit-motorista" list="motoristas-list" class="mt-1 block w-full px-3 py-2
-bg-gray-50 border border-gray-300 rounded-lg">
-
+                        <label for="edit-motorista"
+                            class="block text-sm font-medium text-gray-700">Motorista:</label>
+                        <input type="text" id="edit-motorista" list="motoristas-list"
+                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     </div>
-
                     <div>
-                        <label for="edit-data" class="block text-sm
-font-medium text-gray-700">Data:</label>
-
+                        <label for="edit-data" class="block text-sm font-medium text-gray-700">Data:</label>
                         <input type="date" id="edit-data"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     </div>
@@ -605,7 +500,8 @@ font-medium text-gray-700">Data:</label>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label for="edit-bordero" class="block text-sm font-medium text-gray-700">Nº Borderô:</label>
+                        <label for="edit-bordero" class="block text-sm font-medium text-gray-700">Nº
+                            Borderô:</label>
                         <input type="text" id="edit-bordero"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     </div>
@@ -613,8 +509,6 @@ font-medium text-gray-700">Data:</label>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div></div>
-
-
                     <div id="edit-solicitante-campos-container" class="space-y-4">
                     </div>
                 </div>
@@ -626,65 +520,53 @@ font-medium text-gray-700">Data:</label>
                     </button>
                 </div>
 
-
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
                     <div>
                         <label for="edit-re" class="block text-sm font-medium text-gray-700">RE
                             (P1):</label>
-
-
-                        <input type="text" id="edit-re" name="edit-res[]"
-                            list="transportados-re-list"
+                        <input type="text" id="edit-re" name="edit-res[]" list="transportados-re-list"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
-
                     </div>
-
                     <div>
                         <label for="edit-transportado" class="block text-sm font-medium text-gray-700">Transportado
-
                             (P1):</label>
                         <input type="text" id="edit-transportado" name="edit-transportados[]"
-                            list="transportados-nome-list" class="mt-1 block w-full px-3
-py-2 bg-gray-50 border border-gray-300 rounded-lg">
+                            list="transportados-nome-list"
+                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     </div>
                 </div>
 
                 <div id="edit-passageiros-extras-container" class="space-y-4 grid grid-cols-1 gap-4">
-
                 </div>
 
                 <div>
                     <button type="button" id="add-edit-passageiro-btn"
                         class="w-full px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-150 ease-in-out">
-
                         + Adicionar Outro Passageiro
                     </button>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-row-align">
-
                         <div class="flex-grow">
-                            <label for="edit-origem" class="block text-sm font-medium text-gray-700">Origem:</label>
+                            <label for="edit-origem"
+                                class="block text-sm font-medium text-gray-700">Origem:</label>
                             <input type="text" id="edit-origem"
                                 class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                         </div>
                     </div>
 
                     <div class="form-row-align">
-
                         <div class="flex-grow">
-                            <label for="edit-partida" class="block text-sm font-medium text-gray-700">Partida:</label>
-                            <input type="time" id="edit-partida" name="edit-partida" class="mt-1 block w-full 
-                                px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
+                            <label for="edit-partida"
+                                class="block text-sm font-medium text-gray-700">Partida:</label>
+                            <input type="time" id="edit-partida" name="edit-partida"
+                                class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
                     <div id="edit-destino-campos-container" class="md:col-span-2 space-y-4">
                     </div>
                 </div>
@@ -696,53 +578,41 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     </button>
                 </div>
 
-
-
                 <div id="edit-valor-campos-container" class="md:col-span-2 space-y-4">
                 </div>
-
 
                 <div class="md:col-span-2 flex justify-center md:justify-start">
                     <button type="button" id="add-edit-valor-btn"
                         class="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-150 ease-in-out">
-
                         + Adicionar Valor
                     </button>
                 </div>
 
                 <div>
-                    <label for="edit-observacao" class="block text-sm font-medium text-gray-700">Observação:</label>
-
+                    <label for="edit-observacao"
+                        class="block text-sm font-medium text-gray-700">Observação:</label>
                     <textarea id="edit-observacao" rows="3"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg"></textarea>
                 </div>
 
                 <div class="flex justify-end gap-4 mt-6">
-
                     <button type="button" id="cancel-edit-btn"
                         class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Salvar
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Salvar
                         Alterações</button>
-
-
                 </div>
             </form>
         </div>
     </div>
 
-
-
     <div id="message-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full">
-
             <h2 class="text-xl font-bold mb-4">Aviso</h2>
             <p id="message-content" class="text-gray-700 mb-4"></p>
-
             <div class="flex justify-end">
                 <button id="close-modal"
                     class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">OK</button>
-
-
             </div>
         </div>
     </div>
@@ -752,30 +622,27 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, addDoc, deleteDoc, onSnapshot, collection, doc, query, where, getDocs, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
         // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyDmqvcKtIsga4ZQWNDg4_2k493dqMQCDVg",
             authDomain: "teste-ebf38.firebaseapp.com",
             projectId: "teste-ebf38",
             storageBucket: "teste-ebf38.firebasestorage.app",
-
             messagingSenderId: "741884776297",
             appId: "1:741884776297:web:a23450b4909581a1b237f8",
-
-
             measurementId: "G-2MD5CFD51E"
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        const globalAppId = typeof __app_id !== 'undefined' ?
-            __app_id : 'default-app-id';
-        let globalUserId = null;
+        const globalAppId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         let currentUser = {
             username: null,
             isAdmin: false,
         };
+        
         // ELEMENTOS DOM
         const loginForm = document.getElementById('login-form');
         const loginPage = document.getElementById('login-page');
@@ -790,87 +657,21 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
         const downloadCsvBtn = document.getElementById('download-csv');
         const downloadCsvCustomBtn = document.getElementById('download-csv-custom');
         const csvReportDiv = downloadCsvBtn.closest('.flex-col');
-        // A div que contém o título e os campos de CSV
-
-        // Novos contêineres e botões
         const solicitanteContainer = document.getElementById('solicitante-campos-container');
         const addSolicitanteBtn = document.getElementById('add-solicitante-btn');
         const destinoContainer = document.getElementById('destino-campos-container');
         const addDestinoBtn = document.getElementById('add-destino-btn');
         const valorContainer = document.getElementById('valor-campos-container');
-        // Novo contêiner de valores
         const addValorBtn = document.getElementById('add-valor-btn');
-        // Botão de adicionar valor principal
         const editValorBtn = document.getElementById('add-edit-valor-btn');
-        // Botão de adicionar valor principal (edição)
 
-        // === CONFIGURAÇÃO DE USUÁRIOS ===
-                const users = [
-            { username: 'admin', password: 'rafael22' },
-            { username: 'keimilly', password: 'keimilly121' },
-            { username: 'maicon', password: 'maicon123' },
-            { username: 'ector', password: 'ector123' },
-            { username: 'carlostucci', password: 'carlost123' },
-            { username: 'celso', password: 'celso123' },
-            { username: 'charlesdaniel', password: 'charlesd123' },
-            { username: 'edvaldo', password: 'edvaldo123' },          
-            { username: 'fabricio', password: 'fabricio123' }, 
-            { username: 'fernando', password: 'fernando123' }, 
-            { username: 'joaovitor', password: 'joaov123' }, 
-            { username: 'lilian', password: 'lilian123' }, 
-            { username: 'luilton', password: 'luilton123' }, 
-            { username: 'marcio', password: 'marcio123' }, 
-            { username: 'matheus', password: 'matheus123' }, 
-            { username: 'rodrigo', password: 'rodrigo123' }, 
-            { username: 'tiago', password: 'tiago123' }, 
-            { username: 'vandersonjesus', password: 'vanderson123' }, 
-            { username: 'denilsonoliveira', password: 'denilson123' }, 
-            { username: 'eduardo', password: 'eduardo123' }, 
-            { username: 'beatriz', password: 'beatriz123' }, 
-            { username: 'julianageraldo', password: 'juliana123' }, 
-            { username: 'josecarlos', password: 'josecarlos123' }, 
-            { username: 'maicon2', password: 'maicon25' }, 
-            { username: 'mailsoncarvalho', password: 'mailson123' }, 
-            { username: 'aloisiobranco', password: 'aloisio123' }, 
-            { username: 'gabrielmt', password: 'gabriel123' }, 
-            { username: 'renato', password: 'renato123' }
-        ];
-        const motoristaUsers = {
-            // OBS: Estes IDs são simulados e devem ser consistentes com o userId armazenado no Firestore para o filtro funcionar.
-            'admin': { nome: 'Admin Rafael', is_admin: true, is_motorista_fixo: false, userId: 'admin-Rafael-id' },
-            'keimilly': { nome: 'Admin Keimilly', is_admin: true, is_motorista_fixo: false, userId: 'admin-Keimilly-id' },
-            'maicon': { nome: 'Maicon', is_admin: false, is_motorista_fixo: true, userId: 'motorista-maicon-id' },
-            'ector': { nome: 'Ector', is_admin: false, is_motorista_fixo: true, userId: 'motorista-Ector-id' },
-            'carlostucci': { nome: 'Carlos Tucci', is_admin: false, is_motorista_fixo: true, userId: 'motorista-carlostucci-id' },
-            'celso': { nome: 'Celso', is_admin: false, is_motorista_fixo: true, userId: 'motorista-celso-id' },
-            'charlesdaniel': { nome: 'Charles Daniel', is_admin: false, is_motorista_fixo: true, userId: 'motorista-charlesdaniel-id' },
-            'edvaldo': { nome: 'Edvaldo', is_admin: false, is_motorista_fixo: true, userId: 'motorista-edvaldo-id' },
-            'fabricio': { nome: 'Fabricio', is_admin: false, is_motorista_fixo: true, userId: 'motorista-fabricio-id' },
-            'fernando': { nome: 'Fernando', is_admin: false, is_motorista_fixo: true, userId: 'motorista-fernando-id' },
-            'joaovitor': { nome: 'João Vitor', is_admin: false, is_motorista_fixo: true, userId: 'motorista-joaovitor-id' },
-            'lilian': { nome: 'Lilian', is_admin: false, is_motorista_fixo: true, userId: 'motorista-lilian-id' },
-            'luilton': { nome: 'Luilton', is_admin: false, is_motorista_fixo: true, userId: 'motorista-luilton-id' },
-            'marcio': { nome: 'Marcio', is_admin: false, is_motorista_fixo: true, userId: 'motorista-marcio-id' },
-            'matheus': { nome: 'Matheus', is_admin: false, is_motorista_fixo: true, userId: 'motorista-matheus-id' },
-            'rodrigo': { nome: 'Rodrigo', is_admin: false, is_motorista_fixo: true, userId: 'motorista-rodrigo-id' },
-            'tiago': { nome: 'Tiago', is_admin: false, is_motorista_fixo: true, userId: 'motorista-tiago-id' },
-            'vandersonjesus': { nome: 'Vanderson Jesus', is_admin: false, is_motorista_fixo: true, userId: 'motorista-vandersonjesus-id' },
-            'denilsonoliveira': { nome: 'Denilson Oliveira', is_admin: false, is_motorista_fixo: true, userId: 'motorista-denilsonoliveira-id' },
-            'eduardo': { nome: 'Eduardo', is_admin: false, is_motorista_fixo: true, userId: 'motorista-eduardo-id' },
-            'beatriz': { nome: 'Beatriz', is_admin: false, is_motorista_fixo: true, userId: 'motorista-beatriz-id' },
-            'julianageraldo': { nome: 'Juliana Geraldo', is_admin: false, is_motorista_fixo: true, userId: 'motorista-julianageraldo-id' },
-            'josecarlos': { nome: 'José Carlos', is_admin: false, is_motorista_fixo: true, userId: 'motorista-josecarlos-id' },
-            'maicon2': { nome: 'Maicon (2)', is_admin: false, is_motorista_fixo: true, userId: 'motorista-maicon2-id' },
-            'mailsoncarvalho': { nome: 'Mailson Carvalho', is_admin: false, is_motorista_fixo: true, userId: 'motorista-mailsoncarvalho-id' },
-            'aloisiobranco': { nome: 'Aloisio Branco', is_admin: false, is_motorista_fixo: true, userId: 'motorista-aloisiobranco-id' },
-            'gabrielmt': { nome: 'Gabriel MT', is_admin: false, is_motorista_fixo: true, userId: 'motorista-gabrielmt-id' },
-            'renato': { nome: 'Renato', is_admin: false, is_motorista_fixo: true, userId: 'motorista-renato-id' },
-        };
+        // === DADOS GLOBAIS ===
         let transportadosData = [];
-        let motoristasData = [];
+        let usersData = []; // Substituído motoristasData por usersData
         let lancamentosData = [];
         let reToNome = {};
         let nomeToRE = {};
+
         // === FUNÇÕES DE VALIDAÇÃO E INTERFACE ===
 
         function showWarning(message) {
@@ -882,36 +683,29 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             document.getElementById('message-modal').classList.add('hidden');
         }
 
-        function setMotoristaReadOnly(username) {
-            const userData = motoristaUsers[username];
-            currentUser.username = username;
-            currentUser.isAdmin = userData ? userData.is_admin : false;
-            // Define o globalUserId com o ID simulado do motorista para o filtro de lançamentos
-            globalUserId = userData ?
-                userData.userId : null;
-            userIdDisplay.innerText = `ID do Usuário: ${globalUserId}`;
+        // NOVA FUNÇÃO para configurar a interface com base nos dados do usuário do Firestore
+        function setMotoristaFromData(userData) {
+            currentUser.username = userData.username;
+            currentUser.isAdmin = userData.is_admin || false;
 
-            // A seção de CSV agora é sempre visível para todos os usuários.
+            userIdDisplay.classList.add('hidden'); // Oculta o ID antigo
+
             csvReportDiv.classList.remove('hidden');
 
-            if (userData && userData.is_admin) {
+            if (currentUser.isAdmin) {
                 openMotoristasBtn.classList.remove('hidden');
             } else {
                 openMotoristasBtn.classList.add('hidden');
             }
 
-            if (userData && userData.is_motorista_fixo) {
+            if (userData.is_motorista_fixo) {
                 motoristaInput.value = userData.nome;
                 motoristaInput.setAttribute('readonly', 'readonly');
                 motoristaInput.classList.add('bg-gray-200');
             } else {
                 motoristaInput.removeAttribute('readonly');
                 motoristaInput.classList.remove('bg-gray-200');
-                if (userData) {
-                    motoristaInput.value = userData.nome;
-                } else {
-                    motoristaInput.value = '';
-                }
+                motoristaInput.value = userData.nome || '';
             }
         }
 
@@ -941,15 +735,11 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 const rowKey = `${rowRE}_${rowNome.toLowerCase()}`;
                 const isSameRow = (rowToCheck === row);
 
-
-                if (rowKey === currentKey
-
-                    && !isSameRow) {
+                if (rowKey === currentKey && !isSameRow) {
                     isDuplicated = true;
                     rowToCheck.querySelector('input[name="res[]"]').classList.add('error-border');
                     rowToCheck.querySelector('input[name="transportados[]"]').classList.add('error-border');
                 }
-
             });
             if (isDuplicated) {
                 currentREInput.classList.add('error-border');
@@ -993,67 +783,47 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 const input = row.querySelector('input');
 
                 if (label) {
-
-                    // O primeiro não tem P(n) no rótulo, apenas o nome base
                     label.textContent = index === 0 ? baseLabel + ':' : `${baseLabel} (P${pNum}):`;
                 }
-
-                // Atualiza o ID do campo principal do solicitante para que ele seja encontrado na validação
-
+                
                 if (containerId === 'solicitante-campos-container' && index === 0 && input) {
                     input.id = 'solicitante';
                     input.name = 'solicitantes[]';
                 }
-                // O campo destino principal não é mais o 
-                // input com id="destino", ele é dinâmico.
-                // Mas garantimos que o primeiro campo de destino tenha o nome correto para o backend:
                 if (containerId === 'destino-campos-container' && index === 0) {
-                    // O primeiro input é o Destino
-
                     const destinoInput = row.querySelector('input[name="destinos[]"]');
                     if (destinoInput) destinoInput.id = 'destino';
-                    // O segundo input é a Chegada, deve ter o nome correto
                     const chegadaInput = row.querySelector('input[name="chegadas_destino[]"]');
                     if (chegadaInput) chegadaInput.id = 'chegada_destino_p1';
                 }
 
-                // Lógica de Valor
                 if (containerId === 'valor-campos-container') {
                     const valorInput = row.querySelector('input[name="valores[]"]');
                     const valorExtraInput = row.querySelector('input[name="valores_extra[]"]');
 
                     if (valorInput) {
-                        valorInput.id = index === 0 ?
-                            'valor' : `valor-${pNum}`;
+                        valorInput.id = index === 0 ? 'valor' : `valor-${pNum}`;
                         valorInput.name = 'valores[]';
-                        valorInput.classList.remove('error-border'); // Limpa a borda de erro
-
-                        // Rebinding de eventos de moeda
+                        valorInput.classList.remove('error-border'); 
                         valorInput.addEventListener('input', () => formatCurrencyInput(valorInput));
                         valorInput.addEventListener('focus', () => { if (valorInput.value === '0,00') valorInput.value = ''; });
                         valorInput.addEventListener('blur', () => { if (valorInput.value === '') valorInput.value = '0,00'; });
-                        // Define o valor padrão em foco/blur
                         if (valorInput.value === '') valorInput.value = '0,00';
                     }
 
                     if (valorExtraInput) {
-                        valorExtraInput.id = index === 0 ?
-                            'valor-extra' : `valor-extra-${pNum}`;
+                        valorExtraInput.id = index === 0 ? 'valor-extra' : `valor-extra-${pNum}`;
                         valorExtraInput.name = 'valores_extra[]';
-                        valorExtraInput.classList.remove('error-border'); // Limpa a borda de erro
-
-                        // Rebinding de eventos de moeda
+                        valorExtraInput.classList.remove('error-border'); 
                         valorExtraInput.addEventListener('input', () => formatCurrencyInput(valorExtraInput));
                         valorExtraInput.addEventListener('focus', () => { if (valorExtraInput.value === '0,00') valorExtraInput.value = ''; });
                         valorExtraInput.addEventListener('blur', () => { if (valorExtraInput.value === '') valorExtraInput.value = '0,00'; });
-                        // Define o valor padrão em foco/blur
                         if (valorExtraInput.value === '') valorExtraInput.value = '0,00';
                     }
                 }
 
                 const removeBtn = row.querySelector('.remove-dynamic-btn');
                 if (removeBtn) {
-                    // O primeiro item (índice 0) é obrigatório e não pode ser removido.
                     if (index === 0) {
                         removeBtn.classList.add('hidden');
                     } else {
@@ -1061,15 +831,10 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                         removeBtn.onclick = () => {
                             row.remove();
                             updateDynamicLabels(containerId, inputName, baseLabel);
-                            // Se remover um destino, deve remover o valor correspondente.
-                            if (containerId === 'destino-campos-container') {
-                                // A sincronização de valores foi removida, então nada de remoção automática aqui.
-                            }
                         };
                     }
                 }
             });
-            // A sincronização de valores foi removida, o botão de valor é totalmente manual.
         }
 
         function createSolicitanteInput(index, isRequired = true) {
@@ -1083,19 +848,17 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     <label for="solicitante-${index}" class="block text-sm font-medium text-gray-700">${labelText}</label>
                     <input type="text" id="solicitante-${index}" name="solicitantes[]"
                         onfocus="this.classList.remove('error-border')"
-         
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                 </div>
                 <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-dynamic-btn ${isRequired ? 'hidden' : ''}">
                     -
- 
                 </button>
             `;
             const removeBtn = fieldset.querySelector('.remove-dynamic-btn');
             if (removeBtn && !isRequired) {
                 removeBtn.onclick = () => {
                     fieldset.remove();
-                    updateDynamicLabels(containerId, 'solicitante', 'Solicitante');
+                    updateDynamicLabels('solicitante-campos-container', 'solicitante', 'Solicitante');
                 };
             }
             return fieldset;
@@ -1103,7 +866,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
 
         function createDestinoInput(index, isRequired = true) {
             const fieldset = document.createElement('div');
-            // O dynamic-row aqui é para o JS. Usamos grid grid-cols-2 aqui
             fieldset.className = 'dynamic-row grid grid-cols-2 gap-4 md:gap-6';
             fieldset.dataset.pNum = (document.querySelectorAll(`#destino-campos-container .dynamic-row`).length + 1);
 
@@ -1115,21 +877,17 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     <div class="flex-grow">
                         <label for="destino-${index}" class="block text-sm font-medium text-gray-700">${labelText}</label>
                         <input type="text" id="destino-${index}" name="destinos[]"
-    
                             onfocus="this.classList.remove('error-border')"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                     </div>
-            
                     <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-dynamic-btn ${isRequired ? 'hidden' : ''}">
                         -
                     </button>
                 </div>
-                
                 <div class="form-row-align">
                     <div class="flex-grow">
                         <label for="chegada-destino-${index}" class="block text-sm font-medium text-gray-700">${labelTime}</label>
                         <input type="time" id="chegada-destino-${index}" name="chegadas_destino[]"
-                      
                             onfocus="this.classList.remove('error-border')"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                     </div>
@@ -1138,23 +896,20 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             const removeBtn = fieldset.querySelector('.remove-dynamic-btn');
             if (removeBtn && !isRequired) {
                 removeBtn.onclick = () => {
-                    const pNumToRemove = fieldset.dataset.pNum;
                     fieldset.remove();
-                    updateDynamicLabels(containerId, 'destino', 'Destino');
+                    updateDynamicLabels('destino-campos-container', 'destino', 'Destino');
                 };
             }
             return fieldset;
         }
 
-        // Lógica de Valor Dinâmico (Página Principal)
         function createValorInput(pNum, isRequired = true) {
             const fieldset = document.createElement('div');
             fieldset.className = 'dynamic-row grid grid-cols-2 gap-4 md:gap-6 valor-row';
             fieldset.dataset.pNum = pNum;
             const isP1 = pNum === 1;
             const labelValor = pNum === 1 ? 'Valor P1:' : `Valor P${pNum}:`;
-            const labelValorExtra = pNum === 1 ?
-                'Valor Extra P1:' : `Valor Extra P${pNum}:`;
+            const labelValorExtra = pNum === 1 ? 'Valor Extra P1:' : `Valor Extra P${pNum}:`;
             const inputIdValor = pNum === 1 ? 'valor' : `valor-${pNum}`;
             const inputIdValorExtra = pNum === 1 ? 'valor-extra' : `valor-extra-${pNum}`;
             fieldset.innerHTML = `
@@ -1162,55 +917,43 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     <label for="${inputIdValor}" class="block text-sm font-medium text-gray-700">${labelValor}</label>
                     <div class="relative mt-1">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 pr-2 text-gray-400">R$</span>
-   
                         <input type="text" id="${inputIdValor}" name="valores[]"
                             class="block w-full px-3 py-2 pl-9 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out text-right">
                     </div>
-           
                 </div>
                 <div class="form-row-align">
                     <div class="flex-grow">
                         <label for="${inputIdValorExtra}" class="block text-sm font-medium text-gray-700">${labelValorExtra}</label>
                         <div class="relative mt-1">
-  
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 pr-2 text-gray-400">R$</span>
                             <input type="text" id="${inputIdValorExtra}" name="valores_extra[]"
-                                class="block w-full px-3 
-                                py-2 pl-9 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:focus:border-blue-500 transition duration-150 ease-in-out text-right">
+                                class="block w-full px-3 py-2 pl-9 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:focus:border-blue-500 transition duration-150 ease-in-out text-right">
                         </div>
                     </div>
-                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-valor-btn ${isP1 ?
-                    'hidden' : ''}">
+                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-valor-btn ${isP1 ? 'hidden' : ''}">
                         -
                     </button>
                 </div>
             `;
 
             const removeBtn = fieldset.querySelector('.remove-valor-btn');
-
             if (removeBtn && !isP1) {
                 removeBtn.onclick = () => {
                     fieldset.remove();
                     updateValueLabels();
                 };
             }
-
-
             return fieldset;
         }
 
-        // Função para remover um campo de Valor específico
         function removeValueRow(pNumToRemove) {
             const rowToRemove = document.querySelector(`#valor-campos-container .valor-row[data-p-num="${pNumToRemove}"]`);
             if (rowToRemove) {
                 rowToRemove.remove();
-
-                // Reorganiza os rótulos de Valor e Valor Extra após a remoção
                 updateValueLabels();
             }
         }
 
-        // Função para atualizar os rótulos de Valor após adição/remoção
         function updateValueLabels() {
             const rows = document.querySelectorAll(`#valor-campos-container .valor-row`);
             rows.forEach((row, index) => {
@@ -1220,27 +963,18 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 const labelValor = row.querySelector(`label[for^="valor"]`);
                 const labelValorExtra = row.querySelector(`label[for^="valor-extra"]`);
                 const inputValor = row.querySelector('input[name="valores[]"]');
-
                 const inputValorExtra = row.querySelector('input[name="valores_extra[]"]');
                 const removeBtn = row.querySelector('.remove-valor-btn');
 
-                // Atualiza rótulos
                 if (labelValor) labelValor.textContent = pNum === 1 ? 'Valor P1:' : `Valor P${pNum}:`;
-                if
-                    (labelValorExtra) labelValorExtra.textContent = pNum === 1 ? 'Valor Extra P1:' : `Valor Extra P${pNum}:`;
-
-                // Atualiza IDs (essencial para formatCurrencyInput funcionar e para o submit)
+                if (labelValorExtra) labelValorExtra.textContent = pNum === 1 ? 'Valor Extra P1:' : `Valor Extra P${pNum}:`;
                 if (inputValor) inputValor.id = pNum === 1 ? 'valor' : `valor-${pNum}`;
-                if (inputValorExtra) inputValorExtra.id = pNum === 1 ?
-                    'valor-extra' : `valor-extra-${pNum}`;
-
-                // Revalida a exibição do botão de remoção
+                if (inputValorExtra) inputValorExtra.id = pNum === 1 ? 'valor-extra' : `valor-extra-${pNum}`;
                 if (removeBtn) {
                     if (pNum === 1) removeBtn.classList.add('hidden');
                     else removeBtn.classList.remove('hidden');
                 }
 
-                // Adiciona/reforça eventos de moeda
                 if (inputValor) {
                     inputValor.removeEventListener('input', formatCurrencyInput);
                     inputValor.addEventListener('input', () => formatCurrencyInput(inputValor));
@@ -1257,11 +991,9 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     inputValorExtra.removeEventListener('blur', () => { if (inputValorExtra.value === '') inputValorExtra.value = '0,00'; });
                     inputValorExtra.addEventListener('blur', () => { if (inputValorExtra.value === '') inputValorExtra.value = '0,00'; });
                 }
-
             });
         }
 
-        // Função principal para adicionar linhas dinâmicas
         function addDynamicRow(containerId, inputName, baseLabel, isRequired = false) {
             const container = document.getElementById(containerId);
             let newRow;
@@ -1271,7 +1003,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             } else if (inputName === 'solicitante') {
                 newRow = createSolicitanteInput(Date.now(), isRequired);
             } else if (inputName === 'valor') {
-                // A adição de valor é sempre opcional (não-obrigatória)
                 newRow = createValorInput(document.querySelectorAll(`#valor-campos-container .valor-row`).length + 1, false);
             }
 
@@ -1280,11 +1011,9 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 updateDynamicLabels(containerId, inputName, baseLabel);
             }
         }
-
-        // Associa o botão de adicionar valor à função de adicionar Valor
         addValorBtn.addEventListener('click', () => addDynamicRow('valor-campos-container', 'valor', 'Valor', false));
+        
         // --- Lógica Passageiros (Transportados) ---
-
         function updatePassageiroLabels() {
             const rows = document.querySelectorAll('#passageiros-campos-container .passageiro-row');
             rows.forEach((row, index) => {
@@ -1293,27 +1022,20 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 const transportadoLabel = row.querySelector(`label[for^="transportado-"]`);
 
                 if (reLabel) reLabel.textContent = `RE (P${pNum}):`;
-
-
-                if
-                    (transportadoLabel) transportadoLabel.textContent = `Transportado (P${pNum}):`;
+                if (transportadoLabel) transportadoLabel.textContent = `Transportado (P${pNum}):`;
 
                 const removeBtn = row.querySelector('.remove-passageiro-btn');
                 if (removeBtn) {
-                    // O primeiro passageiro (P1) não tem botão de remover
                     if (index === 0) {
-
                         removeBtn.classList.add('hidden');
                     } else {
                         removeBtn.classList.remove('hidden');
                         removeBtn.onclick = () => {
-
                             row.remove();
                             updatePassageiroLabels();
                         };
                     }
                 }
-
             });
         }
 
@@ -1326,32 +1048,24 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     <label for="re-${index}" class="block text-sm font-medium text-gray-700">RE (P${index + 1}):</label>
                     <input type="text" id="re-${index}" name="res[]" list="transportados-re-list"
                         onfocus="this.classList.remove('error-border')"
-      
- 
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                 </div>
                 <div class="flex items-end">
                     <div class="flex-grow">
-           
- 
                         <label for="transportado-${index}" class="block text-sm font-medium text-gray-700">Transportado (P${index + 1}):</label>
                         <input type="text" id="transportado-${index}" name="transportados[]" list="transportados-nome-list"
                             onfocus="this.classList.remove('error-border')"
-                       
- 
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                     </div>
-                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-passageiro-btn ${isRequired ?
-                    'hidden' : ''}">
+                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-passageiro-btn ${isRequired ? 'hidden' : ''}">
                     -
-                </button>
+                    </button>
                 </div>
             `;
             return fieldset;
         }
 
         function addPassageiroRow(isRequired = false) {
-
             const newIndex = Date.now();
             const newRow = createPassageiroInput(newIndex, isRequired);
             passageirosContainer.appendChild(newRow);
@@ -1359,31 +1073,33 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
         }
 
 
-        // --- Inicialização e Eventos Globais ---
-
+        // --- INICIALIZAÇÃO E EVENTOS GLOBAIS ---
         window.onload = () => {
-            // ---> INÍCIO DA MODIFICAÇÃO PARA LOGIN PERSISTENTE E CORREÇÃO DA TELA CINZA
-            const loggedInUser = localStorage.getItem('loggedInUser');
-            if (loggedInUser && users.find(u => u.username === loggedInUser)) {
-                loginPage.classList.add('hidden');
-                appPage.classList.remove('hidden');
-                setMotoristaReadOnly(loggedInUser);
+            const loggedInUserData = localStorage.getItem('loggedInUserData');
+            if (loggedInUserData) {
+                try {
+                    const userData = JSON.parse(loggedInUserData);
+                    loginPage.classList.add('hidden');
+                    appPage.classList.remove('hidden');
+                    setMotoristaFromData(userData); // Usa a nova função
+                } catch (e) {
+                    // Se os dados estiverem corrompidos, limpa e força o login
+                    localStorage.removeItem('loggedInUser');
+                    localStorage.removeItem('loggedInUserData');
+                    loginPage.classList.remove('hidden');
+                    appPage.classList.add('hidden');
+                }
             } else {
                  loginPage.classList.remove('hidden');
                  appPage.classList.add('hidden');
             }
-            // ---> FIM DA MODIFICAÇÃO
 
             function bindPassageiroListeners() {
                 passageirosContainer.addEventListener('blur', (event) => {
                     const input = event.target;
-
                     if (input.matches('input[name="res[]"]') || input.matches('input[name="transportados[]"]')) {
-
                         const row = input.closest('.passageiro-row');
-
                         const reInput = row.querySelector('input[name="res[]"]');
-
                         const nomeInput = row.querySelector('input[name="transportados[]"]');
                         if (input.name === 'res[]') {
                             handleAutofillDynamic(reInput, nomeInput, 're');
@@ -1391,92 +1107,126 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                             handleAutofillDynamic(nomeInput, reInput, 'nome');
                         }
                     }
-
                 }, true);
             }
 
-            // Inicialização dos campos dinâmicos na página de lançamento
             addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', true);
             addDynamicRow('destino-campos-container', 'destino', 'Destino', true);
-            // Inicia o valor P1 e Valor Extra P1
             addDynamicRow('valor-campos-container', 'valor', 'Valor', true);
             addPassageiroRow(true);
 
             bindPassageiroListeners();
             addPassageiroBtn.addEventListener('click', () => addPassageiroRow(false));
             addSolicitanteBtn.addEventListener('click', () => addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', false));
-            // O botão de Destino não precisa mais sincronizar os valores
             addDestinoBtn.addEventListener('click', () => {
                 addDynamicRow('destino-campos-container', 'destino', 'Destino', false);
             });
+            
             onAuthStateChanged(auth, async (user) => {
-                // Aqui o user.uid é o ID anônimo/Firebase, mas usamos o globalUserId simulado
                 if (user) {
-                    // Não alteramos o globalUserId aqui. Ele é definido no login/setMotoristaReadOnly.
-
                     startFirestoreListeners();
                 } else {
-                    if (!localStorage.getItem('loggedInUser')) {
+                    if (!localStorage.getItem('loggedInUserData')) {
                         loginPage.classList.remove('hidden');
                         appPage.classList.add('hidden');
                     }
                 }
-
             });
             signInAnonymously(auth).catch((error) => console.error("Erro no login anônimo:", error));
         };
-        loginForm.addEventListener('submit', function (event) {
+
+        // LÓGICA DE LOGIN ATUALIZADA
+        loginForm.addEventListener('submit', async function (event) {
             event.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            const foundUser = users.find(user => user.username === username && user.password === password);
+            loginMessage.classList.add('hidden');
 
-            if (foundUser) {
-                // ---> INÍCIO DA MODIFICAÇÃO
-                localStorage.setItem('loggedInUser', username); // Salva o usuário no localStorage
-                // ---> FIM DA MODIFICAÇÃO
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where("username", "==", username), where("password", "==", password));
 
-                loginPage.classList.add('hidden');
-                appPage.classList.remove('hidden');
-                setMotoristaReadOnly(username);
-            } else {
+            try {
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    const userDoc = querySnapshot.docs[0];
+                    const userData = { id: userDoc.id, ...userDoc.data() };
 
+                    localStorage.setItem('loggedInUser', username);
+                    localStorage.setItem('loggedInUserData', JSON.stringify(userData));
+
+                    loginPage.classList.add('hidden');
+                    appPage.classList.remove('hidden');
+                    setMotoristaFromData(userData);
+                } else {
+                    loginMessage.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Erro ao fazer login:", error);
+                loginMessage.innerText = 'Erro ao conectar com o servidor.';
                 loginMessage.classList.remove('hidden');
             }
         });
+
         logoutButton.addEventListener('click', () => {
-             // ---> INÍCIO DA MODIFICAÇÃO
-            localStorage.removeItem('loggedInUser'); // Remove o usuário do localStorage
-            // ---> FIM DA MODIFICAÇÃO
+            localStorage.removeItem('loggedInUser');
+            localStorage.removeItem('loggedInUserData'); // Limpa os dados do usuário
             signOut(auth).then(() => {
                 window.location.reload();
             });
         });
+
+        // NOVA FUNÇÃO para tornar linhas de tabela clicáveis
+        function makeTableRowsClickable(tableId) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+
+            const tableBody = table.querySelector('tbody');
+            if (!tableBody) return;
+
+            tableBody.addEventListener('click', function(event) {
+                if (event.target.type === 'checkbox') {
+                    return;
+                }
+                const row = event.target.closest('tr');
+                if (!row) return;
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                }
+            });
+        }
+        
+        // LISTENERS DO FIRESTORE ATUALIZADOS
         function startFirestoreListeners() {
             const transportadosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'transportados');
             onSnapshot(transportadosRef, (snapshot) => {
                 transportadosData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 rebuildTransportadosLookups();
             });
-            const motoristasRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'motoristas');
-            onSnapshot(motoristasRef, (snapshot) => {
-                motoristasData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            // Ouve a coleção 'users' em vez de 'motoristas'
+            const usersRef = collection(db, 'users');
+            onSnapshot(usersRef, (snapshot) => {
+                usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 rebuildMotoristasLookups();
             });
+
             const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
             onSnapshot(lancamentosRef, (snapshot) => {
                 lancamentosData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             });
+
+            // Ativa a funcionalidade de clique nas tabelas
+            makeTableRowsClickable('transportados-table');
+            makeTableRowsClickable('motoristas-table');
         }
 
         function rebuildTransportadosLookups(sortKey = 'nome', sortOrder = 'asc') {
             transportadosData.sort((a, b) => {
                 let valA = a[sortKey] || '';
                 let valB = b[sortKey] || '';
-
-                return sortOrder === 'asc'
-
-                    ? valA.localeCompare(valB, undefined, { numeric: true }) : valB.localeCompare(valA, undefined, { numeric: true });
+                return sortOrder === 'asc' ? valA.localeCompare(valB, undefined, { numeric: true }) : valB.localeCompare(valA, undefined, { numeric: true });
             });
             reToNome = {};
             nomeToRE = {};
@@ -1487,8 +1237,9 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             renderTransportadosList();
         }
 
+        // ATUALIZADO para usar 'usersData'
         function rebuildMotoristasLookups(sortOrder = 'asc') {
-            motoristasData.sort((a, b) => sortOrder === 'asc' ? a.nome.localeCompare(b.nome) : b.nome.localeCompare(a.nome));
+            usersData.sort((a, b) => sortOrder === 'asc' ? a.nome.localeCompare(b.nome) : b.nome.localeCompare(a.nome));
             renderMotoristasList();
             populateMotoristasDatalist();
         }
@@ -1515,22 +1266,18 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
         document.getElementById('form-corrida').addEventListener('submit', async function (event) {
             event.preventDefault();
             const form = event.target;
-            // 'chegada' foi removido, agora é 'chegada_destino'
             const requiredFields = ['motorista', 'data', 'origem', 'partida', 'valor'];
 
             const solicitantesInputs = document.querySelectorAll('#solicitante-campos-container input[name="solicitantes[]"]');
-
             const destinosInputs = document.querySelectorAll('#destino-campos-container input[name="destinos[]"]');
-            const chegadasDestinoInputs = document.querySelectorAll('#destino-campos-container input[name="chegadas_destino[]"]'); // Novo para capturar a hora de chegada do destino
-            const valoresInputs = document.querySelectorAll('#valor-campos-container input[name="valores[]"]'); // Novos
+            const chegadasDestinoInputs = document.querySelectorAll('#destino-campos-container input[name="chegadas_destino[]"]');
+            const valoresInputs = document.querySelectorAll('#valor-campos-container input[name="valores[]"]');
             const valoresExtraInputs = document.querySelectorAll('#valor-campos-container input[name="valores_extra[]"]');
-            // Novos
             const resInputs = document.querySelectorAll('#passageiros-campos-container input[name="res[]"]');
             const transportadosInputs = document.querySelectorAll('#passageiros-campos-container input[name="transportados[]"]');
 
             let isFormValid = true;
 
-            // Validação de campos obrigatórios (motorista, data, etc.)
             requiredFields.forEach(field => {
                 const input = form[field];
                 if (input && input.value.trim() === '') {
@@ -1540,7 +1287,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     input.classList.remove('error-border');
                 }
             });
-            // Coleta e validação de Solicitantes
             const solicitantesData = [];
             solicitantesInputs.forEach(input => {
                 const value = input.value.trim();
@@ -1552,10 +1298,9 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 isFormValid = false;
                 if (solicitantesInputs[0]) solicitantesInputs[0].classList.add('error-border');
             } else {
-                solicitantesInputs[0].classList.remove('error-border');
+                if (solicitantesInputs[0]) solicitantesInputs[0].classList.remove('error-border');
             }
 
-            // Coleta e validação de Destinos e Chegadas
             const destinosData = [];
             const chegadasDestinoData = [];
             let destinoChegadaIncompleto = false;
@@ -1583,27 +1328,21 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 if (destinosInputs[0]) destinosInputs[0].classList.add('error-border');
                 if (chegadasDestinoInputs[0]) chegadasDestinoInputs[0].classList.add('error-border');
             } else {
-                destinosInputs[0].classList.remove('error-border');
-                chegadasDestinoInputs[0].classList.remove('error-border');
+                if (destinosInputs[0]) destinosInputs[0].classList.remove('error-border');
+                if (chegadasDestinoInputs[0]) chegadasDestinoInputs[0].classList.remove('error-border');
             }
 
-            // Coleta e validação de Valores
             const valoresData = [];
             const valoresExtraData = [];
-            // O número de valores é independente dos destinos (exceto P1), então coletamos todos os valores preenchidos.
             for (let i = 0; i < valoresInputs.length; i++) {
                 const valor = parseCurrencyValue(valoresInputs[i].value);
                 const valorExtra = parseCurrencyValue(valoresExtraInputs[i].value);
-
-                // Assume que o valor 0 é aceitável, mas coleta todos para manter o alinhamento
                 valoresData.push(valor);
                 valoresExtraData.push(valorExtra);
             }
 
-            // Coleta e validação de Passageiros
             const passageirosData = [];
             const passageirosSet = new Set();
-
             for (let i = 0; i < resInputs.length; i++) {
                 const reInput = resInputs[i];
                 const nomeInput = transportadosInputs[i];
@@ -1636,56 +1375,40 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 if (transportadosInputs[0]) transportadosInputs[0].classList.add('error-border');
             }
 
-
             if (!isFormValid) {
                 showWarning('Preencha todos os campos obrigatórios e verifique por duplicidades.');
                 return;
             }
 
-            // Estrutura para salvar Destinos e Chegadas Extras
             const destinosExtras = [];
-            // O número de destinos extras deve ser igual ao número de valores extras - 1 (P1).
             const numDestinosExtras = destinosData.length - 1;
             const numValoresExtras = valoresData.length - 1;
-            // Garantir que a menor quantidade de dados seja usada para evitar erros.
             const extraCount = Math.min(numDestinosExtras, numValoresExtras);
             for (let i = 1; i <= extraCount; i++) {
                 destinosExtras.push({
                     destino: destinosData[i],
                     chegada: chegadasDestinoData[i],
                     valor: valoresData[i],
-
                     valorExtra: valoresExtraData[i]
                 });
             }
 
-
             const newEntry = {
-                userId: globalUserId,
                 createdBy: currentUser.username,
                 motorista: form['motorista'].value,
                 bordero: form['bordero'].value.trim(),
-
                 re: passageirosData[0].re,
-                transportado:
-                    passageirosData[0].nome,
-                passageiros_extras: passageirosData.length > 1 ?
-                    passageirosData.slice(1) : [],
-
+                transportado: passageirosData[0].nome,
+                passageiros_extras: passageirosData.length > 1 ? passageirosData.slice(1) : [],
                 solicitante: solicitantesData[0],
-                solicitantes_extras: solicitantesData.length > 1 ?
-                    solicitantesData.slice(1) : [],
-
+                solicitantes_extras: solicitantesData.length > 1 ? solicitantesData.slice(1) : [],
                 data: form['data'].value,
                 origem: form['origem'].value,
-
                 destino: destinosData[0],
-                chegada_destino: chegadasDestinoData[0], // Chegada do primeiro destino
+                chegada_destino: chegadasDestinoData[0],
                 valor: valoresData[0],
-
                 valorExtra: valoresExtraData[0],
                 destinos_extras: destinosExtras,
-
                 partida: form['partida'].value,
                 observacao: form['observacao'].value,
                 createdAt: serverTimestamp()
@@ -1695,17 +1418,19 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
 
             showWarning('Lançamento salvo com sucesso!');
             form.reset();
-            // Re-inicializa campos dinâmicos
+            
             solicitanteContainer.innerHTML = '';
             addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', true);
             destinoContainer.innerHTML = '';
-            valorContainer.innerHTML = '';
-            passageirosContainer.innerHTML = '';
-            // Limpa e reinicia o container de valor
             addDynamicRow('destino-campos-container', 'destino', 'Destino', true);
-            addDynamicRow('valor-campos-container', 'valor', 'Valor', true); // Adiciona valor P1
+            valorContainer.innerHTML = '';
+            addDynamicRow('valor-campos-container', 'valor', 'Valor', true);
+            passageirosContainer.innerHTML = '';
             addPassageiroRow(true);
         });
+
+        // O resto do seu código (download-csv, modais, etc.) permanece o mesmo...
+        // ... cole o resto do seu JS a partir daqui, com as seguintes exceções:
 
         document.getElementById('download-csv').addEventListener('click', async function () {
             const startDate = document.getElementById('start-date').value;
@@ -1717,7 +1442,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             }
 
             let dataToDownload = lancamentosData;
-            // Filtra por data
             if (startDate || endDate) {
                 dataToDownload = dataToDownload.filter(item => {
                     const itemDate = new Date(item.data);
@@ -1729,9 +1453,8 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 });
             }
 
-            // Filtra por usuário se não for admin
             if (!currentUser.isAdmin) {
-                dataToDownload = dataToDownload.filter(item => item.userId === globalUserId);
+                dataToDownload = dataToDownload.filter(item => item.createdBy === currentUser.username);
             }
 
             if (dataToDownload.length === 0) {
@@ -1742,28 +1465,22 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             const bom = '\uFEFF';
             const maxExtras = 3;
 
-            // --- CABEÇALHOS CORRIGIDOS ---
-            // 1. Cabeçalhos Fixos (P1)
             const csvHeaders = [
                 'DATA', 'MOTORISTA', 'Nº BORDERÔ', 'SOLICITANTE P1', 'PASSAGEIRO P1',
-                'VALOR NORMAL P1', 'VALOR EXTRA P1', // Alterado aqui
+                'VALOR NORMAL P1', 'VALOR EXTRA P1',
                 'ORIGEM', 'PARTIDA', 'DESTINO P1', 'CHEGADA P1',
             ];
-
-            // 2. Cabeçalhos Dinâmicos (Extras)
             const extraHeaders = [];
             for (let i = 1; i <= maxExtras; i++) {
-                const pNum = i + 1; // Para exibir P2, P3, P4...
+                const pNum = i + 1;
                 extraHeaders.push(
                     `SOLICITANTE EXTRA ${i}`,
                     `PASSAGEIRO EXTRA ${i}`,
-                    `VALOR NORMAL P${pNum}`, `VALOR EXTRA P${pNum}` // Alterado aqui
+                    `VALOR NORMAL P${pNum}`, `VALOR EXTRA P${pNum}`
                 );
             }
             extraHeaders.push('OBSERVAÇÃO');
             const finalHeaders = [...csvHeaders, ...extraHeaders];
-
-            // --- MAPEAMENTO DE DADOS CORRIGIDO ---
             const rows = dataToDownload.map(obj => {
                 const solicitantes = [obj.solicitante || '', ...(obj.solicitantes_extras || [])];
                 const passageiros = [{ nome: obj.transportado || '' }, ...(obj.passageiros_extras || [])];
@@ -1774,14 +1491,12 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     valorExtra: obj.valorExtra || 0,
                 }, ...(obj.destinos_extras || [])];
 
-                // Mapeamento dos campos principais
                 const rowData = [
                     obj.data || '',
                     obj.motorista || '',
                     obj.bordero || '',
                     solicitantes[0] || '',
                     passageiros[0].nome || '',
-                    // Corrigido para puxar VALOR NORMAL e VALOR EXTRA de P1
                     (destinosValores[0].valor || 0).toFixed(2).replace('.', ','),
                     (destinosValores[0].valorExtra || 0).toFixed(2).replace('.', ','),
                     obj.origem || '',
@@ -1789,19 +1504,14 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     destinosValores[0].destino || '',
                     destinosValores[0].chegada || '',
                 ];
-
                 const extraData = [];
 
-                // Extras: limitados a 3 grupos
                 for (let i = 1; i <= maxExtras; i++) {
                     const solicitanteExtra = solicitantes[i] || '';
                     const passageiroExtraNome = (passageiros[i] && passageiros[i].nome) ? passageiros[i].nome : '';
                     const destinoValorObj = destinosValores[i] || { valor: 0, valorExtra: 0 };
-
-                    // Corrigido para puxar VALOR NORMAL e VALOR EXTRA dos pontos extras
                     const valorNormal_Pn = (destinoValorObj.valor || 0).toFixed(2).replace('.', ',');
                     const valorExtra_Pn = (destinoValorObj.valorExtra || 0).toFixed(2).replace('.', ',');
-
                     extraData.push(
                         solicitanteExtra,
                         passageiroExtraNome,
@@ -1811,7 +1521,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 }
 
                 extraData.push(obj.observacao || '');
-
                 return [...rowData, ...extraData].map(value => `"${String(value).replace(/"/g, '""')}"`).join(';');
             }).join('\n');
 
@@ -1837,8 +1546,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             }
 
             let dataToDownload = lancamentosData;
-
-            // Filtra por data
             if (startDate || endDate) {
                 dataToDownload = dataToDownload.filter(item => {
                     const itemDate = new Date(item.data);
@@ -1850,9 +1557,8 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 });
             }
 
-            // Filtra por usuário se não for admin
             if (!currentUser.isAdmin) {
-                dataToDownload = dataToDownload.filter(item => item.userId === globalUserId);
+                dataToDownload = dataToDownload.filter(item => item.createdBy === currentUser.username);
             }
 
             if (dataToDownload.length === 0) {
@@ -1863,27 +1569,22 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             const bom = '\uFEFF';
             const maxExtras = 3;
 
-            // --- CABEÇALHOS CORRIGIDOS ---
             const csvHeaders = [
                 'DATA', 'SOLICITANTE P1', 'PASSAGEIRO P1',
-                'VALOR NORMAL P1', 'VALOR EXTRA P1' // Alterado aqui
+                'VALOR NORMAL P1', 'VALOR EXTRA P1'
             ];
-
             const extraHeaders = [];
             for (let i = 1; i <= maxExtras; i++) {
-                const pNum = i + 1; // Para exibir P2, P3, P4...
+                const pNum = i + 1;
                 extraHeaders.push(
                     `SOLICITANTE EXTRA ${i}`,
                     `PASSAGEIRO EXTRA ${i}`,
-                    `VALOR NORMAL P${pNum}`, `VALOR EXTRA P${pNum}` // Alterado aqui
+                    `VALOR NORMAL P${pNum}`, `VALOR EXTRA P${pNum}`
                 );
             }
 
             const finalHeaders = [...csvHeaders, ...extraHeaders];
-
-            // --- MAPEAMENTO DE DADOS CORRIGIDO ---
             const rows = dataToDownload.map(obj => {
-
                 const solicitantes = [obj.solicitante || '', ...(obj.solicitantes_extras || [])];
                 const passageiros = [{ nome: obj.transportado || '' }, ...(obj.passageiros_extras || [])];
                 const destinosValores = [{
@@ -1895,22 +1596,16 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     obj.data || '',
                     solicitantes[0] || '',
                     passageiros[0].nome || '',
-                    // Corrigido para puxar VALOR NORMAL e VALOR EXTRA de P1
                     (destinosValores[0].valor || 0).toFixed(2).replace('.', ','),
                     (destinosValores[0].valorExtra || 0).toFixed(2).replace('.', ',')
                 ];
-
                 const extraData = [];
-
                 for (let i = 1; i <= maxExtras; i++) {
                     const solicitanteExtra = solicitantes[i] || '';
                     const passageiroExtraNome = (passageiros[i] && passageiros[i].nome) ? passageiros[i].nome : '';
                     const destinoValorObj = destinosValores[i] || { valor: 0, valorExtra: 0 };
-
-                    // Corrigido para puxar VALOR NORMAL e VALOR EXTRA dos pontos extras
                     const valorNormal_Pn = (destinoValorObj.valor || 0).toFixed(2).replace('.', ',');
                     const valorExtra_Pn = (destinoValorObj.valorExtra || 0).toFixed(2).replace('.', ',');
-
                     extraData.push(
                         solicitanteExtra,
                         passageiroExtraNome,
@@ -1918,7 +1613,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                         valorExtra_Pn
                     );
                 }
-
                 return [...rowData, ...extraData].map(value => `"${String(value).replace(/"/g, '""')}"`).join(';');
             }).join('\n');
 
@@ -1934,20 +1628,17 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
         });
 
         // --- LÓGICA DO MODAL DE LANÇAMENTOS ---
-
         function formatMultipleValues(principal, extras, isPassageiro = false) {
             let result = principal || '';
             if (extras && extras.length > 0) {
-                const extraList = extras.map(e => isPassageiro ?
-                    e.nome : e);
+                const extraList = extras.map(e => isPassageiro ? e.nome : e);
                 result += ' (' + extraList.join(', ') + ')';
             }
             return result;
         }
 
         function formatDestinosChegadas(principalDestino, principalChegada, extras) {
-            let result = principalDestino ||
-                '';
+            let result = principalDestino || '';
             if (principalChegada) {
                 result += ` (${principalChegada})`;
             }
@@ -1990,23 +1681,18 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             const endDate = modal.querySelector('#filter-end-date').value;
 
             let dataToShow = lancamentosData;
-
             if (!currentUser.isAdmin) {
-                dataToShow = lancamentosData.filter(lanc => lanc.userId === globalUserId);
+                dataToShow = lancamentosData.filter(lanc => lanc.createdBy === currentUser.username);
             }
 
             if (startDate || endDate) {
                 dataToShow = dataToShow.filter(item => {
                     if (!item.data) return false;
                     const itemDate = new Date(item.data + "T00:00:00");
-
                     const start = startDate ? new Date(startDate + "T00:00:00") : null;
                     const end = endDate ? new Date(endDate + "T00:00:00") : null;
-
                     if (start && itemDate < start) return false;
-
                     if (end && itemDate > end) return false;
-
                     return true;
                 });
             }
@@ -2026,14 +1712,11 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
 
                 const transportadoFull = formatMultipleValues(item.transportado, item.passageiros_extras, true);
                 const solicitanteFull = formatMultipleValues(item.solicitante, item.solicitantes_extras, false);
-
                 const destinoFull = formatDestinosChegadas(item.destino, item.chegada_destino, item.destinos_extras);
-
                 const statusText = item.editedBy ? `<span class="text-xs text-gray-500">Editado por ${item.editedBy}</span>` : '';
 
                 row.innerHTML = `
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 hidden">${item.id || ''}</td>
-            
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.data || ''}</td>
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.motorista || ''}</td>
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.bordero || ''}</td>
@@ -2054,7 +1737,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
                         </button>
                     </td>
-          
                 `;
                 tableBody.appendChild(row);
             });
@@ -2065,7 +1747,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             document.getElementById('filter-end-date').value = '';
             renderLancamentosList();
             document.getElementById('lancamentos-modal').classList.remove('hidden');
-
         });
         document.getElementById('close-lancamentos-modal').addEventListener('click', () => {
             document.getElementById('lancamentos-modal').classList.add('hidden');
@@ -2088,7 +1769,7 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                         const docRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos', lancamentoId);
                         await deleteDoc(docRef);
                         showWarning('Lançamento excluído com sucesso!');
-                        renderLancamentosList(); // Re-render the list
+                        renderLancamentosList();
                     } catch (error) {
                         console.error("Erro ao excluir lançamento:", error);
                         showWarning('Ocorreu um erro ao excluir o lançamento.');
@@ -2096,6 +1777,12 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 }
             }
         });
+        
+        // --- LÓGICA DO MODAL DE EDIÇÃO (a maior parte permanece a mesma) ---
+        // Funções: updateEditDynamicLabels, createEditDynamicInput, createEditDestinoChegadaInput, etc...
+        // ... (todo o bloco de código do modal de edição pode ser mantido como está)
+        // O restante do seu JS, do modal de edição em diante, pode ser colado aqui.
+        // As únicas funções que mudam são as que lidam com 'motoristas', agora 'users'.
 
         // --- Lógica Solicitante/Destino Dinâmico (Modal de Edição) ---
 
@@ -2107,56 +1794,39 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 const input = row.querySelector('input');
 
                 if (label) {
-
                     label.textContent = `${baseLabel} (P${pNum}):`;
                 }
-
-                // Define o ID do P1 para ser encontrado no submit
+                
                 if (containerId === 'edit-solicitante-campos-container' && index === 0 && input) {
                     input.id = 'edit-solicitante-p1';
-
                 }
 
-                // Os campos de Destino/Chegada precisam ser tratados como um grupo
                 if (containerId === 'edit-destino-campos-container') {
                     const destinoLabel = row.querySelector('label[for^="edit-destino-"]');
-                    const chegadaLabel
-                        = row.querySelector('label[for^="edit-chegada-destino-"]');
+                    const chegadaLabel = row.querySelector('label[for^="edit-chegada-destino-"]');
                     const destinoInput = row.querySelector('input[name="edit-destinos[]"]');
-
                     if (destinoLabel) destinoLabel.textContent = `Destino (P${pNum}):`;
                     if (chegadaLabel) chegadaLabel.textContent = `Chegada (P${pNum}):`;
-
                     if (index === 0) {
                         if (destinoInput) destinoInput.id = 'edit-destino-p1';
-                        // ID para validação
                     }
                 }
 
-                // Lógica de Valor Dinâmico (Edit Modal)
                 if (containerId === 'edit-valor-campos-container') {
-
                     const labelValor = row.querySelector('label[for^="edit-valor-"]');
                     const labelValorExtra = row.querySelector('label[for^="edit-valor-extra-"]');
                     const inputValor = row.querySelector('input[name="edit-valores[]"]');
                     const inputValorExtra = row.querySelector('input[name="edit-valores_extra[]"]');
-                    // Atualiza rótulos
-                    if (labelValor) labelValor.textContent = pNum === 1 ?
-                        'Valor P1:' : `Valor P${pNum}:`;
+                    if (labelValor) labelValor.textContent = pNum === 1 ? 'Valor P1:' : `Valor P${pNum}:`;
                     if (labelValorExtra) labelValorExtra.textContent = pNum === 1 ? 'Valor Extra P1:' : `Valor Extra P${pNum}:`;
-                    // Atualiza IDs (essencial para formatCurrencyInput funcionar e para o submit)
-                    if (inputValor) inputValor.id = pNum === 1 ?
-                        'edit-valor' : `edit-valor-${pNum}`;
+                    if (inputValor) inputValor.id = pNum === 1 ? 'edit-valor' : `edit-valor-${pNum}`;
                     if (inputValorExtra) inputValorExtra.id = pNum === 1 ? 'edit-valor-extra' : `edit-valor-extra-${pNum}`;
-                    // Garante que a formatação da moeda está ativa
                     if (inputValor) formatCurrencyInput(inputValor);
                     if (inputValorExtra) formatCurrencyInput(inputValorExtra);
                 }
 
-
                 const removeBtn = row.querySelector('.remove-edit-dynamic-btn');
                 if (removeBtn) {
-                    // O primeiro item (índice 0) é obrigatório e não pode ser removido (P1).
                     if (index === 0) {
                         removeBtn.classList.add('hidden');
                     } else {
@@ -2164,7 +1834,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                         removeBtn.onclick = () => {
                             row.remove();
                             updateEditDynamicLabels(containerId, inputName, baseLabel);
-                            // Se remover um destino, deve remover o valor correspondente.
                             if (containerId === 'edit-destino-campos-container') {
                                 removeEditValueRow(pNum);
                             }
@@ -2174,7 +1843,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             });
         }
 
-        // Função genérica para criar campos dinâmicos (Solicitante)
         function createEditDynamicInput(containerId, inputName, baseLabel, value = '') {
             const fieldset = document.createElement('div');
             fieldset.className = 'edit-dynamic-row form-row-align';
@@ -2187,15 +1855,12 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 <div class="flex-grow">
                     <label for="edit-${inputName}-${index}" class="block text-sm font-medium text-gray-700">${baseLabel} (P${pNum}):</label>
                     <input type="text" id="edit-${inputName}-${index}" name="edit-${inputName}s[]" value="${value}"
-                        class="mt-1 
-                        block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
+                        class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 </div>
                 <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-dynamic-btn ${isP1 ? 'hidden' : ''}">
                     -
                 </button>
-         
             `;
-
             if (!isP1) {
                 const removeBtn = fieldset.querySelector('.remove-edit-dynamic-btn');
                 removeBtn.onclick = () => {
@@ -2206,36 +1871,29 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             return fieldset;
         }
 
-        // Nova função para criar Destino + Chegada no modal de edição
         function createEditDestinoChegadaInput(destinoValue = '', chegadaValue = '') {
             const containerId = 'edit-destino-campos-container';
             const fieldset = document.createElement('div');
-            // Alinhamento de 2 colunas para Destino e Chegada no modal
             fieldset.className = 'edit-dynamic-row grid grid-cols-2 gap-4';
             const index = Date.now();
             const pNum = document.querySelectorAll(`#${containerId} .edit-dynamic-row`).length + 1;
             const isP1 = pNum === 1;
-            // Estrutura interna para Destino e Chegada
             fieldset.innerHTML = `
                 <div class="form-row-align">
                     <div class="flex-grow">
                         <label for="edit-destino-${index}" class="block text-sm font-medium text-gray-700">Destino (P${pNum}):</label>
-            
                         <input type="text" id="edit-destino-${index}" name="edit-destinos[]" value="${destinoValue}"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     </div>
-                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold 
-                        rounded-lg shadow-md hover:bg-gray-400 remove-edit-dynamic-btn ${isP1 ? 'hidden' : ''}">
+                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-dynamic-btn ${isP1 ? 'hidden' : ''}">
                         -
                     </button>
                 </div>
                 <div class="form-row-align">
-               
                     <div class="flex-grow">
                         <label for="edit-chegada-destino-${index}" class="block text-sm font-medium text-gray-700">Chegada (P${pNum}):</label>
                         <input type="time" id="edit-chegada-destino-${index}" name="edit-chegadas_destino[]" value="${chegadaValue}"
-                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 
-                                rounded-lg">
+                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     </div>
                 </div>
             `;
@@ -2244,7 +1902,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 removeBtn.onclick = () => {
                     fieldset.remove();
                     updateEditDynamicLabels(containerId, 'destino', 'Destino');
-                    // Garante que o valor associado também seja removido
                     removeEditValueRow(pNum);
                 };
             }
@@ -2252,14 +1909,12 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
         }
 
 
-        // Valor Dinâmico (Modal de Edição)
         function createEditValorInput(pNum, valorValue = '0,00', valorExtraValue = '0,00') {
             const fieldset = document.createElement('div');
             fieldset.className = 'edit-dynamic-row grid grid-cols-2 gap-4 valor-row';
             fieldset.dataset.pNum = pNum;
 
-            const labelValor = pNum === 1 ?
-                'Valor P1:' : `Valor P${pNum}:`;
+            const labelValor = pNum === 1 ? 'Valor P1:' : `Valor P${pNum}:`;
             const labelValorExtra = pNum === 1 ? 'Valor Extra P1:' : `Valor Extra P${pNum}:`;
             const inputIdValor = pNum === 1 ? 'edit-valor' : `edit-valor-${pNum}`;
             const inputIdValorExtra = pNum === 1 ? 'edit-valor-extra' : `edit-valor-extra-${pNum}`;
@@ -2268,37 +1923,29 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     <label for="${inputIdValor}" class="block text-sm font-medium text-gray-700">${labelValor}</label>
                     <div class="relative mt-1">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 pr-2 text-gray-400">R$</span>
-   
                         <input type="text" id="${inputIdValor}" name="edit-valores[]" value="${valorValue}"
                             class="block w-full px-3 py-2 pl-9 bg-gray-50 border border-gray-300 rounded-lg text-right">
                     </div>
                 </div>
-  
                 <div>
                     <label for="${inputIdValorExtra}" class="block text-sm font-medium text-gray-700">${labelValorExtra}</label>
                     <div class="relative mt-1">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 pr-2 text-gray-400">R$</span>
-       
                         <input type="text" id="${inputIdValorExtra}" name="edit-valores_extra[]" value="${valorExtraValue}"
                             class="block w-full px-3 py-2 pl-9 bg-gray-50 border border-gray-300 rounded-lg text-right">
                     </div>
                 </div>
-      
             `;
-            // Adiciona a formatação da moeda
             const valorInput = fieldset.querySelector('input[name="edit-valores[]"]');
             const valorExtraInput = fieldset.querySelector('input[name="edit-valores_extra[]"]');
             if (valorInput) {
                 valorInput.addEventListener('input', () => formatCurrencyInput(valorInput));
-                // Define o valor padrão em blur
                 valorInput.addEventListener('blur', () => { if (valorInput.value === '') valorInput.value = '0,00'; });
             }
             if (valorExtraInput) {
                 valorExtraInput.addEventListener('input', () => formatCurrencyInput(valorExtraInput));
-                // Define o valor padrão em blur
                 valorExtraInput.addEventListener('blur', () => { if (valorExtraInput.value === '') valorExtraInput.value = '0,00'; });
             }
-
             return fieldset;
         }
 
@@ -2306,30 +1953,21 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             const rowToRemove = document.querySelector(`#edit-valor-campos-container .valor-row[data-p-num="${pNumToRemove}"]`);
             if (rowToRemove) {
                 rowToRemove.remove();
-                // Reorganiza os rótulos de Valor e Valor Extra após a remoção
                 updateEditDynamicLabels('edit-valor-campos-container', 'valor', 'Valor');
             }
         }
 
-
         function addEditDynamicRow(containerId, inputName, baseLabel, value = '', value2 = null, value3 = 0, value4 = 0) {
             const container = document.getElementById(containerId);
             let newRow;
-
             if (inputName === 'destino') {
                 newRow = createEditDestinoChegadaInput(value, value2);
-                // NOTA: A adição de valor/valor extra foi desvinculada do destino.
             } else if (inputName === 'solicitante') {
                 newRow = createEditDynamicInput(containerId, inputName, baseLabel, value);
             } else if (inputName === 'valor') {
-                // Adição de valor manual
                 const pNum = document.querySelectorAll(`#${containerId} .edit-dynamic-row`).length + 1;
-                const valorContainer = document.getElementById('edit-valor-campos-container');
-
-                // value e value2 são passados como valores pré-formatados ou '0,00'
                 const valorFmt = (value || 0).toFixed(2).replace('.', ',');
                 const valorExtraFmt = (value2 || 0).toFixed(2).replace('.', ',');
-
                 newRow = createEditValorInput(pNum, valorFmt, valorExtraFmt);
             }
 
@@ -2342,30 +1980,22 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
         document.getElementById('add-edit-solicitante-btn').addEventListener('click', () => addEditDynamicRow('edit-solicitante-campos-container', 'solicitante', 'Solicitante'));
         document.getElementById('add-edit-destino-btn').addEventListener('click', () => addEditDynamicRow('edit-destino-campos-container', 'destino', 'Destino', '', ''));
         document.getElementById('add-edit-valor-btn').addEventListener('click', () => addEditDynamicRow('edit-valor-campos-container', 'valor', 'Valor', 0, 0));
-        // Adiciona um novo par Valor/Valor Extra
-
-
-        // --- Lógica Passageiros (Transportados) Edit ---
-
+        
         function updateEditPassageiroLabels() {
             const container = document.getElementById('edit-passageiros-extras-container');
             const p1REInput = document.getElementById('edit-re');
             const p1NomeInput = document.getElementById('edit-transportado');
             const p1RELabel = p1REInput.previousElementSibling;
             const p1NomeLabel = p1NomeInput.previousElementSibling;
-            // Define P1
             if (p1RELabel) p1RELabel.textContent = `RE (P1):`;
             if (p1NomeLabel) p1NomeLabel.textContent = `Transportado (P1):`;
 
-            // Redefine rótulos e botões de remoção para extras (a partir do P2)
             const extraRows = container.querySelectorAll('.edit-passageiro-row');
             extraRows.forEach((row, index) => {
-                const pNum = index + 2; // Começa do P2
+                const pNum = index + 2;
                 const reLabel = row.querySelector('label');
                 const transportadoLabel = row.querySelector('.flex-grow label');
                 const removeBtn = row.querySelector('.remove-edit-passageiro-btn');
-
-
                 if (reLabel) reLabel.textContent = `RE (P${pNum}):`;
                 if (transportadoLabel) transportadoLabel.textContent = `Transportado (P${pNum}):`;
                 if (removeBtn) removeBtn.dataset.pNum = pNum;
@@ -2376,36 +2006,28 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             const fieldset = document.createElement('div');
             fieldset.className = 'edit-passageiro-row grid grid-cols-1 md:grid-cols-2 gap-4';
             fieldset.dataset.pNum = pNum;
-
             const isP1 = pNum === 1;
             fieldset.innerHTML = `
                 <div>
                     <label class="block text-sm font-medium text-gray-700">RE (P${pNum}):</label>
                     <input type="text" name="edit-res[]" list="transportados-re-list" value="${reValue}"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
- 
                 </div>
                 <div class="flex items-end">
                     <div class="flex-grow">
                         <label class="block text-sm font-medium text-gray-700">Transportado (P${pNum}):</label>
-                 
                         <input type="text" name="edit-transportados[]" list="transportados-nome-list" value="${nomeValue}"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     </div>
-                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-passageiro-btn ${isP1
-                    ? 'hidden' : ''}" data-p-num="${pNum}">-</button>
+                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-passageiro-btn ${isP1 ? 'hidden' : ''}" data-p-num="${pNum}">-</button>
                 </div>
             `;
-            // Adiciona listeners de autofill ao novo elemento
             const reInput = fieldset.querySelector('input[name="edit-res[]"]');
             const nomeInput = fieldset.querySelector('input[name="edit-transportados[]"]');
-
             if (reInput && nomeInput) {
-
                 reInput.addEventListener('blur', () => handleAutofillDynamic(reInput, nomeInput, 're'));
                 nomeInput.addEventListener('blur', () => handleAutofillDynamic(nomeInput, reInput, 'nome'));
             }
-
             const removeBtn = fieldset.querySelector('.remove-edit-passageiro-btn');
             if (removeBtn) {
                 removeBtn.onclick = () => {
@@ -2413,24 +2035,21 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     updateEditPassageiroLabels();
                 };
             }
-
             return fieldset;
         }
 
 
-        function addEditPassageiroRow(re =
-            '', nome = '') {
+        function addEditPassageiroRow(re = '', nome = '') {
             const extrasContainer = document.getElementById('edit-passageiros-extras-container');
             const currentRows = extrasContainer.querySelectorAll('.edit-passageiro-row').length;
             const pNum = currentRows + 2;
-            // O próximo passageiro será P2, P3, etc.
-
             const newRow = createEditPassageiroInput(pNum, re, nome);
             extrasContainer.appendChild(newRow);
             updateEditPassageiroLabels();
         }
 
         document.getElementById('add-edit-passageiro-btn').addEventListener('click', () => addEditPassageiroRow());
+        
         function openEditLancamentoModal(id) {
             const lancamento = lancamentosData.find(l => l.id === id);
             if (!lancamento) return;
@@ -2454,7 +2073,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
 
             const editSolicitanteContainer = document.getElementById('edit-solicitante-campos-container');
             editSolicitanteContainer.innerHTML = '';
-
             addEditDynamicRow('edit-solicitante-campos-container', 'solicitante', 'Solicitante', lancamento.solicitante || '');
             if (lancamento.solicitantes_extras && lancamento.solicitantes_extras.length > 0) {
                 lancamento.solicitantes_extras.forEach((s) => {
@@ -2465,24 +2083,20 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
 
             const editDestinoContainer = document.getElementById('edit-destino-campos-container');
             editDestinoContainer.innerHTML = '';
-
             const destinosParaEdicao = [{ destino: lancamento.destino || '', chegada: lancamento.chegada_destino || '' }];
             if (lancamento.destinos_extras && lancamento.destinos_extras.length > 0) {
                 lancamento.destinos_extras.forEach(d => destinosParaEdicao.push({ destino: d.destino || '', chegada: d.chegada || '' }));
             }
-
             destinosParaEdicao.forEach(d => {
                 addEditDynamicRow('edit-destino-campos-container', 'destino', 'Destino', d.destino, d.chegada);
             });
 
             const editValorContainer = document.getElementById('edit-valor-campos-container');
             editValorContainer.innerHTML = '';
-
             const valoresParaEdicao = [{ valor: lancamento.valor || 0, valorExtra: lancamento.valorExtra || 0 }];
             if (lancamento.destinos_extras && lancamento.destinos_extras.length > 0) {
                 lancamento.destinos_extras.forEach(d => valoresParaEdicao.push({ valor: d.valor || 0, valorExtra: d.valorExtra || 0 }));
             }
-
             valoresParaEdicao.forEach((v, index) => {
                 const pNum = index + 1;
                 const valorFmt = (v.valor || 0).toFixed(2).replace('.', ',');
@@ -2494,7 +2108,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
 
             document.getElementById('edit-re').value = lancamento.re || '';
             document.getElementById('edit-transportado').value = lancamento.transportado || '';
-
             const extrasContainer = document.getElementById('edit-passageiros-extras-container');
             extrasContainer.innerHTML = '';
             if (lancamento.passageiros_extras && lancamento.passageiros_extras.length > 0) {
@@ -2503,7 +2116,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 });
             }
             updateEditPassageiroLabels();
-
             document.getElementById('edit-lancamento-modal').classList.remove('hidden');
         }
 
@@ -2515,12 +2127,9 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 if (!parentDiv) {
                     parentDiv = input.closest('.edit-passageiro-row');
                 }
-
                 if (!parentDiv) return;
-
                 const reInput = parentDiv.querySelector('input[name="edit-res[]"]');
                 const nomeInput = parentDiv.querySelector('input[name="edit-transportados[]"]');
-
                 if (reInput && nomeInput) {
                     if (input === reInput) {
                         handleAutofillDynamic(reInput, nomeInput, 're');
@@ -2531,25 +2140,22 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             }, true);
         }
         setupEditModalAutofill();
+
         document.getElementById('close-edit-lancamento-modal').addEventListener('click', () => {
             document.getElementById('edit-lancamento-modal').classList.add('hidden');
         });
         document.getElementById('cancel-edit-btn').addEventListener('click', () => {
             document.getElementById('edit-lancamento-modal').classList.add('hidden');
         });
-
         document.getElementById('edit-lancamento-form').addEventListener('submit', async function (event) {
             event.preventDefault();
             const id = document.getElementById('edit-lancamento-id').value;
-
             const solicitantesEdit = Array.from(document.querySelectorAll('#edit-solicitante-campos-container input[name="edit-solicitantes[]"]'))
-                .map(input => input.value.trim())
-                .filter(value => value !== '');
+                .map(input => input.value.trim()).filter(value => value !== '');
             if (solicitantesEdit.length === 0) {
                 showWarning('O solicitante principal (P1) deve estar preenchido.');
                 return;
             }
-
             const p1RE = document.getElementById('edit-re').value.trim();
             const p1Nome = document.getElementById('edit-transportado').value.trim();
             if (!p1RE || !p1Nome) {
@@ -2558,38 +2164,29 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             }
             const resExtras = Array.from(document.querySelectorAll('#edit-passageiros-extras-container input[name="edit-res[]"]')).map(input => input.value.trim());
             const nomesExtras = Array.from(document.querySelectorAll('#edit-passageiros-extras-container input[name="edit-transportados[]"]')).map(input => input.value.trim());
-            const passageirosExtras = resExtras.map((re, i) => ({
-                re: re,
-                nome: nomesExtras[i]
-            })).filter(p => p.re && p.nome);
-
+            const passageirosExtras = resExtras.map((re, i) => ({ re: re, nome: nomesExtras[i] })).filter(p => p.re && p.nome);
             const destinosInputs = document.querySelectorAll('#edit-destino-campos-container input[name="edit-destinos[]"]');
             const chegadasInputs = document.querySelectorAll('#edit-destino-campos-container input[name="edit-chegadas_destino[]"]');
             const valoresInputs = document.querySelectorAll('#edit-valor-campos-container input[name="edit-valores[]"]');
             const valoresExtraInputs = document.querySelectorAll('#edit-valor-campos-container input[name="edit-valores_extra[]"]');
-
             const destinosArray = [];
             let destinoIncompleto = false;
             destinosInputs.forEach((destinoInput, i) => {
                 const destino = destinoInput.value.trim();
                 const chegada = chegadasInputs[i] ? chegadasInputs[i].value.trim() : '';
-
                 if ((destino && !chegada) || (!destino && chegada)) {
                     destinoIncompleto = true;
                 }
                 destinosArray.push({ destino, chegada });
             });
-
             if (destinoIncompleto) {
                 showWarning('Preencha os campos de Destino e Chegada (Horário) ou deixe ambos vazios.');
                 return;
             }
-
             if (!destinosArray[0] || !destinosArray[0].destino || !destinosArray[0].chegada) {
                 showWarning('O destino principal (P1) e sua chegada devem estar preenchidos.');
                 return;
             }
-
             const valoresArray = [];
             valoresInputs.forEach((valorInput, i) => {
                 const valor = parseCurrencyValue(valorInput.value);
@@ -2619,12 +2216,10 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             };
 
             const totalExtras = Math.max(destinosArray.length, valoresArray.length) - 1;
-
             if (totalExtras > 0) {
                 for (let i = 1; i <= totalExtras; i++) {
                     const destinoInfo = destinosArray[i] || { destino: '', chegada: '' };
                     const valorInfo = valoresArray[i] || { valor: 0, valorExtra: 0 };
-
                     if (destinoInfo.destino || valorInfo.valor > 0 || valorInfo.valorExtra > 0) {
                         updatedData.destinos_extras.push({
                             destino: destinoInfo.destino,
@@ -2638,7 +2233,6 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
 
             const docRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos', id);
             await updateDoc(docRef, updatedData);
-
             showWarning('Lançamento atualizado com sucesso!');
             document.getElementById('edit-lancamento-modal').classList.add('hidden');
             renderLancamentosList();
@@ -2660,10 +2254,11 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             populateTransportadosDatalist();
         }
 
+        // ATUALIZADO para usar 'usersData'
         function renderMotoristasList() {
             const tableBody = document.querySelector('#motoristas-table tbody');
             tableBody.innerHTML = '';
-            motoristasData.forEach(item => {
+            usersData.forEach(item => {
                 const row = document.createElement('tr');
                 row.className = 'bg-white hover:bg-gray-50';
                 row.innerHTML = `
@@ -2675,8 +2270,7 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
         }
 
         function populateTransportadosDatalist() {
-            const reDatalist = document.querySelector('#transportados-re-list') ||
-                document.createElement('datalist');
+            const reDatalist = document.querySelector('#transportados-re-list') || document.createElement('datalist');
             reDatalist.id = 'transportados-re-list';
             const nomeDatalist = document.querySelector('#transportados-nome-list') || document.createElement('datalist');
             nomeDatalist.id = 'transportados-nome-list';
@@ -2690,23 +2284,22 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             });
         }
 
+        // ATUALIZADO para usar 'usersData'
         function populateMotoristasDatalist() {
             const datalist = document.getElementById('motoristas-list');
             datalist.innerHTML = '';
-            motoristasData.forEach(item => datalist.innerHTML += `<option value="${item.nome}">`);
+            usersData.forEach(item => datalist.innerHTML += `<option value="${item.nome}">`);
         }
 
         document.getElementById('add-transportado').addEventListener('click', async () => {
             const newRE = document.getElementById('new-re').value.trim();
             const newNome = document.getElementById('new-nome').value.trim();
             if (newRE && newNome) {
-                const existing = transportadosData.find(item => item.re === newRE ||
-                    item.nome.toLowerCase() === newNome.toLowerCase());
+                const existing = transportadosData.find(item => item.re === newRE || item.nome.toLowerCase() === newNome.toLowerCase());
                 if (existing) {
                     showWarning('RE ou nome já existe.');
                 } else {
-                    await addDoc(collection(db, 'artifacts', globalAppId, 'public', 'data', 'transportados'),
-                        { re: newRE, nome: newNome });
+                    await addDoc(collection(db, 'artifacts', globalAppId, 'public', 'data', 'transportados'), { re: newRE, nome: newNome });
                     document.getElementById('new-re').value = '';
                     document.getElementById('new-nome').value = '';
                     showWarning('Transportado adicionado.');
@@ -2726,31 +2319,55 @@ py-2 bg-gray-50 border border-gray-300 rounded-lg">
             await Promise.all(promises);
             showWarning(`${checkboxes.length} transportados excluídos.`);
         });
+        
+        // LÓGICA DE ADICIONAR MOTORISTA ATUALIZADA
         document.getElementById('add-motorista').addEventListener('click', async () => {
-            const newNome = document.getElementById('new-motorista-nome').value.trim();
-            if (newNome) {
-                if (motoristasData.find(item => item.nome.toLowerCase() === newNome.toLowerCase())) {
-                    showWarning('Motorista já existe.');
-                } else {
-                    await addDoc(collection(db, 'artifacts', globalAppId, 'public', 'data', 'motoristas'), { nome: newNome });
-                    document.getElementById('new-motorista-nome').value = '';
-                    showWarning('Motorista adicionado.');
-                }
+            const nome = document.getElementById('new-motorista-nome').value.trim();
+            const username = document.getElementById('new-motorista-username').value.trim().toLowerCase();
+            const password = document.getElementById('new-motorista-password').value.trim();
+            const isAdmin = document.getElementById('new-motorista-is-admin').checked;
+
+            if (nome && username && password) {
+                 const existingUser = usersData.find(user => user.username === username);
+                 if (existingUser) {
+                     showWarning('Este nome de usuário já existe.');
+                     return;
+                 }
+                
+                const newUser = {
+                    nome: nome,
+                    username: username,
+                    password: password, // Lembre-se do aviso de segurança!
+                    is_admin: isAdmin,
+                    is_motorista_fixo: true 
+                };
+                
+                await addDoc(collection(db, 'users'), newUser);
+
+                document.getElementById('new-motorista-nome').value = '';
+                document.getElementById('new-motorista-username').value = '';
+                document.getElementById('new-motorista-password').value = '';
+                document.getElementById('new-motorista-is-admin').checked = false;
+
+                showWarning('Novo usuário/motorista adicionado com sucesso!');
             } else {
-                showWarning('Preencha o nome do motorista.');
+                showWarning('Preencha todos os campos: Nome, Usuário e Senha.');
             }
         });
+
+        // LÓGICA DE EXCLUIR MOTORISTA ATUALIZADA
         document.getElementById('delete-selected-motoristas').addEventListener('click', async () => {
             const checkboxes = document.querySelectorAll('#motoristas-table .motorista-checkbox:checked');
             if (checkboxes.length === 0) {
                 showWarning('Selecione ao menos um motorista.');
                 return;
             }
-            const promises = Array.from(checkboxes).map(cb =>
-                deleteDoc(doc(db, 'artifacts', globalAppId, 'public', 'data', 'motoristas', cb.dataset.id)));
+            // Usa a coleção 'users'
+            const promises = Array.from(checkboxes).map(cb => deleteDoc(doc(db, 'users', cb.dataset.id)));
             await Promise.all(promises);
-            showWarning(`${checkboxes.length} motoristas excluídos.`);
+            showWarning(`${checkboxes.length} usuários/motoristas excluídos.`);
         });
+
         // --- Eventos de UI restantes ---
         document.getElementById('close-modal').addEventListener('click', hideWarning);
         document.getElementById('open-transportados-modal').addEventListener('click', () => document.getElementById('transportados-modal').classList.remove('hidden'));
