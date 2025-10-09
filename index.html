@@ -90,6 +90,8 @@
             </div>
             <button id="logout-btn"
                 class="absolute top-0 right-0 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded-lg hover:bg-gray-400">Sair</button>
+	<button id="open-change-password-btn"
+    class="absolute top-12 right-0 px-4 py-2 bg-yellow-500 text-white font-medium rounded-lg hover:bg-yellow-600">Alterar Senha</button>
         </div>
 
         <p id="user-id-display" class="text-sm text-transparent text-center mb-4"></p>
@@ -617,6 +619,56 @@
         </div>
     </div>
 
+<div id="change-password-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl modal-content max-w-md w-full">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800">Alterar Minha Senha</h2>
+            <button id="close-change-password-modal" class="text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
+        </div>
+        <form id="change-password-form" class="space-y-4">
+            <div>
+                <label for="current-password" class="block text-sm font-medium text-gray-700">Senha Atual:</label>
+                <input type="password" id="current-password" required class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label for="new-password" class="block text-sm font-medium text-gray-700">Nova Senha:</label>
+                <input type="password" id="new-password" required class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label for="confirm-new-password" class="block text-sm font-medium text-gray-700">Confirmar Nova Senha:</label>
+                <input type="password" id="confirm-new-password" required class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <p id="change-password-message" class="text-red-500 text-sm text-center hidden"></p>
+            <div class="flex justify-end gap-4 pt-4">
+                <button type="button" id="cancel-change-password-btn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Cancelar</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Salvar Nova Senha</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="reset-password-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl modal-content max-w-md w-full">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800">Redefinir Senha</h2>
+            <button id="close-reset-password-modal" class="text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
+        </div>
+        <p class="mb-4">Redefinindo senha para o usuário: <strong id="reset-username-display"></strong></p>
+        <form id="reset-password-form" class="space-y-4">
+            <input type="hidden" id="reset-user-id">
+            <div>
+                <label for="admin-new-password" class="block text-sm font-medium text-gray-700">Digite a Nova Senha:</label>
+                <input type="password" id="admin-new-password" required class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <p id="reset-password-message" class="text-red-500 text-sm text-center hidden"></p>
+            <div class="flex justify-end gap-4 pt-4">
+                <button type="button" id="cancel-reset-password-btn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Cancelar</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Salvar Nova Senha</button>
+            </div>
+        </form>
+    </div>
+</div>
+
     <script type="module">
         // IMPORTAÇÕES
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -625,13 +677,13 @@
         
         // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = {
-            apiKey: "__FIREBASE_API_KEY__",
-            authDomain: "__FIREBASE_AUTH_DOMAIN__",
-            projectId: "__FIREBASE_PROJECT_ID__",
-            storageBucket: "__FIREBASE_STORAGE_BUCKET__",
-            messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
-            appId: "__FIREBASE_APP_ID__",
-            measurementId: "__FIREBASE_MEASUREMENT_ID__"
+            apiKey: "AIzaSyDmqvcKtIsga4ZQWNDg4_2k493dqMQCDVg",
+            authDomain: "teste-ebf38.firebaseapp.com",
+            projectId: "teste-ebf38",
+            storageBucket: "teste-ebf38.firebasestorage.app",
+            messagingSenderId: "741884776297",
+            appId: "1:741884776297:web:a23450b4909581a1b237f8",
+            measurementId: "G-2MD5CFD51E"
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -664,6 +716,139 @@
         const valorContainer = document.getElementById('valor-campos-container');
         const addValorBtn = document.getElementById('add-valor-btn');
         const editValorBtn = document.getElementById('add-edit-valor-btn');
+	const openChangePasswordBtn = document.getElementById('open-change-password-btn');
+	const changePasswordModal = document.getElementById('change-password-modal');
+	const closeChangePasswordModalBtn = document.getElementById('close-change-password-modal');
+	const cancelChangePasswordBtn = document.getElementById('cancel-change-password-btn');
+	const changePasswordForm = document.getElementById('change-password-form');
+	const changePasswordMessage = document.getElementById('change-password-message');
+	const resetPasswordModal = document.getElementById('reset-password-modal');
+	const closeResetPasswordModalBtn = document.getElementById('close-reset-password-modal');
+	const cancelResetPasswordBtn = document.getElementById('cancel-reset-password-btn');
+	const resetPasswordForm = document.getElementById('reset-password-form');
+	const resetPasswordMessage = document.getElementById('reset-password-message');
+	const motoristasTable = document.getElementById('motoristas-table');
+
+// --- LÓGICA PARA ALTERAR A PRÓPRIA SENHA ---
+
+openChangePasswordBtn.addEventListener('click', () => {
+    changePasswordForm.reset();
+    changePasswordMessage.classList.add('hidden');
+    changePasswordModal.classList.remove('hidden');
+});
+
+const closeChangePasswordModal = () => {
+    changePasswordModal.classList.add('hidden');
+};
+
+closeChangePasswordModalBtn.addEventListener('click', closeChangePasswordModal);
+cancelChangePasswordBtn.addEventListener('click', closeChangePasswordModal);
+
+changePasswordForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    changePasswordMessage.classList.add('hidden');
+
+    const currentPassword = document.getElementById('current-password').value;
+    const newPassword = document.getElementById('new-password').value;
+    const confirmNewPassword = document.getElementById('confirm-new-password').value;
+
+    // Validações
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+        changePasswordMessage.innerText = 'Todos os campos são obrigatórios.';
+        changePasswordMessage.classList.remove('hidden');
+        return;
+    }
+    if (newPassword !== confirmNewPassword) {
+        changePasswordMessage.innerText = 'A nova senha e a confirmação não correspondem.';
+        changePasswordMessage.classList.remove('hidden');
+        return;
+    }
+
+    // Verifica a senha atual
+    const storedUserData = JSON.parse(localStorage.getItem('loggedInUserData'));
+    if (storedUserData.password !== currentPassword) {
+        changePasswordMessage.innerText = 'A senha atual está incorreta.';
+        changePasswordMessage.classList.remove('hidden');
+        return;
+    }
+
+    if (newPassword === currentPassword) {
+        changePasswordMessage.innerText = 'A nova senha deve ser diferente da atual.';
+        changePasswordMessage.classList.remove('hidden');
+        return;
+    }
+
+
+    try {
+        const userDocRef = doc(db, 'users', storedUserData.id);
+        await updateDoc(userDocRef, {
+            password: newPassword
+        });
+
+        // ATUALIZA O LOCALSTORAGE TAMBÉM!
+        const updatedUserData = { ...storedUserData, password: newPassword };
+        localStorage.setItem('loggedInUserData', JSON.stringify(updatedUserData));
+
+        showWarning('Senha alterada com sucesso!');
+        closeChangePasswordModal();
+
+    } catch (error) {
+        console.error("Erro ao atualizar senha:", error);
+        changePasswordMessage.innerText = 'Erro ao conectar com o servidor.';
+        changePasswordMessage.classList.remove('hidden');
+    }
+});
+
+
+// --- LÓGICA PARA ADMIN REDEFINIR SENHA ---
+
+motoristasTable.addEventListener('click', (event) => {
+    const resetButton = event.target.closest('.reset-password-btn');
+    if (resetButton) {
+        const userId = resetButton.dataset.id;
+        const username = resetButton.dataset.username;
+
+        resetPasswordForm.reset();
+        resetPasswordMessage.classList.add('hidden');
+        document.getElementById('reset-user-id').value = userId;
+        document.getElementById('reset-username-display').innerText = username;
+        resetPasswordModal.classList.remove('hidden');
+    }
+});
+
+const closeResetPasswordModal = () => {
+    resetPasswordModal.classList.add('hidden');
+};
+
+closeResetPasswordModalBtn.addEventListener('click', closeResetPasswordModal);
+cancelResetPasswordBtn.addEventListener('click', closeResetPasswordModal);
+
+resetPasswordForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    resetPasswordMessage.classList.add('hidden');
+
+    const userId = document.getElementById('reset-user-id').value;
+    const newPassword = document.getElementById('admin-new-password').value;
+
+    if (!newPassword) {
+        resetPasswordMessage.innerText = 'O campo de nova senha é obrigatório.';
+        resetPasswordMessage.classList.remove('hidden');
+        return;
+    }
+
+    try {
+        const userDocRef = doc(db, 'users', userId);
+        await updateDoc(userDocRef, {
+            password: newPassword
+        });
+        showWarning(`Senha do usuário foi redefinida com sucesso!`);
+        closeResetPasswordModal();
+    } catch (error) {
+        console.error("Erro ao redefinir a senha:", error);
+        resetPasswordMessage.innerText = 'Erro ao conectar com o servidor.';
+        resetPasswordMessage.classList.remove('hidden');
+    }
+});
 
         // === DADOS GLOBAIS ===
         let transportadosData = [];
@@ -2333,15 +2518,30 @@ function checkEditPassageiroDuplicidade() {
         }
 
         // ATUALIZADO para usar 'usersData'
+// ATUALIZADO para usar 'usersData' e adicionar botão de redefinir senha
         function renderMotoristasList() {
             const tableBody = document.querySelector('#motoristas-table tbody');
+            const tableHead = document.querySelector('#motoristas-table thead tr');
+
+            // Adiciona o cabeçalho "Ações" se ainda não existir
+            if (!tableHead.querySelector('.th-actions')) {
+                tableHead.innerHTML += `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider th-actions">Ações</th>`;
+            }
+
             tableBody.innerHTML = '';
             usersData.forEach(item => {
+                // Não mostra o botão para o próprio admin logado
+                const disableButton = item.username === currentUser.username;
+                const buttonHtml = disableButton ? 
+                    `<span class="text-gray-400 text-sm">Próprio Usuário</span>` : 
+                    `<button data-id="${item.id}" data-username="${item.username}" class="reset-password-btn text-yellow-600 hover:text-yellow-900 font-semibold">Redefinir Senha</button>`;
+
                 const row = document.createElement('tr');
                 row.className = 'bg-white hover:bg-gray-50';
                 row.innerHTML = `
                     <td class="p-4"><input type="checkbox" data-id="${item.id}" class="motorista-checkbox rounded-sm"></td>
                     <td class="px-6 py-4">${item.nome}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${buttonHtml}</td>
                 `;
                 tableBody.appendChild(row);
             });
