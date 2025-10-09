@@ -625,13 +625,13 @@
         
         // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = {
-            apiKey: "AIzaSyDmqvcKtIsga4ZQWNDg4_2k493dqMQCDVg",
-            authDomain: "teste-ebf38.firebaseapp.com",
-            projectId: "teste-ebf38",
-            storageBucket: "teste-ebf38.firebasestorage.app",
-            messagingSenderId: "741884776297",
-            appId: "1:741884776297:web:a23450b4909581a1b237f8",
-            measurementId: "G-2MD5CFD51E"
+            apiKey: "__FIREBASE_API_KEY__",
+            authDomain: "__FIREBASE_AUTH_DOMAIN__",
+            projectId: "__FIREBASE_PROJECT_ID__",
+            storageBucket: "__FIREBASE_STORAGE_BUCKET__",
+            messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
+            appId: "__FIREBASE_APP_ID__",
+            measurementId: "__FIREBASE_MEASUREMENT_ID__"
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -2446,6 +2446,7 @@ function checkEditPassageiroDuplicidade() {
             showWarning(`${checkboxes.length} usuários/motoristas excluídos.`);
         });
 
+        // --- Eventos de UI restantes ---
         document.getElementById('close-modal').addEventListener('click', hideWarning);
         document.getElementById('open-transportados-modal').addEventListener('click', () => document.getElementById('transportados-modal').classList.remove('hidden'));
         document.getElementById('close-transportados-modal').addEventListener('click', () => document.getElementById('transportados-modal').classList.add('hidden'));
