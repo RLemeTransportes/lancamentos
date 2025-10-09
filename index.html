@@ -2446,7 +2446,6 @@ function checkEditPassageiroDuplicidade() {
             showWarning(`${checkboxes.length} usuários/motoristas excluídos.`);
         });
 
-        // --- Eventos de UI restantes ---
         document.getElementById('close-modal').addEventListener('click', hideWarning);
         document.getElementById('open-transportados-modal').addEventListener('click', () => document.getElementById('transportados-modal').classList.remove('hidden'));
         document.getElementById('close-transportados-modal').addEventListener('click', () => document.getElementById('transportados-modal').classList.add('hidden'));
