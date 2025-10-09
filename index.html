@@ -1662,7 +1662,9 @@ function checkEditPassageiroDuplicidade() {
             await addDoc(lancamentosRef, newEntry);
 
             showWarning('Lançamento salvo com sucesso!');
-            form.reset();
+            const dataValue = form['data'].value; // Salva o valor da data
+			form.reset(); // Limpa o formulário
+			form['data'].value = dataValue; // Restaura o valor da data
             
             solicitanteContainer.innerHTML = '';
             addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', true);
