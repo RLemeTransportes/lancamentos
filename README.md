@@ -2896,7 +2896,6 @@
                             }
                         });
 
-                        // LÓGICA DE EXCLUIR MOTORISTA ATUALIZADA
                         document.getElementById('delete-selected-motoristas').addEventListener('click', async () => {
                             const checkboxes = document.querySelectorAll('#motoristas-table .motorista-checkbox:checked');
                             if (checkboxes.length === 0) {
