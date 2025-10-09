@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<index.html>
 <html lang="pt-BR">
 
 <head>
@@ -606,7 +606,7 @@
         </div>
     </div>
 
-    <div id="message-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
+    <div id="message-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center" style="z-index: 60;">
         <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full">
             <h2 class="text-xl font-bold mb-4">Aviso</h2>
             <p id="message-content" class="text-gray-700 mb-4"></p>
@@ -772,6 +772,63 @@
 
             setTimeout(() => checkPassageiroDuplicidade(sourceInput), 50);
         }
+
+function checkEditPassageiroDuplicidade() {
+            const allPassengerInputs = [];
+            const p1Row = {
+                reInput: document.getElementById('edit-re'),
+                nomeInput: document.getElementById('edit-transportado')
+            };
+            allPassengerInputs.push(p1Row);
+
+            const extraRows = document.querySelectorAll('#edit-passageiros-extras-container .edit-passageiro-row');
+            extraRows.forEach(row => {
+                allPassengerInputs.push({
+                    reInput: row.querySelector('input[name="edit-res[]"]'),
+                    nomeInput: row.querySelector('input[name="edit-transportados[]"]')
+                });
+            });
+
+            // Limpa bordas de erro anteriores
+            allPassengerInputs.forEach(pair => {
+                if(pair.reInput) pair.reInput.classList.remove('error-border');
+                if(pair.nomeInput) pair.nomeInput.classList.remove('error-border');
+            });
+
+            const seen = new Map();
+            let isDuplicated = false;
+
+            allPassengerInputs.forEach(pair => {
+                if (!pair.reInput || !pair.nomeInput) return;
+                
+                const re = pair.reInput.value.trim();
+                const nome = pair.nomeInput.value.trim().toLowerCase();
+
+                if (re === '' || nome === '') return; 
+
+                const key = `${re}_${nome}`;
+
+                if (seen.has(key)) {
+                    isDuplicated = true;
+                    // Marca a linha atual como duplicada
+                    pair.reInput.classList.add('error-border');
+                    pair.nomeInput.classList.add('error-border');
+                    
+                    // Marca a primeira linha encontrada com a mesma combinação
+                    const firstSeenPair = seen.get(key);
+                    firstSeenPair.reInput.classList.add('error-border');
+                    firstSeenPair.nomeInput.classList.add('error-border');
+                } else {
+                    seen.set(key, pair);
+                }
+            });
+            
+            if (isDuplicated) {
+                showWarning('Passageiro duplicado encontrado no formulário de edição.');
+            }
+            return isDuplicated;
+        }
+
 
         // --- Lógica Solicitante/Destino/Valor Dinâmico (Página Principal) ---
 
@@ -1813,13 +1870,16 @@
                 }
 
                 if (containerId === 'edit-valor-campos-container') {
-                    const labelValor = row.querySelector('label[for^="edit-valor-"]');
-                    const labelValorExtra = row.querySelector('label[for^="edit-valor-extra-"]');
+
+                    const labelValor = row.querySelector('label[for^="edit-valor"]:not([for*="extra"])');
+                    const labelValorExtra = row.querySelector('label[for*="extra"]');
                     const inputValor = row.querySelector('input[name="edit-valores[]"]');
-                    const inputValorExtra = row.querySelector('input[name="edit-valores_extra[]"]');
-                    if (labelValor) labelValor.textContent = pNum === 1 ? 'Valor P1:' : `Valor P${pNum}:`;
-                    if (labelValorExtra) labelValorExtra.textContent = pNum === 1 ? 'Valor Extra P1:' : `Valor Extra P${pNum}:`;
-                    if (inputValor) inputValor.id = pNum === 1 ? 'edit-valor' : `edit-valor-${pNum}`;
+                    const inputValorExtra = row.querySelector('input[name="edit-valores_extra[]"]');                    
+                    if (labelValor) labelValor.textContent = pNum === 1 ?
+                        'Valor P1:' : `Valor P${pNum}:`;
+                    if (labelValorExtra) labelValorExtra.textContent = pNum === 1 ? 'Valor Extra P1:' : `Valor Extra P${pNum}:`;                   
+                    if (inputValor) inputValor.id = pNum === 1 ?
+                        'edit-valor' : `edit-valor-${pNum}`;
                     if (inputValorExtra) inputValorExtra.id = pNum === 1 ? 'edit-valor-extra' : `edit-valor-extra-${pNum}`;
                     if (inputValor) formatCurrencyInput(inputValor);
                     if (inputValorExtra) formatCurrencyInput(inputValorExtra);
@@ -2033,6 +2093,7 @@
                 removeBtn.onclick = () => {
                     fieldset.remove();
                     updateEditPassageiroLabels();
+		    checkEditPassageiroDuplicidade();
                 };
             }
             return fieldset;
@@ -2123,19 +2184,31 @@
             const modal = document.getElementById('edit-lancamento-modal');
             modal.addEventListener('blur', (event) => {
                 const input = event.target;
-                let parentDiv = input.closest('.grid.grid-cols-1.md\\:grid-cols-2.gap-4');
-                if (!parentDiv) {
-                    parentDiv = input.closest('.edit-passageiro-row');
-                }
-                if (!parentDiv) return;
-                const reInput = parentDiv.querySelector('input[name="edit-res[]"]');
-                const nomeInput = parentDiv.querySelector('input[name="edit-transportados[]"]');
-                if (reInput && nomeInput) {
-                    if (input === reInput) {
-                        handleAutofillDynamic(reInput, nomeInput, 're');
-                    } else if (input === nomeInput) {
-                        handleAutofillDynamic(nomeInput, reInput, 'nome');
+                
+                const isPassengerField = input.id === 'edit-re' || input.id === 'edit-transportado' ||
+                    input.matches('input[name="edit-res[]"]') || input.matches('input[name="edit-transportados[]"]');
+
+                if (isPassengerField) {
+                    let reInput, nomeInput;
+                    
+                    if (input.id === 'edit-re' || input.id === 'edit-transportado') {
+                        reInput = document.getElementById('edit-re');
+                        nomeInput = document.getElementById('edit-transportado');
+                    } else {
+                        const row = input.closest('.edit-passageiro-row');
+                        reInput = row.querySelector('input[name="edit-res[]"]');
+                        nomeInput = row.querySelector('input[name="edit-transportados[]"]');
                     }
+                    
+                    if (reInput && nomeInput) {
+                         if (input === reInput) {
+                            handleAutofillDynamic(reInput, nomeInput, 're');
+                        } else if (input === nomeInput) {
+                            handleAutofillDynamic(nomeInput, reInput, 'nome');
+                        }
+                    }
+
+                    setTimeout(() => checkEditPassageiroDuplicidade(), 50);
                 }
             }, true);
         }
@@ -2149,6 +2222,11 @@
         });
         document.getElementById('edit-lancamento-form').addEventListener('submit', async function (event) {
             event.preventDefault();
+
+            if (checkEditPassageiroDuplicidade()) {
+                showWarning('Corrija os passageiros duplicados antes de salvar.');
+                return;
+            }
             const id = document.getElementById('edit-lancamento-id').value;
             const solicitantesEdit = Array.from(document.querySelectorAll('#edit-solicitante-campos-container input[name="edit-solicitantes[]"]'))
                 .map(input => input.value.trim()).filter(value => value !== '');
