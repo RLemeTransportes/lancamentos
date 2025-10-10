@@ -52,6 +52,39 @@
             min-width: 0;
             /* Allow flex item to shrink */
         }
+
+/* ESTILOS PARA A CAIXA DE AUTOCOMPLETAR */
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d1d5db;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border-radius: 0 0 0.5rem 0.5rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.autocomplete-items div {
+    padding: 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.autocomplete-items div:hover {
+    background-color: #e5e7eb;
+}
+
+.autocomplete-active {
+    background-color: #3b82f6 !important;
+    color: #ffffff;
+}
+
     </style>
 </head>
 
@@ -671,6 +704,8 @@
     </div>
 </div>
 
+<div id="autocomplete-suggestions-container"></div>
+
     <script type="module">
         // IMPORTAÇÕES
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -936,6 +971,64 @@ resetPasswordForm.addEventListener('submit', async (event) => {
 
             return isDuplicated;
         }
+
+
+// ===============================================
+// ▼▼▼ NOVA LÓGICA DE AUTOCOMPLETE ▼▼▼
+// ===============================================
+
+function closeAllAutocompleteLists() {
+    const container = document.getElementById('autocomplete-suggestions-container');
+    container.innerHTML = '';
+}
+
+function showAutocompleteSuggestions(inputElement, filterType) {
+    const val = inputElement.value;
+    closeAllAutocompleteLists();
+    if (!val || val.length < 2) { // Só busca a partir de 2 caracteres
+        return false;
+    }
+
+    const container = document.getElementById('autocomplete-suggestions-container');
+    const suggestionsDiv = document.createElement('div');
+    suggestionsDiv.setAttribute('class', 'autocomplete-items');
+    container.appendChild(suggestionsDiv);
+
+    const rect = inputElement.getBoundingClientRect();
+    container.style.position = 'absolute';
+    container.style.left = `${rect.left + window.scrollX}px`;
+    container.style.top = `${rect.bottom + window.scrollY}px`;
+    container.style.width = `${rect.width}px`;
+
+    const normalizedVal = val.toLowerCase();
+    let suggestions = [];
+
+    if (filterType === 're') {
+        suggestions = transportadosData.filter(item => item.re && item.re.toLowerCase().includes(normalizedVal));
+    } else { // 'nome'
+        suggestions = transportadosData.filter(item => item.nome && item.nome.toLowerCase().includes(normalizedVal));
+    }
+
+    // Limita o número de sugestões para não poluir a tela
+    suggestions.slice(0, 7).forEach(item => {
+        const suggestionItem = document.createElement('div');
+        suggestionItem.innerHTML = `<strong>${item.re}</strong> - ${item.nome}`;
+        suggestionItem.addEventListener('click', function() {
+            // Ao clicar, preenche os campos da linha correta
+            const parentRow = inputElement.closest('.passageiro-row');
+            const reInput = parentRow.querySelector('input[name="res[]"]');
+            const nomeInput = parentRow.querySelector('input[name="transportados[]"]');
+
+            reInput.value = item.re;
+            nomeInput.value = item.nome;
+
+            closeAllAutocompleteLists();
+            // Dispara a checagem de duplicidade
+            setTimeout(() => checkPassageiroDuplicidade(inputElement), 50);
+        });
+        suggestionsDiv.appendChild(suggestionItem);
+    });
+}
 
         function handleAutofillDynamic(sourceInput, targetInput, sourceType) {
             const value = sourceInput.value.trim();
@@ -1283,22 +1376,24 @@ function checkEditPassageiroDuplicidade() {
             });
         }
 
-        function createPassageiroInput(index, isRequired = true) {
+function createPassageiroInput(index, isRequired = true) {
             const fieldset = document.createElement('div');
-            fieldset.className = 'passageiro-row grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6';
+            fieldset.className = 'passageiro-row grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 relative'; // Adicionamos a classe 'relative'
             fieldset.dataset.index = index;
             fieldset.innerHTML = `
                 <div>
                     <label for="re-${index}" class="block text-sm font-medium text-gray-700">RE (P${index + 1}):</label>
-                    <input type="text" id="re-${index}" name="res[]" list="transportados-re-list"
+                    <input type="text" id="re-${index}" name="res[]"
                         onfocus="this.classList.remove('error-border')"
+                        autocomplete="off" 
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                 </div>
                 <div class="flex items-end">
                     <div class="flex-grow">
                         <label for="transportado-${index}" class="block text-sm font-medium text-gray-700">Transportado (P${index + 1}):</label>
-                        <input type="text" id="transportado-${index}" name="transportados[]" list="transportados-nome-list"
+                        <input type="text" id="transportado-${index}" name="transportados[]"
                             onfocus="this.classList.remove('error-border')"
+                            autocomplete="off"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                     </div>
                     <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-passageiro-btn ${isRequired ? 'hidden' : ''}">
@@ -1306,6 +1401,7 @@ function checkEditPassageiroDuplicidade() {
                     </button>
                 </div>
             `;
+            // A div de sugestões será adicionada aqui via JS
             return fieldset;
         }
 
@@ -1338,21 +1434,25 @@ function checkEditPassageiroDuplicidade() {
                  appPage.classList.add('hidden');
             }
 
-            function bindPassageiroListeners() {
-                passageirosContainer.addEventListener('blur', (event) => {
-                    const input = event.target;
-                    if (input.matches('input[name="res[]"]') || input.matches('input[name="transportados[]"]')) {
-                        const row = input.closest('.passageiro-row');
-                        const reInput = row.querySelector('input[name="res[]"]');
-                        const nomeInput = row.querySelector('input[name="transportados[]"]');
-                        if (input.name === 'res[]') {
-                            handleAutofillDynamic(reInput, nomeInput, 're');
-                        } else if (input.name === 'transportados[]') {
-                            handleAutofillDynamic(nomeInput, reInput, 'nome');
-                        }
-                    }
-                }, true);
-            }
+// VERSÃO ATUALIZADA COM AUTOSUGGEST
+function bindPassageiroListeners() {
+    passageirosContainer.addEventListener('input', (event) => {
+        const input = event.target;
+        if (input.matches('input[name="res[]"]')) {
+            showAutocompleteSuggestions(input, 're');
+        } else if (input.matches('input[name="transportados[]"]')) {
+            showAutocompleteSuggestions(input, 'nome');
+        }
+    });
+
+    // Adiciona um listener para fechar as sugestões se clicar fora
+    document.addEventListener('click', function (e) {
+        const container = document.getElementById('autocomplete-suggestions-container');
+        if (e.target !== container && !container.contains(e.target) && !e.target.matches('input[name="res[]"]') && !e.target.matches('input[name="transportados[]"]')) {
+            closeAllAutocompleteLists();
+        }
+    });
+}
 
             addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', true);
             addDynamicRow('destino-campos-container', 'destino', 'Destino', true);
@@ -1567,12 +1667,6 @@ async function fetchLancamentos(forceRefresh = false) {
                     solicitantesData.push(value);
                 }
             });
-            if (solicitantesData.length === 0) {
-                isFormValid = false;
-                if (solicitantesInputs[0]) solicitantesInputs[0].classList.add('error-border');
-            } else {
-                if (solicitantesInputs[0]) solicitantesInputs[0].classList.remove('error-border');
-            }
 
             const destinosData = [];
             const chegadasDestinoData = [];
@@ -1673,7 +1767,7 @@ async function fetchLancamentos(forceRefresh = false) {
                 re: passageirosData[0].re,
                 transportado: passageirosData[0].nome,
                 passageiros_extras: passageirosData.length > 1 ? passageirosData.slice(1) : [],
-                solicitante: solicitantesData[0],
+                solicitante: solicitantesData[0] || '', // Garante que será salvo como vazio se não preenchido
                 solicitantes_extras: solicitantesData.length > 1 ? solicitantesData.slice(1) : [],
                 data: form['data'].value,
                 origem: form['origem'].value,
@@ -2451,10 +2545,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', asyn
             const id = document.getElementById('edit-lancamento-id').value;
             const solicitantesEdit = Array.from(document.querySelectorAll('#edit-solicitante-campos-container input[name="edit-solicitantes[]"]'))
                 .map(input => input.value.trim()).filter(value => value !== '');
-            if (solicitantesEdit.length === 0) {
-                showWarning('O solicitante principal (P1) deve estar preenchido.');
-                return;
-            }
+
             const p1RE = document.getElementById('edit-re').value.trim();
             const p1Nome = document.getElementById('edit-transportado').value.trim();
             if (!p1RE || !p1Nome) {
@@ -2502,7 +2593,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', asyn
                 observacao: document.getElementById('edit-observacao').value,
                 editedBy: currentUser.username,
                 editedAt: serverTimestamp(),
-                solicitante: solicitantesEdit[0],
+                solicitante: solicitantesEdit[0] || '', // Garante que será salvo como vazio se não preenchido
                 re: p1RE,
                 transportado: p1Nome,
                 destino: destinosArray[0].destino,
