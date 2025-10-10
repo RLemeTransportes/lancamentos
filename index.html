@@ -90,10 +90,9 @@
             </div>
             <button id="logout-btn"
                 class="absolute top-0 right-0 px-4 py-2 bg-gray-300 text-gray-800 font-medium rounded-lg hover:bg-gray-400">Sair</button>
-	<button id="open-change-password-btn"
+<button id="open-change-password-btn"
     class="absolute top-12 right-1 text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium">
     Alterar Senha
-</button>
 </button>
         </div>
 
@@ -1467,6 +1466,35 @@ function checkEditPassageiroDuplicidade() {
             makeTableRowsClickable('motoristas-table');
         }
 
+// NOVA FUNÇÃO PARA BUSCAR LANÇAMENTOS SOB DEMANDA
+// NOVA FUNÇÃO PARA BUSCAR LANÇAMENTOS SOB DEMANDA
+async function fetchLancamentos(forceRefresh = false) {
+    if (lancamentosData.length > 0 && !forceRefresh) {
+        return;
+    }
+    console.log("Buscando lançamentos do Firestore...");
+    try {
+        // Pega a data de 30 dias atrás
+        const date30DaysAgo = new Date();
+        date30DaysAgo.setDate(date30DaysAgo.getDate() - 30);
+        const dateString = date30DaysAgo.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
+
+        const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
+        
+        // A consulta agora filtra para trazer apenas os lançamentos dos últimos 30 dias
+        const q = query(lancamentosRef, where("data", ">=", dateString), orderBy("data", "desc"));
+        
+        const snapshot = await getDocs(q);
+        lancamentosData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        console.log(`${lancamentosData.length} lançamentos (dos últimos 30 dias) carregados.`);
+
+    } catch (error) {
+        // AGORA O CÓDIGO DE ERRO ESTÁ DENTRO DO 'CATCH', ONDE DEVERIA ESTAR
+        console.error("Erro ao buscar lançamentos:", error);
+        showWarning("Não foi possível carregar os lançamentos.");
+    }
+}
+
         function rebuildTransportadosLookups(sortKey = 'nome', sortOrder = 'asc') {
             transportadosData.sort((a, b) => {
                 let valA = a[sortKey] || '';
@@ -1663,8 +1691,8 @@ function checkEditPassageiroDuplicidade() {
 
             showWarning('Lançamento salvo com sucesso!');
             const dataValue = form['data'].value; // Salva o valor da data
-			form.reset(); // Limpa o formulário
-			form['data'].value = dataValue; // Restaura o valor da data
+	    form.reset(); // Limpa o formulário
+	    form['data'].value = dataValue; // Restaura o valor da data
             
             solicitanteContainer.innerHTML = '';
             addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', true);
@@ -1989,10 +2017,13 @@ function checkEditPassageiroDuplicidade() {
             });
         }
 
-        document.getElementById('open-lancamentos-modal').addEventListener('click', () => {
+document.getElementById('open-lancamentos-modal').addEventListener('click', async () => { // Adicione 'async'
             document.getElementById('filter-start-date').value = '';
             document.getElementById('filter-end-date').value = '';
-            renderLancamentosList();
+            
+            await fetchLancamentos(); // Espera os dados serem buscados
+            
+            renderLancamentosList(); // Renderiza a lista com os dados frescos
             document.getElementById('lancamentos-modal').classList.remove('hidden');
         });
         document.getElementById('close-lancamentos-modal').addEventListener('click', () => {
