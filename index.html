@@ -1781,15 +1781,28 @@ async function fetchLancamentos(forceRefresh = false) {
                 createdAt: serverTimestamp()
             };
             const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
+            // ...
             await addDoc(lancamentosRef, newEntry);
 
             showWarning('Lançamento salvo com sucesso!');
             const dataValue = form['data'].value; // Salva o valor da data
 	    form.reset(); // Limpa o formulário
 	    form['data'].value = dataValue; // Restaura o valor da data
+
+            // ADICIONE ESTE BLOCO PARA RESTAURAR O MOTORISTA
+            const loggedInUserData = localStorage.getItem('loggedInUserData');
+            if (loggedInUserData) {
+                try {
+                    const userData = JSON.parse(loggedInUserData);
+                    setMotoristaFromData(userData);
+                } catch (e) {
+                    console.error("Erro ao recarregar dados do usuário:", e);
+                }
+            }
             
             solicitanteContainer.innerHTML = '';
             addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', true);
+// ...
             destinoContainer.innerHTML = '';
             addDynamicRow('destino-campos-container', 'destino', 'Destino', true);
             valorContainer.innerHTML = '';
