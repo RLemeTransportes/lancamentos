@@ -185,42 +185,39 @@
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                 </div>
             </div>
-            <div class="form-row-align">
-                <div class="flex-grow">
-
-                    <label for="origem" class="block text-sm font-medium text-gray-700">Origem:</label>
-                    <input type="text" id="origem" name="origem" onfocus="this.classList.remove('error-border')"
-                        class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
-                </div>
-            </div>
-
-            <div class="form-row-align">
-
-                <div class="flex-grow">
-                    <label for="partida" class="block text-sm font-medium text-gray-700">Partida:</label>
-                    <input type="time" id="partida" name="partida" onfocus="this.classList.remove('error-border')"
-                        class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
-                </div>
-            </div>
-
-            <div id="destino-campos-container-wrapper" class="md:col-span-2 space-y-4">
-                <div id="destino-campos-container" class="grid grid-cols-1 gap-4 md:gap-6">
-                </div>
-
-
-                <div class="flex justify-center md:justify-start">
-                    <button type="button" id="add-destino-btn"
-                        class="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-150 ease-in-out">
-                        + Adicionar Outro Destino
+            <div id="origem-campos-container-wrapper" class="md:col-span-1 space-y-4">
+                <div id="origem-campos-container">
+                    </div>
+                <div class="flex justify-center md:justify-start gap-2">
+                    <button type="button" id="add-origem-btn"
+                        class="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300">
+                        + Adicionar Outra Origem
+                    </button>
+                    <button type="button" id="fill-partidas-btn"
+                        class="w-full md:w-auto px-4 py-2 bg-blue-100 text-blue-800 font-medium rounded-lg hover:bg-blue-200">
+                        Preencher Partidas
                     </button>
                 </div>
             </div>
 
+            <div id="destino-campos-container-wrapper" class="md:col-span-1 space-y-4">
+                <div id="destino-campos-container" class="grid grid-cols-1 gap-4 md:gap-6">
+                    </div>
+                <div class="flex justify-center md:justify-start gap-2">
+                    <button type="button" id="add-destino-btn"
+                        class="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300">
+                        + Adicionar Outro Destino
+                    </button>
+                    <button type="button" id="fill-chegadas-btn"
+                        class="w-full md:w-auto px-4 py-2 bg-blue-100 text-blue-800 font-medium rounded-lg hover:bg-blue-200">
+                        Preencher Chegadas
+                    </button>
+                </div>
+            </div>
 
             <div id="valor-campos-container-wrapper" class="md:col-span-2 space-y-4">
                 <div id="valor-campos-container" class="grid grid-cols-1 gap-4 md:gap-6">
                 </div>
-
                 <div class="flex justify-center md:justify-start">
                     <button type="button" id="add-valor-btn"
                         class="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-150 ease-in-out">
@@ -228,7 +225,6 @@
                     </button>
                 </div>
             </div>
-
 
             <div class="md:col-span-2">
                 <label for="observacao" class="block text-sm font-medium text-gray-700">Observação:</label>
@@ -447,23 +443,17 @@
                     class="absolute top-0 right-0 text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
-                    <label for="filter-start-date" class="block text-sm font-medium text-gray-700">De:</label>
-                    <input type="date" id="filter-start-date"
-                        class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
-                </div>
-                <div>
-                    <label for="filter-end-date" class="block text-sm font-medium text-gray-700">Até:</label>
-                    <input type="date" id="filter-end-date"
+                    <label for="filter-date" class="block text-sm font-medium text-gray-700">Filtrar por Data:</label>
+                    <input type="date" id="filter-date"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 </div>
                 <div class="flex items-end">
                     <button id="filter-lancamentos-btn"
-                        class="w-full px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700">Filtrar</button>
+                        class="w-full px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700">Buscar Lançamentos</button>
                 </div>
             </div>
-
 
             <div class="overflow-y-auto flex-grow">
                 <table class="min-w-full table-auto" id="lancamentos-table">
@@ -583,26 +573,14 @@
                     </button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="form-row-align">
-                        <div class="flex-grow">
-                            <label for="edit-origem"
-                                class="block text-sm font-medium text-gray-700">Origem:</label>
-                            <input type="text" id="edit-origem"
-                                class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
-                        </div>
-                    </div>
-
-                    <div class="form-row-align">
-                        <div class="flex-grow">
-                            <label for="edit-partida"
-                                class="block text-sm font-medium text-gray-700">Partida:</label>
-                            <input type="time" id="edit-partida" name="edit-partida"
-                                class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
-                        </div>
-                    </div>
-                </div>
-
+<div id="edit-origem-campos-container" class="space-y-4">
+        </div>
+    <div class="flex justify-center md:justify-start">
+        <button type="button" id="add-edit-origem-btn"
+            class="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-150 ease-in-out">
+            + Adicionar Outra Origem
+        </button>
+    </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div id="edit-destino-campos-container" class="md:col-span-2 space-y-4">
                     </div>
@@ -710,8 +688,7 @@
         // IMPORTAÇÕES
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, addDoc, deleteDoc, onSnapshot, collection, doc, query, where, getDocs, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
+        import { getFirestore, addDoc, deleteDoc, onSnapshot, collection, doc, query, where, getDocs, updateDoc, serverTimestamp, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";        
         // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyDmqvcKtIsga4ZQWNDg4_2k493dqMQCDVg",
@@ -894,6 +871,26 @@ resetPasswordForm.addEventListener('submit', async (event) => {
         let reToNome = {};
         let nomeToRE = {};
 
+            function rebuildTransportadosLookups(sortKey = 'nome', sortOrder = 'asc') {
+    transportadosData.sort((a, b) => {
+        let valA = a[sortKey] || '';
+        let valB = b[sortKey] || '';
+        return sortOrder === 'asc' ? valA.localeCompare(valB, undefined, { numeric: true }) : valB.localeCompare(valA, undefined, { numeric: true });
+    });
+    reToNome = {};
+    nomeToRE = {};
+    transportadosData.forEach(item => {
+        reToNome[item.re] = item.nome;
+        nomeToRE[item.nome.toLowerCase()] = item.re;
+    });
+    renderTransportadosList();
+}
+
+    function rebuildMotoristasLookups(sortOrder = 'asc') {
+            usersData.sort((a, b) => sortOrder === 'asc' ? a.nome.localeCompare(b.nome) : b.nome.localeCompare(a.nome));
+    renderMotoristasList();
+    populateMotoristasDatalist();
+}
         // === FUNÇÕES DE VALIDAÇÃO E INTERFACE ===
 
         function showWarning(message) {
@@ -1050,7 +1047,6 @@ function showAutocompleteSuggestions(inputElement, filterType) {
                 targetInput.value = '';
             }
 
-            setTimeout(() => checkPassageiroDuplicidade(sourceInput), 50);
         }
 
 function checkEditPassageiroDuplicidade() {
@@ -1109,6 +1105,24 @@ function checkEditPassageiroDuplicidade() {
             return isDuplicated;
         }
 
+        function formatCurrencyInput(input) {
+    if (!input) return;
+    let value = input.value.replace(/\D/g, '');
+    if (value === '') {
+        input.value = '0,00';
+        return;
+    }
+    value = value.padStart(3, '0');
+    const integerPart = value.slice(0, -2);
+    const decimalPart = value.slice(-2);
+    const formattedInteger = parseInt(integerPart, 10).toLocaleString('pt-BR');
+    input.value = `${formattedInteger},${decimalPart}`;
+}
+
+function parseCurrencyValue(value) {
+    if (typeof value !== 'string' || value.trim() === '') return 0;
+    return parseFloat(value.replace(/\./g, '').replace(',', '.'));
+}
 
         // --- Lógica Solicitante/Destino/Valor Dinâmico (Página Principal) ---
 
@@ -1283,6 +1297,43 @@ function checkEditPassageiroDuplicidade() {
             return fieldset;
         }
 
+function createOrigemInput(index, isRequired = true) {
+            const fieldset = document.createElement('div');
+            // Alterado para usar grid, igual ao destino
+            fieldset.className = 'dynamic-row grid grid-cols-2 gap-4 md:gap-6'; 
+            const pNum = document.querySelectorAll(`#origem-campos-container .dynamic-row`).length + 1;
+            const labelOrigem = isRequired ? 'Origem:' : `Origem (P${pNum}):`;
+            const labelPartida = isRequired ? 'Partida:' : `Partida (P${pNum}):`;
+
+            fieldset.innerHTML = `
+                <div class="form-row-align">
+                    <div class="flex-grow">
+                        <label class="block text-sm font-medium text-gray-700">${labelOrigem}</label>
+                        <input type="text" name="origens[]" onfocus="this.classList.remove('error-border')"
+                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                    </div>
+                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-dynamic-btn ${isRequired ? 'hidden' : ''}">
+                        -
+                    </button>
+                </div>
+                <div class="form-row-align">
+                    <div class="flex-grow">
+                        <label class="block text-sm font-medium text-gray-700">${labelPartida}</label>
+                        <input type="time" name="partidas[]" onfocus="this.classList.remove('error-border')"
+                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                    </div>
+                </div>
+            `;
+            const removeBtn = fieldset.querySelector('.remove-dynamic-btn');
+            if (removeBtn && !isRequired) {
+                removeBtn.onclick = () => {
+                    fieldset.remove();
+                    updateDynamicLabels('origem-campos-container', 'origem', 'Origem');
+                };
+            }
+            return fieldset;
+        }
+
         function removeValueRow(pNumToRemove) {
             const rowToRemove = document.querySelector(`#valor-campos-container .valor-row[data-p-num="${pNumToRemove}"]`);
             if (rowToRemove) {
@@ -1331,23 +1382,25 @@ function checkEditPassageiroDuplicidade() {
             });
         }
 
-        function addDynamicRow(containerId, inputName, baseLabel, isRequired = false) {
-            const container = document.getElementById(containerId);
-            let newRow;
+function addDynamicRow(containerId, inputName, baseLabel, isRequired = false) {
+    const container = document.getElementById(containerId);
+    let newRow;
 
-            if (inputName === 'destino') {
-                newRow = createDestinoInput(Date.now(), isRequired);
-            } else if (inputName === 'solicitante') {
-                newRow = createSolicitanteInput(Date.now(), isRequired);
-            } else if (inputName === 'valor') {
-                newRow = createValorInput(document.querySelectorAll(`#valor-campos-container .valor-row`).length + 1, false);
-            }
+    if (inputName === 'destino') {
+        newRow = createDestinoInput(Date.now(), isRequired);
+    } else if (inputName === 'solicitante') {
+        newRow = createSolicitanteInput(Date.now(), isRequired);
+    } else if (inputName === 'valor') {
+        newRow = createValorInput(document.querySelectorAll(`#valor-campos-container .valor-row`).length + 1, false);
+    } else if (inputName === 'origem') { // <-- NOVO CASO ADICIONADO
+        newRow = createOrigemInput(Date.now(), isRequired);
+    }
 
-            if (newRow) {
-                container.appendChild(newRow);
-                updateDynamicLabels(containerId, inputName, baseLabel);
-            }
-        }
+    if (newRow) {
+        container.appendChild(newRow);
+        updateDynamicLabels(containerId, inputName, baseLabel);
+    }
+}
         addValorBtn.addEventListener('click', () => addDynamicRow('valor-campos-container', 'valor', 'Valor', false));
         
         // --- Lógica Passageiros (Transportados) ---
@@ -1375,6 +1428,39 @@ function checkEditPassageiroDuplicidade() {
                 }
             });
         }
+
+    function createEditOrigemInput(origemValue = '', partidaValue = '') {
+        const containerId = 'edit-origem-campos-container';
+        const fieldset = document.createElement('div');
+        fieldset.className = 'edit-dynamic-row grid grid-cols-2 gap-4';
+        const pNum = document.querySelectorAll(`#${containerId} .edit-dynamic-row`).length + 1;
+        const isP1 = pNum === 1;
+
+        fieldset.innerHTML = `
+            <div class="form-row-align">
+                <div class="flex-grow">
+                    <label class="block text-sm font-medium text-gray-700">Origem (P${pNum}):</label>
+                    <input type="text" name="edit-origens[]" value="${origemValue}"
+                        class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
+                </div>
+                <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-dynamic-btn ${isP1 ? 'hidden' : ''}">
+                    -
+                </button>
+            </div>
+            <div class="form-row-align">
+                <div class="flex-grow">
+                    <label class="block text-sm font-medium text-gray-700">Partida (P${pNum}):</label>
+                    <input type="time" name="edit-partidas[]" value="${partidaValue}"
+                        class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
+                </div>
+            </div>
+        `;
+        if (!isP1) {
+            const removeBtn = fieldset.querySelector('.remove-edit-dynamic-btn');
+            removeBtn.onclick = () => fieldset.remove();
+        }
+        return fieldset;
+    }
 
 function createPassageiroInput(index, isRequired = true) {
             const fieldset = document.createElement('div');
@@ -1433,6 +1519,9 @@ function createPassageiroInput(index, isRequired = true) {
                  loginPage.classList.remove('hidden');
                  appPage.classList.add('hidden');
             }
+
+addDynamicRow('origem-campos-container', 'origem', 'Origem', true);
+    document.getElementById('add-origem-btn').addEventListener('click', () => addDynamicRow('origem-campos-container', 'origem', 'Origem', false));
 
 // VERSÃO ATUALIZADA COM AUTOSUGGEST
 function bindPassageiroListeners() {
@@ -1566,451 +1655,172 @@ function bindPassageiroListeners() {
             makeTableRowsClickable('motoristas-table');
         }
 
-// NOVA FUNÇÃO PARA BUSCAR LANÇAMENTOS SOB DEMANDA
-// NOVA FUNÇÃO PARA BUSCAR LANÇAMENTOS SOB DEMANDA
-async function fetchLancamentos(forceRefresh = false) {
-    if (lancamentosData.length > 0 && !forceRefresh) {
+document.getElementById('form-corrida').addEventListener('submit', async function (event) {
+    // A PRIMEIRA COISA a se fazer é impedir o recarregamento da página.
+    event.preventDefault();
+
+    const form = event.target;
+    const requiredFields = ['motorista', 'data']; // Removido 'valor' temporariamente para validação
+
+    const origensInputs = document.querySelectorAll('#origem-campos-container input[name="origens[]"]');
+    const partidasInputs = document.querySelectorAll('#origem-campos-container input[name="partidas[]"]');
+    const solicitantesInputs = document.querySelectorAll('#solicitante-campos-container input[name="solicitantes[]"]');
+    const destinosInputs = document.querySelectorAll('#destino-campos-container input[name="destinos[]"]');
+    const chegadasDestinoInputs = document.querySelectorAll('#destino-campos-container input[name="chegadas_destino[]"]');
+    const valoresInputs = document.querySelectorAll('#valor-campos-container input[name="valores[]"]');
+    const valoresExtraInputs = document.querySelectorAll('#valor-campos-container input[name="valores_extra[]"]');
+    const resInputs = document.querySelectorAll('#passageiros-campos-container input[name="res[]"]');
+    const transportadosInputs = document.querySelectorAll('#passageiros-campos-container input[name="transportados[]"]');
+
+    let isFormValid = true;
+
+    requiredFields.forEach(field => {
+        const input = form[field];
+        if (input && input.value.trim() === '') {
+            isFormValid = false;
+            input.classList.add('error-border');
+        } else if (input) {
+            input.classList.remove('error-border');
+        }
+    });
+
+    const origensData = [];
+    const partidasData = [];
+    for(let i = 0; i < origensInputs.length; i++) {
+        const origem = origensInputs[i].value.trim();
+        const partida = partidasInputs[i].value.trim();
+        if (origem || partida) {
+            origensData.push(origem);
+            partidasData.push(partida);
+        }
+    }
+
+    const solicitantesData = [];
+    solicitantesInputs.forEach(input => {
+        const value = input.value.trim();
+        if (value !== '') {
+            solicitantesData.push(value);
+        }
+    });
+
+    const destinosData = [];
+    const chegadasDestinoData = [];
+    for (let i = 0; i < destinosInputs.length; i++) {
+        const destino = destinosInputs[i].value.trim();
+        const chegada = chegadasDestinoInputs[i].value.trim();
+        if (destino || chegada) {
+            destinosData.push(destino);
+            chegadasDestinoData.push(chegada);
+        }
+    }
+
+    const valoresData = [];
+    const valoresExtraData = [];
+    for (let i = 0; i < valoresInputs.length; i++) {
+        const valor = parseCurrencyValue(valoresInputs[i].value);
+        const valorExtra = parseCurrencyValue(valoresExtraInputs[i].value);
+        valoresData.push(valor);
+        valoresExtraData.push(valorExtra);
+    }
+
+    const passageirosData = [];
+    const passageirosSet = new Set();
+    for (let i = 0; i < resInputs.length; i++) {
+        const reInput = resInputs[i];
+        const nomeInput = transportadosInputs[i];
+        const re = reInput.value.trim();
+        const nome = nomeInput.value.trim();
+
+        reInput.classList.remove('error-border');
+        nomeInput.classList.remove('error-border');
+        if (re !== '' && nome !== '') {
+            const key = `${re}_${nome.toLowerCase()}`;
+            if (passageirosSet.has(key)) {
+                isFormValid = false;
+                reInput.classList.add('error-border');
+                nomeInput.classList.add('error-border');
+                showWarning(`Passageiro duplicado: ${nome}.`);
+                return;
+            }
+            passageirosSet.add(key);
+            passageirosData.push({ re: re, nome: nome });
+        } else if (re !== '' || nome !== '') {
+            isFormValid = false;
+            if (re === '') reInput.classList.add('error-border');
+            if (nome === '') nomeInput.classList.add('error-border');
+        }
+    }
+
+    if (passageirosData.length === 0) {
+        isFormValid = false;
+        if (resInputs[0]) resInputs[0].classList.add('error-border');
+        if (transportadosInputs[0]) transportadosInputs[0].classList.add('error-border');
+    }
+
+    if (!isFormValid) {
+        showWarning('Preencha todos os campos obrigatórios e verifique os dados.');
         return;
     }
-    console.log("Buscando lançamentos do Firestore...");
-    try {
-        // Pega a data de 30 dias atrás
-        const date30DaysAgo = new Date();
-        date30DaysAgo.setDate(date30DaysAgo.getDate() - 30);
-        const dateString = date30DaysAgo.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
 
-        const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
-        
-        // A consulta agora filtra para trazer apenas os lançamentos dos últimos 30 dias
-        const q = query(lancamentosRef, where("data", ">=", dateString), orderBy("data", "desc"));
-        
-        const snapshot = await getDocs(q);
-        lancamentosData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        console.log(`${lancamentosData.length} lançamentos (dos últimos 30 dias) carregados.`);
-
-    } catch (error) {
-        // AGORA O CÓDIGO DE ERRO ESTÁ DENTRO DO 'CATCH', ONDE DEVERIA ESTAR
-        console.error("Erro ao buscar lançamentos:", error);
-        showWarning("Não foi possível carregar os lançamentos.");
+    const destinosExtras = [];
+    for (let i = 1; i < destinosData.length; i++) {
+         destinosExtras.push({
+            destino: destinosData[i],
+            chegada: chegadasDestinoData[i],
+            valor: valoresData[i] || 0,
+            valorExtra: valoresExtraData[i] || 0
+        });
     }
-}
 
-        function rebuildTransportadosLookups(sortKey = 'nome', sortOrder = 'asc') {
-            transportadosData.sort((a, b) => {
-                let valA = a[sortKey] || '';
-                let valB = b[sortKey] || '';
-                return sortOrder === 'asc' ? valA.localeCompare(valB, undefined, { numeric: true }) : valB.localeCompare(valA, undefined, { numeric: true });
-            });
-            reToNome = {};
-            nomeToRE = {};
-            transportadosData.forEach(item => {
-                reToNome[item.re] = item.nome;
-                nomeToRE[item.nome.toLowerCase()] = item.re;
-            });
-            renderTransportadosList();
-        }
+    const newEntry = {
+        createdBy: currentUser.username,
+        motorista: form['motorista'].value,
+        bordero: form['bordero'].value.trim(),
+        re: passageirosData[0].re,
+        transportado: passageirosData[0].nome,
+        passageiros_extras: passageirosData.slice(1),
+        solicitante: solicitantesData[0] || '',
+        solicitantes_extras: solicitantesData.slice(1),
+        data: form['data'].value,
+        origem: origensData.length > 0 ? origensData[0] : '',
+        partida: partidasData.length > 0 ? partidasData[0] : '',
+        origens_extras: origensData.slice(1).map((origem, i) => ({ origem: origem, partida: partidasData[i+1] || '' })),
+        destino: destinosData[0] || '',
+        chegada_destino: chegadasDestinoData[0] || '',
+        valor: valoresData[0] || 0,
+        valorExtra: valoresExtraData[0] || 0,
+        destinos_extras: destinosExtras,
+        observacao: form['observacao'].value,
+        createdAt: serverTimestamp()
+    };
 
-        // ATUALIZADO para usar 'usersData'
-        function rebuildMotoristasLookups(sortOrder = 'asc') {
-            usersData.sort((a, b) => sortOrder === 'asc' ? a.nome.localeCompare(b.nome) : b.nome.localeCompare(a.nome));
-            renderMotoristasList();
-            populateMotoristasDatalist();
-        }
+    const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
+    await addDoc(lancamentosRef, newEntry);
 
-        function formatCurrencyInput(input) {
-            if (!input) return;
-            let value = input.value.replace(/\D/g, '');
-            if (value === '') {
-                input.value = '0,00';
-                return;
-            }
-            value = value.padStart(3, '0');
-            const integerPart = value.slice(0, -2);
-            const decimalPart = value.slice(-2);
-            const formattedInteger = parseInt(integerPart, 10).toLocaleString('pt-BR');
-            input.value = `${formattedInteger},${decimalPart}`;
-        }
+    showWarning('Lançamento salvo com sucesso!');
+    const dataValue = form['data'].value;
+    const motoristaValue = form['motorista'].value;
 
-        function parseCurrencyValue(value) {
-            if (typeof value !== 'string' || value.trim() === '') return 0;
-            return parseFloat(value.replace(/\./g, '').replace(',', '.'));
-        }
+    form.reset();
 
-        document.getElementById('form-corrida').addEventListener('submit', async function (event) {
-            event.preventDefault();
-            const form = event.target;
-            const requiredFields = ['motorista', 'data', 'origem', 'partida', 'valor'];
+    form['data'].value = dataValue;
+    form['motorista'].value = motoristaValue;
 
-            const solicitantesInputs = document.querySelectorAll('#solicitante-campos-container input[name="solicitantes[]"]');
-            const destinosInputs = document.querySelectorAll('#destino-campos-container input[name="destinos[]"]');
-            const chegadasDestinoInputs = document.querySelectorAll('#destino-campos-container input[name="chegadas_destino[]"]');
-            const valoresInputs = document.querySelectorAll('#valor-campos-container input[name="valores[]"]');
-            const valoresExtraInputs = document.querySelectorAll('#valor-campos-container input[name="valores_extra[]"]');
-            const resInputs = document.querySelectorAll('#passageiros-campos-container input[name="res[]"]');
-            const transportadosInputs = document.querySelectorAll('#passageiros-campos-container input[name="transportados[]"]');
+    solicitanteContainer.innerHTML = '';
+    addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', true);
 
-            let isFormValid = true;
+    document.getElementById('origem-campos-container').innerHTML = '';
+    addDynamicRow('origem-campos-container', 'origem', 'Origem', true);
 
-            requiredFields.forEach(field => {
-                const input = form[field];
-                if (input && input.value.trim() === '') {
-                    isFormValid = false;
-                    input.classList.add('error-border');
-                } else if (input) {
-                    input.classList.remove('error-border');
-                }
-            });
-            const solicitantesData = [];
-            solicitantesInputs.forEach(input => {
-                const value = input.value.trim();
-                if (value !== '') {
-                    solicitantesData.push(value);
-                }
-            });
+    destinoContainer.innerHTML = '';
+    addDynamicRow('destino-campos-container', 'destino', 'Destino', true);
+    valorContainer.innerHTML = '';
+    addDynamicRow('valor-campos-container', 'valor', 'Valor', true);
+    passageirosContainer.innerHTML = '';
+    addPassageiroRow(true);        
+});
 
-            const destinosData = [];
-            const chegadasDestinoData = [];
-            let destinoChegadaIncompleto = false;
-
-            for (let i = 0; i < destinosInputs.length; i++) {
-                const destino = destinosInputs[i].value.trim();
-                const chegada = chegadasDestinoInputs[i].value.trim();
-
-                if (destino !== '' && chegada !== '') {
-                    destinosData.push(destino);
-                    chegadasDestinoData.push(chegada);
-                } else if (destino !== '' || chegada !== '') {
-                    destinoChegadaIncompleto = true;
-                    destinosInputs[i].classList.add('error-border');
-                    chegadasDestinoInputs[i].classList.add('error-border');
-                }
-            }
-
-            if (destinoChegadaIncompleto) {
-                isFormValid = false;
-            }
-
-            if (destinosData.length === 0) {
-                isFormValid = false;
-                if (destinosInputs[0]) destinosInputs[0].classList.add('error-border');
-                if (chegadasDestinoInputs[0]) chegadasDestinoInputs[0].classList.add('error-border');
-            } else {
-                if (destinosInputs[0]) destinosInputs[0].classList.remove('error-border');
-                if (chegadasDestinoInputs[0]) chegadasDestinoInputs[0].classList.remove('error-border');
-            }
-
-            const valoresData = [];
-            const valoresExtraData = [];
-            for (let i = 0; i < valoresInputs.length; i++) {
-                const valor = parseCurrencyValue(valoresInputs[i].value);
-                const valorExtra = parseCurrencyValue(valoresExtraInputs[i].value);
-                valoresData.push(valor);
-                valoresExtraData.push(valorExtra);
-            }
-
-            const passageirosData = [];
-            const passageirosSet = new Set();
-            for (let i = 0; i < resInputs.length; i++) {
-                const reInput = resInputs[i];
-                const nomeInput = transportadosInputs[i];
-                const re = reInput.value.trim();
-                const nome = nomeInput.value.trim();
-
-                reInput.classList.remove('error-border');
-                nomeInput.classList.remove('error-border');
-                if (re !== '' && nome !== '') {
-                    const key = `${re}_${nome.toLowerCase()}`;
-                    if (passageirosSet.has(key)) {
-                        isFormValid = false;
-                        reInput.classList.add('error-border');
-                        nomeInput.classList.add('error-border');
-                        showWarning(`Passageiro duplicado: ${nome}.`);
-                        return;
-                    }
-                    passageirosSet.add(key);
-                    passageirosData.push({ re: re, nome: nome });
-                } else if (re !== '' || nome !== '') {
-                    isFormValid = false;
-                    if (re === '') reInput.classList.add('error-border');
-                    if (nome === '') nomeInput.classList.add('error-border');
-                }
-            }
-
-            if (passageirosData.length === 0) {
-                isFormValid = false;
-                if (resInputs[0]) resInputs[0].classList.add('error-border');
-                if (transportadosInputs[0]) transportadosInputs[0].classList.add('error-border');
-            }
-
-            if (!isFormValid) {
-                showWarning('Preencha todos os campos obrigatórios e verifique por duplicidades.');
-                return;
-            }
-
-            const destinosExtras = [];
-            const numDestinosExtras = destinosData.length - 1;
-            const numValoresExtras = valoresData.length - 1;
-            const extraCount = Math.min(numDestinosExtras, numValoresExtras);
-            for (let i = 1; i <= extraCount; i++) {
-                destinosExtras.push({
-                    destino: destinosData[i],
-                    chegada: chegadasDestinoData[i],
-                    valor: valoresData[i],
-                    valorExtra: valoresExtraData[i]
-                });
-            }
-
-            const newEntry = {
-                createdBy: currentUser.username,
-                motorista: form['motorista'].value,
-                bordero: form['bordero'].value.trim(),
-                re: passageirosData[0].re,
-                transportado: passageirosData[0].nome,
-                passageiros_extras: passageirosData.length > 1 ? passageirosData.slice(1) : [],
-                solicitante: solicitantesData[0] || '', // Garante que será salvo como vazio se não preenchido
-                solicitantes_extras: solicitantesData.length > 1 ? solicitantesData.slice(1) : [],
-                data: form['data'].value,
-                origem: form['origem'].value,
-                destino: destinosData[0],
-                chegada_destino: chegadasDestinoData[0],
-                valor: valoresData[0],
-                valorExtra: valoresExtraData[0],
-                destinos_extras: destinosExtras,
-                partida: form['partida'].value,
-                observacao: form['observacao'].value,
-                createdAt: serverTimestamp()
-            };
-            const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
-            // ...
-            await addDoc(lancamentosRef, newEntry);
-
-            showWarning('Lançamento salvo com sucesso!');
-            const dataValue = form['data'].value; // Salva o valor da data
-	    form.reset(); // Limpa o formulário
-	    form['data'].value = dataValue; // Restaura o valor da data
-
-            // ADICIONE ESTE BLOCO PARA RESTAURAR O MOTORISTA
-            const loggedInUserData = localStorage.getItem('loggedInUserData');
-            if (loggedInUserData) {
-                try {
-                    const userData = JSON.parse(loggedInUserData);
-                    setMotoristaFromData(userData);
-                } catch (e) {
-                    console.error("Erro ao recarregar dados do usuário:", e);
-                }
-            }
-            
-            solicitanteContainer.innerHTML = '';
-            addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', true);
-// ...
-            destinoContainer.innerHTML = '';
-            addDynamicRow('destino-campos-container', 'destino', 'Destino', true);
-            valorContainer.innerHTML = '';
-            addDynamicRow('valor-campos-container', 'valor', 'Valor', true);
-            passageirosContainer.innerHTML = '';
-            addPassageiroRow(true);
-        });
-
-        // O resto do seu código (download-csv, modais, etc.) permanece o mesmo...
-        // ... cole o resto do seu JS a partir daqui, com as seguintes exceções:
-
-        document.getElementById('download-csv').addEventListener('click', async function () {
-            const startDate = document.getElementById('start-date').value;
-            const endDate = document.getElementById('end-date').value;
-
-            if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-                showWarning('A data de início não pode ser posterior à data de fim.');
-                return;
-            }
-
-            let dataToDownload = lancamentosData;
-            if (startDate || endDate) {
-                dataToDownload = dataToDownload.filter(item => {
-                    const itemDate = new Date(item.data);
-                    const start = startDate ? new Date(startDate) : null;
-                    const end = endDate ? new Date(endDate) : null;
-                    if (start && itemDate < start) return false;
-                    if (end && itemDate > end) return false;
-                    return true;
-                });
-            }
-
-            if (!currentUser.isAdmin) {
-                dataToDownload = dataToDownload.filter(item => item.createdBy === currentUser.username);
-            }
-
-            if (dataToDownload.length === 0) {
-                showWarning('Nenhum dado encontrado para este período/permissão.');
-                return;
-            }
-
-            const bom = '\uFEFF';
-            const maxExtras = 3;
-
-            const csvHeaders = [
-                'DATA', 'MOTORISTA', 'Nº BORDERÔ', 'SOLICITANTE P1', 'PASSAGEIRO P1',
-                'VALOR NORMAL P1', 'VALOR EXTRA P1',
-                'ORIGEM', 'PARTIDA', 'DESTINO P1', 'CHEGADA P1',
-            ];
-            const extraHeaders = [];
-            for (let i = 1; i <= maxExtras; i++) {
-                const pNum = i + 1;
-                extraHeaders.push(
-                    `SOLICITANTE EXTRA ${i}`,
-                    `PASSAGEIRO EXTRA ${i}`,
-                    `VALOR NORMAL P${pNum}`, `VALOR EXTRA P${pNum}`
-                );
-            }
-            extraHeaders.push('OBSERVAÇÃO');
-            const finalHeaders = [...csvHeaders, ...extraHeaders];
-            const rows = dataToDownload.map(obj => {
-                const solicitantes = [obj.solicitante || '', ...(obj.solicitantes_extras || [])];
-                const passageiros = [{ nome: obj.transportado || '' }, ...(obj.passageiros_extras || [])];
-                const destinosValores = [{
-                    destino: obj.destino || '',
-                    chegada: obj.chegada_destino || '',
-                    valor: obj.valor || 0,
-                    valorExtra: obj.valorExtra || 0,
-                }, ...(obj.destinos_extras || [])];
-
-                const rowData = [
-                    obj.data || '',
-                    obj.motorista || '',
-                    obj.bordero || '',
-                    solicitantes[0] || '',
-                    passageiros[0].nome || '',
-                    (destinosValores[0].valor || 0).toFixed(2).replace('.', ','),
-                    (destinosValores[0].valorExtra || 0).toFixed(2).replace('.', ','),
-                    obj.origem || '',
-                    obj.partida || '',
-                    destinosValores[0].destino || '',
-                    destinosValores[0].chegada || '',
-                ];
-                const extraData = [];
-
-                for (let i = 1; i <= maxExtras; i++) {
-                    const solicitanteExtra = solicitantes[i] || '';
-                    const passageiroExtraNome = (passageiros[i] && passageiros[i].nome) ? passageiros[i].nome : '';
-                    const destinoValorObj = destinosValores[i] || { valor: 0, valorExtra: 0 };
-                    const valorNormal_Pn = (destinoValorObj.valor || 0).toFixed(2).replace('.', ',');
-                    const valorExtra_Pn = (destinoValorObj.valorExtra || 0).toFixed(2).replace('.', ',');
-                    extraData.push(
-                        solicitanteExtra,
-                        passageiroExtraNome,
-                        valorNormal_Pn,
-                        valorExtra_Pn
-                    );
-                }
-
-                extraData.push(obj.observacao || '');
-                return [...rowData, ...extraData].map(value => `"${String(value).replace(/"/g, '""')}"`).join(';');
-            }).join('\n');
-
-
-            const csvContent = `${finalHeaders.join(';')}\n${rows}`;
-            const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `lancamentos_detalhado_${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-
-        document.getElementById('download-csv-custom').addEventListener('click', async function () {
-            const startDate = document.getElementById('start-date').value;
-            const endDate = document.getElementById('end-date').value;
-
-            if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-                showWarning('A data de início não pode ser posterior à data de fim.');
-                return;
-            }
-
-            let dataToDownload = lancamentosData;
-            if (startDate || endDate) {
-                dataToDownload = dataToDownload.filter(item => {
-                    const itemDate = new Date(item.data);
-                    const start = startDate ? new Date(startDate) : null;
-                    const end = endDate ? new Date(endDate) : null;
-                    if (start && itemDate < start) return false;
-                    if (end && itemDate > end) return false;
-                    return true;
-                });
-            }
-
-            if (!currentUser.isAdmin) {
-                dataToDownload = dataToDownload.filter(item => item.createdBy === currentUser.username);
-            }
-
-            if (dataToDownload.length === 0) {
-                showWarning('Nenhum dado encontrado para este período/permissão.');
-                return;
-            }
-
-            const bom = '\uFEFF';
-            const maxExtras = 3;
-
-            const csvHeaders = [
-                'DATA', 'SOLICITANTE P1', 'PASSAGEIRO P1',
-                'VALOR NORMAL P1', 'VALOR EXTRA P1'
-            ];
-            const extraHeaders = [];
-            for (let i = 1; i <= maxExtras; i++) {
-                const pNum = i + 1;
-                extraHeaders.push(
-                    `SOLICITANTE EXTRA ${i}`,
-                    `PASSAGEIRO EXTRA ${i}`,
-                    `VALOR NORMAL P${pNum}`, `VALOR EXTRA P${pNum}`
-                );
-            }
-
-            const finalHeaders = [...csvHeaders, ...extraHeaders];
-            const rows = dataToDownload.map(obj => {
-                const solicitantes = [obj.solicitante || '', ...(obj.solicitantes_extras || [])];
-                const passageiros = [{ nome: obj.transportado || '' }, ...(obj.passageiros_extras || [])];
-                const destinosValores = [{
-                    valor: obj.valor || 0,
-                    valorExtra: obj.valorExtra || 0,
-                }, ...(obj.destinos_extras || [])];
-
-                const rowData = [
-                    obj.data || '',
-                    solicitantes[0] || '',
-                    passageiros[0].nome || '',
-                    (destinosValores[0].valor || 0).toFixed(2).replace('.', ','),
-                    (destinosValores[0].valorExtra || 0).toFixed(2).replace('.', ',')
-                ];
-                const extraData = [];
-                for (let i = 1; i <= maxExtras; i++) {
-                    const solicitanteExtra = solicitantes[i] || '';
-                    const passageiroExtraNome = (passageiros[i] && passageiros[i].nome) ? passageiros[i].nome : '';
-                    const destinoValorObj = destinosValores[i] || { valor: 0, valorExtra: 0 };
-                    const valorNormal_Pn = (destinoValorObj.valor || 0).toFixed(2).replace('.', ',');
-                    const valorExtra_Pn = (destinoValorObj.valorExtra || 0).toFixed(2).replace('.', ',');
-                    extraData.push(
-                        solicitanteExtra,
-                        passageiroExtraNome,
-                        valorNormal_Pn,
-                        valorExtra_Pn
-                    );
-                }
-                return [...rowData, ...extraData].map(value => `"${String(value).replace(/"/g, '""')}"`).join(';');
-            }).join('\n');
-
-            const csvContent = `${finalHeaders.join(';')}\n${rows}`;
-            const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `lancamentos_simples_${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-
-        // --- LÓGICA DO MODAL DE LANÇAMENTOS ---
-        function formatMultipleValues(principal, extras, isPassageiro = false) {
+            function formatMultipleValues(principal, extras, isPassageiro = false) {
             let result = principal || '';
             if (extras && extras.length > 0) {
                 const extraList = extras.map(e => isPassageiro ? e.nome : e);
@@ -2034,7 +1844,7 @@ async function fetchLancamentos(forceRefresh = false) {
             return result;
         }
 
-        function calculateTotalValue(lancamento) {
+                    function calculateTotalValue(lancamento) {
             let total = lancamento.valor || 0;
             if (lancamento.destinos_extras && lancamento.destinos_extras.length > 0) {
                 lancamento.destinos_extras.forEach(dest => {
@@ -2054,34 +1864,50 @@ async function fetchLancamentos(forceRefresh = false) {
             return total;
         }
 
-        function renderLancamentosList() {
-            const modal = document.getElementById('lancamentos-modal');
+// NOVA FUNÇÃO PARA BUSCAR E RENDERIZAR OS DADOS SOB DEMANDA
+async function fetchAndRenderLancamentos() {
+            const tableBody = document.querySelector('#lancamentos-table tbody');
+            tableBody.innerHTML = '<tr><td colspan="15" class="text-center p-4">Carregando...</td></tr>';
+
+            const selectedDate = document.getElementById('filter-date').value;
+
+            if (!selectedDate) {
+                tableBody.innerHTML = '<tr><td colspan="15" class="text-center p-4">Selecione uma data para ver os lançamentos.</td></tr>';
+                return;
+            }
+
+            try {
+                const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
+                
+                // CRIA A CONSULTA AO FIREBASE (SEM O LIMITE DE 15)
+                const q = query(
+                    lancamentosRef,
+                    where("data", "==", selectedDate), // Filtra pela data selecionada
+                    orderBy("createdAt", "desc")       // Ordena pelos mais recentes
+                );
+
+                const snapshot = await getDocs(q);
+                let dataToShow = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Filtra no lado do cliente caso o usuário não seja admin
+                if (!currentUser.isAdmin) {
+                    dataToShow = dataToShow.filter(lanc => lanc.createdBy === currentUser.username);
+                }
+
+                renderLancamentosTable(dataToShow); // Chama a função para popular a tabela
+
+            } catch (error) {
+                console.error("Erro ao buscar lançamentos:", error);
+                tableBody.innerHTML = '<tr><td colspan="15" class="text-center p-4 text-red-500">Ocorreu um erro ao carregar os dados.</td></tr>';
+            }
+        }
+        // NOVA FUNÇÃO DEDICADA APENAS A POPULAR A TABELA HTML
+        function renderLancamentosTable(dataToShow) {
             const tableBody = document.querySelector('#lancamentos-table tbody');
             tableBody.innerHTML = '';
 
-            const startDate = modal.querySelector('#filter-start-date').value;
-            const endDate = modal.querySelector('#filter-end-date').value;
-
-            let dataToShow = lancamentosData;
-            if (!currentUser.isAdmin) {
-                dataToShow = lancamentosData.filter(lanc => lanc.createdBy === currentUser.username);
-            }
-
-            if (startDate || endDate) {
-                dataToShow = dataToShow.filter(item => {
-                    if (!item.data) return false;
-                    const itemDate = new Date(item.data + "T00:00:00");
-                    const start = startDate ? new Date(startDate + "T00:00:00") : null;
-                    const end = endDate ? new Date(endDate + "T00:00:00") : null;
-                    if (start && itemDate < start) return false;
-                    if (end && itemDate > end) return false;
-                    return true;
-                });
-            }
-
-            dataToShow.sort((a, b) => new Date(b.data) - new Date(a.data));
             if (dataToShow.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="14" class="text-center p-4">Nenhum lançamento encontrado.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="15" class="text-center p-4">Nenhum lançamento encontrado para esta data.</td></tr>';
                 return;
             }
 
@@ -2091,7 +1917,6 @@ async function fetchLancamentos(forceRefresh = false) {
 
                 const totalValue = calculateTotalValue(item);
                 const totalExtraValue = calculateTotalExtraValue(item);
-
                 const transportadoFull = formatMultipleValues(item.transportado, item.passageiros_extras, true);
                 const solicitanteFull = formatMultipleValues(item.solicitante, item.solicitantes_extras, false);
                 const destinoFull = formatDestinosChegadas(item.destino, item.chegada_destino, item.destinos_extras);
@@ -2124,19 +1949,23 @@ async function fetchLancamentos(forceRefresh = false) {
             });
         }
 
-document.getElementById('open-lancamentos-modal').addEventListener('click', async () => { // Adicione 'async'
-            document.getElementById('filter-start-date').value = '';
-            document.getElementById('filter-end-date').value = '';
+document.getElementById('open-lancamentos-modal').addEventListener('click', () => {
+            // Define a data do filtro para o dia atual
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('filter-date').value = today;
             
-            await fetchLancamentos(); // Espera os dados serem buscados
+            // Busca e exibe os lançamentos do dia atual
+            fetchAndRenderLancamentos(); 
             
-            renderLancamentosList(); // Renderiza a lista com os dados frescos
             document.getElementById('lancamentos-modal').classList.remove('hidden');
         });
+        
         document.getElementById('close-lancamentos-modal').addEventListener('click', () => {
             document.getElementById('lancamentos-modal').classList.add('hidden');
         });
-        document.getElementById('filter-lancamentos-btn').addEventListener('click', renderLancamentosList);
+
+        // O botão de filtro agora chama a nova função
+        document.getElementById('filter-lancamentos-btn').addEventListener('click', fetchAndRenderLancamentos);
 
 
         document.getElementById('lancamentos-table').addEventListener('click', async function (event) {
@@ -2146,22 +1975,21 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', asyn
                 openEditLancamentoModal(lancamentoId);
             }
 
-            const deleteButton = event.target.closest('.delete-lancamento-btn');
-            if (deleteButton) {
-                const lancamentoId = deleteButton.dataset.id;
-                if (confirm('Tem certeza que deseja excluir este lançamento? Esta ação não pode ser desfeita.')) {
-                    try {
-                        const docRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos', lancamentoId);
-                        await deleteDoc(docRef);
-                        showWarning('Lançamento excluído com sucesso!');
-                        renderLancamentosList();
-                    } catch (error) {
-                        console.error("Erro ao excluir lançamento:", error);
-                        showWarning('Ocorreu um erro ao excluir o lançamento.');
-                    }
-                }
-            }
-        });
+const deleteButton = event.target.closest('.delete-lancamento-btn');
+if (deleteButton) {
+    const lancamentoId = deleteButton.dataset.id;
+    if (confirm('Tem certeza que deseja excluir este lançamento? Esta ação não pode ser desfeita.')) {
+        try {
+            const docRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos', lancamentoId);
+            await deleteDoc(docRef);
+            showWarning('Lançamento excluído com sucesso!');
+            fetchAndRenderLancamentos(); // <<<--- LINHA CORRIGIDA
+        } catch (error) {
+            console.error("Erro ao excluir lançamento:", error);
+            showWarning('Ocorreu um erro ao excluir o lançamento.');
+        }
+    }
+}        });
         
         // --- LÓGICA DO MODAL DE EDIÇÃO (a maior parte permanece a mesma) ---
         // Funções: updateEditDynamicLabels, createEditDynamicInput, createEditDestinoChegadaInput, etc...
@@ -2368,7 +2196,11 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', asyn
         document.getElementById('add-edit-solicitante-btn').addEventListener('click', () => addEditDynamicRow('edit-solicitante-campos-container', 'solicitante', 'Solicitante'));
         document.getElementById('add-edit-destino-btn').addEventListener('click', () => addEditDynamicRow('edit-destino-campos-container', 'destino', 'Destino', '', ''));
         document.getElementById('add-edit-valor-btn').addEventListener('click', () => addEditDynamicRow('edit-valor-campos-container', 'valor', 'Valor', 0, 0));
-        
+        document.getElementById('add-edit-origem-btn').addEventListener('click', () => {
+        const container = document.getElementById('edit-origem-campos-container');
+        container.appendChild(createEditOrigemInput());
+    });
+
         function updateEditPassageiroLabels() {
             const container = document.getElementById('edit-passageiros-extras-container');
             const p1REInput = document.getElementById('edit-re');
@@ -2446,9 +2278,15 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', asyn
             document.getElementById('edit-lancamento-id').value = id;
             document.getElementById('edit-data').value = lancamento.data;
             document.getElementById('edit-bordero').value = lancamento.bordero || '';
-            document.getElementById('edit-origem').value = lancamento.origem;
             document.getElementById('edit-observacao').value = lancamento.observacao || '';
-            document.getElementById('edit-partida').value = lancamento.partida || '';
+            const editOrigemContainer = document.getElementById('edit-origem-campos-container');
+    editOrigemContainer.innerHTML = ''; // Limpa o container
+    editOrigemContainer.appendChild(createEditOrigemInput(lancamento.origem || '', lancamento.partida || ''));
+    if (lancamento.origens_extras && lancamento.origens_extras.length > 0) {
+        lancamento.origens_extras.forEach(o => {
+            editOrigemContainer.appendChild(createEditOrigemInput(o.origem || '', o.partida || ''));
+        });
+    }
 
             const motoristaInput = document.getElementById('edit-motorista');
             motoristaInput.value = lancamento.motorista;
@@ -2555,7 +2393,6 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', asyn
                 showWarning('Corrija os passageiros duplicados antes de salvar.');
                 return;
             }
-            const id = document.getElementById('edit-lancamento-id').value;
             const solicitantesEdit = Array.from(document.querySelectorAll('#edit-solicitante-campos-container input[name="edit-solicitantes[]"]'))
                 .map(input => input.value.trim()).filter(value => value !== '');
 
@@ -2573,23 +2410,14 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', asyn
             const valoresInputs = document.querySelectorAll('#edit-valor-campos-container input[name="edit-valores[]"]');
             const valoresExtraInputs = document.querySelectorAll('#edit-valor-campos-container input[name="edit-valores_extra[]"]');
             const destinosArray = [];
-            let destinoIncompleto = false;
-            destinosInputs.forEach((destinoInput, i) => {
-                const destino = destinoInput.value.trim();
-                const chegada = chegadasInputs[i] ? chegadasInputs[i].value.trim() : '';
-                if ((destino && !chegada) || (!destino && chegada)) {
-                    destinoIncompleto = true;
-                }
-                destinosArray.push({ destino, chegada });
-            });
-            if (destinoIncompleto) {
-                showWarning('Preencha os campos de Destino e Chegada (Horário) ou deixe ambos vazios.');
-                return;
-            }
-            if (!destinosArray[0] || !destinosArray[0].destino || !destinosArray[0].chegada) {
-                showWarning('O destino principal (P1) e sua chegada devem estar preenchidos.');
-                return;
-            }
+destinosInputs.forEach((destinoInput, i) => {
+    const destino = destinoInput.value.trim();
+    const chegada = chegadasInputs[i] ? chegadasInputs[i].value.trim() : '';
+    if (destino || chegada) {
+        destinosArray.push({ destino, chegada });
+    }
+});
+
             const valoresArray = [];
             valoresInputs.forEach((valorInput, i) => {
                 const valor = parseCurrencyValue(valorInput.value);
@@ -2597,25 +2425,49 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', asyn
                 valoresArray.push({ valor, valorExtra });
             });
 
+// ...
+            const id = document.getElementById('edit-lancamento-id').value;
+            // ... (código para coletar solicitantes, passageiros, etc.)
+
+            // 1. PRIMEIRO, COLETAMOS OS DADOS DA ORIGEM (MOVIDO PARA CÁ)
+            const origensEditInputs = document.querySelectorAll('#edit-origem-campos-container input[name="edit-origens[]"]');
+            const partidasEditInputs = document.querySelectorAll('#edit-origem-campos-container input[name="edit-partidas[]"]');
+            const origensEdit = [];
+            origensEditInputs.forEach((input, i) => {
+                const origem = input.value.trim();
+                const partida = partidasEditInputs[i] ? partidasEditInputs[i].value.trim() : '';
+                if (origem || partida) {
+                    origensEdit.push({ origem, partida });
+                }
+            });
+
+            // 2. DEPOIS, CRIAMOS O OBJETO USANDO OS DADOS COLETADOS
             const updatedData = {
                 motorista: document.getElementById('edit-motorista').value,
                 data: document.getElementById('edit-data').value,
                 bordero: document.getElementById('edit-bordero').value.trim(),
-                partida: document.getElementById('edit-partida').value,
-                origem: document.getElementById('edit-origem').value,
                 observacao: document.getElementById('edit-observacao').value,
                 editedBy: currentUser.username,
                 editedAt: serverTimestamp(),
-                solicitante: solicitantesEdit[0] || '', // Garante que será salvo como vazio se não preenchido
+                solicitante: solicitantesEdit[0] || '',
+                solicitantes_extras: solicitantesEdit.slice(1),
                 re: p1RE,
                 transportado: p1Nome,
-                destino: destinosArray[0].destino,
-                chegada_destino: destinosArray[0].chegada,
-                valor: valoresArray[0] ? valoresArray[0].valor : 0,
-                valorExtra: valoresArray[0] ? valoresArray[0].valorExtra : 0,
-                solicitantes_extras: solicitantesEdit.slice(1),
                 passageiros_extras: passageirosExtras,
-                destinos_extras: [],
+                
+                // Campos de Origem Corrigidos
+                origem: origensEdit.length > 0 ? origensEdit[0].origem : '',
+                partida: origensEdit.length > 0 ? origensEdit[0].partida : '',
+                origens_extras: origensEdit.slice(1),
+
+                // Campos de Destino
+                destino: destinosArray.length > 0 ? destinosArray[0].destino : '',
+                chegada_destino: destinosArray.length > 0 ? destinosArray[0].chegada : '',
+                
+                // Campos de Valor
+                valor: valoresArray.length > 0 ? valoresArray[0].valor : 0,
+                valorExtra: valoresArray.length > 0 ? valoresArray[0].valorExtra : 0,
+                destinos_extras: [], // Será preenchido abaixo
             };
 
             const totalExtras = Math.max(destinosArray.length, valoresArray.length) - 1;
@@ -2638,7 +2490,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', asyn
             await updateDoc(docRef, updatedData);
             showWarning('Lançamento atualizado com sucesso!');
             document.getElementById('edit-lancamento-modal').classList.add('hidden');
-            renderLancamentosList();
+            fetchAndRenderLancamentos();
         });
 
         function renderTransportadosList() {
@@ -2801,6 +2653,37 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', asyn
         document.getElementById('sort-motoristas-order').addEventListener('change', function () {
             rebuildMotoristasLookups(this.value);
         });
+// --- LÓGICA DOS BOTÕES DE PREENCHIMENTO AUTOMÁTICO ---
+        document.getElementById('fill-partidas-btn').addEventListener('click', () => {
+            const partidaInputs = document.querySelectorAll('input[name="partidas[]"]');
+            if (partidaInputs.length < 2) return; // Só faz sentido se houver mais de um campo
+
+            const firstPartidaValue = partidaInputs[0].value;
+            if (!firstPartidaValue) {
+                showWarning('Preencha o primeiro horário de partida para usar esta função.');
+                return;
+            }
+
+            for (let i = 1; i < partidaInputs.length; i++) {
+                partidaInputs[i].value = firstPartidaValue;
+            }
+        });
+
+        document.getElementById('fill-chegadas-btn').addEventListener('click', () => {
+            const chegadaInputs = document.querySelectorAll('input[name="chegadas_destino[]"]');
+            if (chegadaInputs.length < 2) return; // Só faz sentido se houver mais de um campo
+
+            const firstChegadaValue = chegadaInputs[0].value;
+            if (!firstChegadaValue) {
+                showWarning('Preencha o primeiro horário de chegada para usar esta função.');
+                return;
+            }
+
+            for (let i = 1; i < chegadaInputs.length; i++) {
+                chegadaInputs[i].value = firstChegadaValue;
+            }
+        });
+
     </script>
 </body>
 
