@@ -243,8 +243,7 @@
 
         <hr class="my-6 md:my-8 border-gray-300">
 
-
-        <div class="flex flex-col gap-4 mb-6">
+        <div id="csv-report-section" class="flex flex-col gap-4 mb-6 hidden">
             <h2 class="text-xl font-bold text-gray-800">Gerar Relatório CSV</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -259,16 +258,13 @@
                 </div>
             </div>
 
-            <div class="flex flex-col md:flex-row gap-4">
-                <button type="button" id="download-csv"
-                    class="flex-1 px-6 py-3 bg-lime-500 text-white font-bold rounded-lg shadow-lg hover:bg-lime-600 focus:outline-none focus:ring-4 focus:ring-lime-400 focus:ring-opacity-50 transition duration-150 ease-in-out">
-                    Baixar Relatório CSV (Detalhado)
-                </button>
-                <button type="button" id="download-csv-custom"
+<div class="flex flex-col md:flex-row gap-4">
+                <button type="button" id="download-csv-detailed"
                     class="flex-1 px-6 py-3 bg-cyan-500 text-white font-bold rounded-lg shadow-lg hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-400 focus:ring-opacity-50 transition duration-150 ease-in-out">
-                    Baixar Relatório CSV (Simples)
+                    Gerar Relatório Completo
                 </button>
-            </div>
+            </div>            
+            <p id="csv-progress" class="text-center text-sm text-gray-600 mt-4 hidden"></p>
         </div>
 
         <hr class="my-6 md:my-8 border-gray-300">
@@ -688,7 +684,7 @@
         // IMPORTAÇÕES
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, addDoc, deleteDoc, onSnapshot, collection, doc, query, where, getDocs, updateDoc, serverTimestamp, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";        
+        import { getFirestore, addDoc, deleteDoc, onSnapshot, collection, doc, query, where, getDocs, getDoc, updateDoc, serverTimestamp, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";        
         // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyDmqvcKtIsga4ZQWNDg4_2k493dqMQCDVg",
@@ -702,6 +698,17 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+
+        try {
+    await enableIndexedDbPersistence(db);
+    console.log("Persistência offline habilitada!");
+} catch (err) {
+    if (err.code == 'failed-precondition') {
+        console.warn("Persistência offline falhou: múltiplas abas abertas.");
+    } else if (err.code == 'unimplemented') {
+        console.log("Persistência offline não suportada neste navegador.");
+    }
+}
 
         const globalAppId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         let currentUser = {
@@ -720,9 +727,8 @@
         const openMotoristasBtn = document.getElementById('open-motoristas-modal');
         const passageirosContainer = document.getElementById('passageiros-campos-container');
         const addPassageiroBtn = document.getElementById('add-passageiro-btn');
-        const downloadCsvBtn = document.getElementById('download-csv');
-        const downloadCsvCustomBtn = document.getElementById('download-csv-custom');
-        const csvReportDiv = downloadCsvBtn.closest('.flex-col');
+        const downloadCsvDetailedBtn = document.getElementById('download-csv-detailed');
+        const csvReportDiv = document.getElementById('csv-report-section');
         const solicitanteContainer = document.getElementById('solicitante-campos-container');
         const addSolicitanteBtn = document.getElementById('add-solicitante-btn');
         const destinoContainer = document.getElementById('destino-campos-container');
@@ -730,18 +736,18 @@
         const valorContainer = document.getElementById('valor-campos-container');
         const addValorBtn = document.getElementById('add-valor-btn');
         const editValorBtn = document.getElementById('add-edit-valor-btn');
-	const openChangePasswordBtn = document.getElementById('open-change-password-btn');
-	const changePasswordModal = document.getElementById('change-password-modal');
-	const closeChangePasswordModalBtn = document.getElementById('close-change-password-modal');
-	const cancelChangePasswordBtn = document.getElementById('cancel-change-password-btn');
-	const changePasswordForm = document.getElementById('change-password-form');
-	const changePasswordMessage = document.getElementById('change-password-message');
-	const resetPasswordModal = document.getElementById('reset-password-modal');
-	const closeResetPasswordModalBtn = document.getElementById('close-reset-password-modal');
-	const cancelResetPasswordBtn = document.getElementById('cancel-reset-password-btn');
-	const resetPasswordForm = document.getElementById('reset-password-form');
-	const resetPasswordMessage = document.getElementById('reset-password-message');
-	const motoristasTable = document.getElementById('motoristas-table');
+        const openChangePasswordBtn = document.getElementById('open-change-password-btn');
+        const changePasswordModal = document.getElementById('change-password-modal');
+        const closeChangePasswordModalBtn = document.getElementById('close-change-password-modal');
+        const cancelChangePasswordBtn = document.getElementById('cancel-change-password-btn');
+        const changePasswordForm = document.getElementById('change-password-form');
+        const changePasswordMessage = document.getElementById('change-password-message');
+        const resetPasswordModal = document.getElementById('reset-password-modal');
+        const closeResetPasswordModalBtn = document.getElementById('close-reset-password-modal');
+        const cancelResetPasswordBtn = document.getElementById('cancel-reset-password-btn');
+        const resetPasswordForm = document.getElementById('reset-password-form');
+        const resetPasswordMessage = document.getElementById('reset-password-message');
+        const motoristasTable = document.getElementById('motoristas-table');
 
 // --- LÓGICA PARA ALTERAR A PRÓPRIA SENHA ---
 
@@ -906,15 +912,14 @@ resetPasswordForm.addEventListener('submit', async (event) => {
         function setMotoristaFromData(userData) {
             currentUser.username = userData.username;
             currentUser.isAdmin = userData.is_admin || false;
-
+            currentUser.nome = userData.nome;
             userIdDisplay.classList.add('hidden'); // Oculta o ID antigo
-
-            csvReportDiv.classList.remove('hidden');
-
             if (currentUser.isAdmin) {
-                openMotoristasBtn.classList.remove('hidden');
+            openMotoristasBtn.classList.remove('hidden');
+            csvReportDiv.classList.remove('hidden'); // Mostra o botão de relatório para admins
             } else {
                 openMotoristasBtn.classList.add('hidden');
+                csvReportDiv.classList.add('hidden'); // Esconde o botão de relatório para não admins
             }
 
             if (userData.is_motorista_fixo) {
@@ -979,11 +984,17 @@ function closeAllAutocompleteLists() {
     container.innerHTML = '';
 }
 
-function showAutocompleteSuggestions(inputElement, filterType) {
+// ===============================================
+// ▼▼▼ LÓGICA DE AUTOCOMPLETE OTIMIZADA ▼▼▼
+// ===============================================
+
+async function showAutocompleteSuggestions(inputElement, filterType) {
     const val = inputElement.value;
     closeAllAutocompleteLists();
-    if (!val || val.length < 2) { // Só busca a partir de 2 caracteres
-        return false;
+
+    // Começa a busca com 2 ou mais caracteres
+    if (!val || val.length < 2) {
+        return;
     }
 
     const container = document.getElementById('autocomplete-suggestions-container');
@@ -991,6 +1002,7 @@ function showAutocompleteSuggestions(inputElement, filterType) {
     suggestionsDiv.setAttribute('class', 'autocomplete-items');
     container.appendChild(suggestionsDiv);
 
+    // Posiciona a caixa de sugestões abaixo do campo de input
     const rect = inputElement.getBoundingClientRect();
     container.style.position = 'absolute';
     container.style.left = `${rect.left + window.scrollX}px`;
@@ -998,35 +1010,53 @@ function showAutocompleteSuggestions(inputElement, filterType) {
     container.style.width = `${rect.width}px`;
 
     const normalizedVal = val.toLowerCase();
-    let suggestions = [];
+    
+    try {
+        // Cria a referência para a coleção de transportados
+        const transportadosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'transportados');
+        
+        // Constrói a query para buscar documentos que "começam com" o texto digitado
+        // Nota: Para isso funcionar bem, é recomendado ter um campo em minúsculas no seu documento.
+        // Ex: { nome: "Fulano de Tal", nome_lower: "fulano de tal", re: "12345" }
+        const q = query(
+            transportadosRef,
+            where(filterType === 're' ? 're' : 'nome_lower', ">=", normalizedVal),
+            where(filterType === 're' ? 're' : 'nome_lower', "<=", normalizedVal + '\uf8ff'),
+            limit(7) // Limita o número de leituras a 7 por busca!
+        );
 
-    if (filterType === 're') {
-        suggestions = transportadosData.filter(item => item.re && item.re.toLowerCase().includes(normalizedVal));
-    } else { // 'nome'
-        suggestions = transportadosData.filter(item => item.nome && item.nome.toLowerCase().includes(normalizedVal));
-    }
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+             suggestionsDiv.innerHTML = '<div>Nenhum resultado encontrado.</div>';
+             return;
+        }
 
-    // Limita o número de sugestões para não poluir a tela
-    suggestions.slice(0, 7).forEach(item => {
-        const suggestionItem = document.createElement('div');
-        suggestionItem.innerHTML = `<strong>${item.re}</strong> - ${item.nome}`;
-        suggestionItem.addEventListener('click', function() {
-            // Ao clicar, preenche os campos da linha correta
-            const parentRow = inputElement.closest('.passageiro-row');
-            const reInput = parentRow.querySelector('input[name="res[]"]');
-            const nomeInput = parentRow.querySelector('input[name="transportados[]"]');
+        querySnapshot.forEach(doc => {
+            const item = doc.data();
+            const suggestionItem = document.createElement('div');
+            
+            // Destaque do texto digitado (opcional, mas melhora a UX)
+            const suggestionText = `<strong>${item.re}</strong> - ${item.nome}`;
+            suggestionItem.innerHTML = suggestionText;
 
-            reInput.value = item.re;
-            nomeInput.value = item.nome;
-
-            closeAllAutocompleteLists();
-            // Dispara a checagem de duplicidade
-            setTimeout(() => checkPassageiroDuplicidade(inputElement), 50);
+            suggestionItem.addEventListener('click', function() {
+                // Ao clicar, preenche os campos da linha correta
+                const parentRow = inputElement.closest('.passageiro-row');
+                parentRow.querySelector('input[name="res[]"]').value = item.re;
+                parentRow.querySelector('input[name="transportados[]"]').value = item.nome;
+                
+                closeAllAutocompleteLists();
+                setTimeout(() => checkPassageiroDuplicidade(inputElement), 50);
+            });
+            suggestionsDiv.appendChild(suggestionItem);
         });
-        suggestionsDiv.appendChild(suggestionItem);
-    });
-}
 
+    } catch (error) {
+        console.error("Erro na busca de autocomplete:", error);
+        suggestionsDiv.innerHTML = '<div>Erro ao buscar.</div>';
+    }
+}
         function handleAutofillDynamic(sourceInput, targetInput, sourceType) {
             const value = sourceInput.value.trim();
             if (value !== '') {
@@ -1631,30 +1661,62 @@ function bindPassageiroListeners() {
         }
         
         // LISTENERS DO FIRESTORE ATUALIZADOS
-        function startFirestoreListeners() {
-            const transportadosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'transportados');
-            onSnapshot(transportadosRef, (snapshot) => {
-                transportadosData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                rebuildTransportadosLookups();
-            });
+// LISTENERS DO FIRESTORE ATUALIZADOS PARA USAR getDocs (MAIS EFICIENTE)
+async function startFirestoreListeners() {
+    // --- Carrega Transportados (uma única vez) ---
+    try {
+        const transportadosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'transportados');
+        const transportadosSnapshot = await getDocs(transportadosRef);
+        transportadosData = transportadosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        rebuildTransportadosLookups();
+    } catch (error) {
+        console.error("Erro ao buscar transportados:", error);
+        showWarning("Não foi possível carregar a lista de transportados.");
+    }
 
-            // Ouve a coleção 'users' em vez de 'motoristas'
-            const usersRef = collection(db, 'users');
-            onSnapshot(usersRef, (snapshot) => {
-                usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                rebuildMotoristasLookups();
-            });
+    // --- Carrega Usuários/Motoristas (uma única vez) ---
+    try {
+        const usersRef = collection(db, 'users');
+        const usersSnapshot = await getDocs(usersRef);
+        usersData = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        rebuildMotoristasLookups();
+    } catch (error) {
+        console.error("Erro ao buscar usuários:", error);
+        showWarning("Não foi possível carregar a lista de motoristas.");
+    }
 
-            const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
-            onSnapshot(lancamentosRef, (snapshot) => {
-                lancamentosData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            });
-
-            // Ativa a funcionalidade de clique nas tabelas
-            makeTableRowsClickable('transportados-table');
-            makeTableRowsClickable('motoristas-table');
+    // ▼▼▼ LÓGICA DE CACHE PARA USUÁRIOS/MOTORISTAS ▼▼▼
+    try {
+        // 1. Tenta carregar do cache local primeiro
+        const cachedUsers = localStorage.getItem('cachedUsersData');
+        if (cachedUsers) {
+            usersData = JSON.parse(cachedUsers);
+            rebuildMotoristasLookups(); // Popula a interface instantaneamente
+            console.log("Motoristas carregados do cache.");
         }
 
+        // 2. Busca a lista atualizada do Firestore em segundo plano
+        const usersRef = collection(db, 'users');
+        const usersSnapshot = await getDocs(usersRef);
+        const freshUsersData = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // 3. Compara e atualiza se houver diferença
+        if (JSON.stringify(freshUsersData) !== JSON.stringify(usersData)) {
+            console.log("Atualizando lista de motoristas...");
+            usersData = freshUsersData;
+            rebuildMotoristasLookups(); // Atualiza a interface com os novos dados
+            localStorage.setItem('cachedUsersData', JSON.stringify(usersData)); // Salva no cache
+        }
+
+    } catch (error) {
+        console.error("Erro ao buscar usuários:", error);
+        showWarning("Não foi possível carregar a lista de motoristas.");
+    }
+
+    // Ativa a funcionalidade de clique nas tabelas
+    makeTableRowsClickable('transportados-table');
+    makeTableRowsClickable('motoristas-table');
+}
 document.getElementById('form-corrida').addEventListener('submit', async function (event) {
     // A PRIMEIRA COISA a se fazer é impedir o recarregamento da página.
     event.preventDefault();
@@ -2271,15 +2333,33 @@ if (deleteButton) {
 
         document.getElementById('add-edit-passageiro-btn').addEventListener('click', () => addEditPassageiroRow());
         
-        function openEditLancamentoModal(id) {
-            const lancamento = lancamentosData.find(l => l.id === id);
-            if (!lancamento) return;
+async function openEditLancamentoModal(id) {
+    let lancamento;
+    try {
+        // Busca o lançamento específico no banco de dados pelo ID
+        const docRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos', id);
+        const docSnap = await getDoc(docRef);
 
-            document.getElementById('edit-lancamento-id').value = id;
-            document.getElementById('edit-data').value = lancamento.data;
-            document.getElementById('edit-bordero').value = lancamento.bordero || '';
-            document.getElementById('edit-observacao').value = lancamento.observacao || '';
-            const editOrigemContainer = document.getElementById('edit-origem-campos-container');
+        if (docSnap.exists()) {
+            lancamento = { id: docSnap.id, ...docSnap.data() };
+        } else {
+            showWarning("Lançamento não encontrado. A lista pode estar desatualizada.");
+            return;
+        }
+    } catch (error) {
+        console.error("Erro ao buscar lançamento para edição:", error);
+        showWarning("Erro ao carregar os dados do lançamento.");
+        return;
+    }
+
+    if (!lancamento) return;
+
+    // O restante da função continua exatamente como antes
+    document.getElementById('edit-lancamento-id').value = id;
+    document.getElementById('edit-data').value = lancamento.data;
+    document.getElementById('edit-bordero').value = lancamento.bordero || '';
+    document.getElementById('edit-observacao').value = lancamento.observacao || '';
+    const editOrigemContainer = document.getElementById('edit-origem-campos-container');
     editOrigemContainer.innerHTML = ''; // Limpa o container
     editOrigemContainer.appendChild(createEditOrigemInput(lancamento.origem || '', lancamento.partida || ''));
     if (lancamento.origens_extras && lancamento.origens_extras.length > 0) {
@@ -2288,64 +2368,63 @@ if (deleteButton) {
         });
     }
 
-            const motoristaInput = document.getElementById('edit-motorista');
-            motoristaInput.value = lancamento.motorista;
-            if (!currentUser.isAdmin) {
-                motoristaInput.setAttribute('readonly', 'readonly');
-                motoristaInput.classList.add('bg-gray-200');
-            } else {
-                motoristaInput.removeAttribute('readonly');
-                motoristaInput.classList.remove('bg-gray-200');
-            }
+    const motoristaInput = document.getElementById('edit-motorista');
+    motoristaInput.value = lancamento.motorista;
+    if (!currentUser.isAdmin) {
+        motoristaInput.setAttribute('readonly', 'readonly');
+        motoristaInput.classList.add('bg-gray-200');
+    } else {
+        motoristaInput.removeAttribute('readonly');
+        motoristaInput.classList.remove('bg-gray-200');
+    }
 
-            const editSolicitanteContainer = document.getElementById('edit-solicitante-campos-container');
-            editSolicitanteContainer.innerHTML = '';
-            addEditDynamicRow('edit-solicitante-campos-container', 'solicitante', 'Solicitante', lancamento.solicitante || '');
-            if (lancamento.solicitantes_extras && lancamento.solicitantes_extras.length > 0) {
-                lancamento.solicitantes_extras.forEach((s) => {
-                    addEditDynamicRow('edit-solicitante-campos-container', 'solicitante', 'Solicitante', s);
-                });
-            }
-            updateEditDynamicLabels('edit-solicitante-campos-container', 'solicitante', 'Solicitante');
+    const editSolicitanteContainer = document.getElementById('edit-solicitante-campos-container');
+    editSolicitanteContainer.innerHTML = '';
+    addEditDynamicRow('edit-solicitante-campos-container', 'solicitante', 'Solicitante', lancamento.solicitante || '');
+    if (lancamento.solicitantes_extras && lancamento.solicitantes_extras.length > 0) {
+        lancamento.solicitantes_extras.forEach((s) => {
+            addEditDynamicRow('edit-solicitante-campos-container', 'solicitante', 'Solicitante', s);
+        });
+    }
+    updateEditDynamicLabels('edit-solicitante-campos-container', 'solicitante', 'Solicitante');
 
-            const editDestinoContainer = document.getElementById('edit-destino-campos-container');
-            editDestinoContainer.innerHTML = '';
-            const destinosParaEdicao = [{ destino: lancamento.destino || '', chegada: lancamento.chegada_destino || '' }];
-            if (lancamento.destinos_extras && lancamento.destinos_extras.length > 0) {
-                lancamento.destinos_extras.forEach(d => destinosParaEdicao.push({ destino: d.destino || '', chegada: d.chegada || '' }));
-            }
-            destinosParaEdicao.forEach(d => {
-                addEditDynamicRow('edit-destino-campos-container', 'destino', 'Destino', d.destino, d.chegada);
-            });
+    const editDestinoContainer = document.getElementById('edit-destino-campos-container');
+    editDestinoContainer.innerHTML = '';
+    const destinosParaEdicao = [{ destino: lancamento.destino || '', chegada: lancamento.chegada_destino || '' }];
+    if (lancamento.destinos_extras && lancamento.destinos_extras.length > 0) {
+        lancamento.destinos_extras.forEach(d => destinosParaEdicao.push({ destino: d.destino || '', chegada: d.chegada || '' }));
+    }
+    destinosParaEdicao.forEach(d => {
+        addEditDynamicRow('edit-destino-campos-container', 'destino', 'Destino', d.destino, d.chegada);
+    });
 
-            const editValorContainer = document.getElementById('edit-valor-campos-container');
-            editValorContainer.innerHTML = '';
-            const valoresParaEdicao = [{ valor: lancamento.valor || 0, valorExtra: lancamento.valorExtra || 0 }];
-            if (lancamento.destinos_extras && lancamento.destinos_extras.length > 0) {
-                lancamento.destinos_extras.forEach(d => valoresParaEdicao.push({ valor: d.valor || 0, valorExtra: d.valorExtra || 0 }));
-            }
-            valoresParaEdicao.forEach((v, index) => {
-                const pNum = index + 1;
-                const valorFmt = (v.valor || 0).toFixed(2).replace('.', ',');
-                const valorExtraFmt = (v.valorExtra || 0).toFixed(2).replace('.', ',');
-                const newRow = createEditValorInput(pNum, valorFmt, valorExtraFmt);
-                editValorContainer.appendChild(newRow);
-            });
-            updateEditDynamicLabels('edit-valor-campos-container', 'valor', 'Valor');
+    const editValorContainer = document.getElementById('edit-valor-campos-container');
+    editValorContainer.innerHTML = '';
+    const valoresParaEdicao = [{ valor: lancamento.valor || 0, valorExtra: lancamento.valorExtra || 0 }];
+    if (lancamento.destinos_extras && lancamento.destinos_extras.length > 0) {
+        lancamento.destinos_extras.forEach(d => valoresParaEdicao.push({ valor: d.valor || 0, valorExtra: d.valorExtra || 0 }));
+    }
+    valoresParaEdicao.forEach((v, index) => {
+        const pNum = index + 1;
+        const valorFmt = (v.valor || 0).toFixed(2).replace('.', ',');
+        const valorExtraFmt = (v.valorExtra || 0).toFixed(2).replace('.', ',');
+        const newRow = createEditValorInput(pNum, valorFmt, valorExtraFmt);
+        editValorContainer.appendChild(newRow);
+    });
+    updateEditDynamicLabels('edit-valor-campos-container', 'valor', 'Valor');
 
-            document.getElementById('edit-re').value = lancamento.re || '';
-            document.getElementById('edit-transportado').value = lancamento.transportado || '';
-            const extrasContainer = document.getElementById('edit-passageiros-extras-container');
-            extrasContainer.innerHTML = '';
-            if (lancamento.passageiros_extras && lancamento.passageiros_extras.length > 0) {
-                lancamento.passageiros_extras.forEach((p) => {
-                    addEditPassageiroRow(p.re, p.nome);
-                });
-            }
-            updateEditPassageiroLabels();
-            document.getElementById('edit-lancamento-modal').classList.remove('hidden');
-        }
-
+    document.getElementById('edit-re').value = lancamento.re || '';
+    document.getElementById('edit-transportado').value = lancamento.transportado || '';
+    const extrasContainer = document.getElementById('edit-passageiros-extras-container');
+    extrasContainer.innerHTML = '';
+    if (lancamento.passageiros_extras && lancamento.passageiros_extras.length > 0) {
+        lancamento.passageiros_extras.forEach((p) => {
+            addEditPassageiroRow(p.re, p.nome);
+        });
+    }
+    updateEditPassageiroLabels();
+    document.getElementById('edit-lancamento-modal').classList.remove('hidden');
+}
         function setupEditModalAutofill() {
             const modal = document.getElementById('edit-lancamento-modal');
             modal.addEventListener('blur', (event) => {
@@ -2640,7 +2719,10 @@ destinosInputs.forEach((destinoInput, i) => {
 
         // --- Eventos de UI restantes ---
         document.getElementById('close-modal').addEventListener('click', hideWarning);
-        document.getElementById('open-transportados-modal').addEventListener('click', () => document.getElementById('transportados-modal').classList.remove('hidden'));
+        document.getElementById('open-transportados-modal').addEventListener('click', () => { 
+        renderTransportadosList();
+        document.getElementById('transportados-modal').classList.remove('hidden');
+});
         document.getElementById('close-transportados-modal').addEventListener('click', () => document.getElementById('transportados-modal').classList.add('hidden'));
         document.getElementById('open-motoristas-modal').addEventListener('click', () => document.getElementById('motoristas-modal').classList.remove('hidden'));
         document.getElementById('close-motoristas-modal').addEventListener('click', () => document.getElementById('motoristas-modal').classList.add('hidden'));
@@ -2683,6 +2765,168 @@ destinosInputs.forEach((destinoInput, i) => {
                 chegadaInputs[i].value = firstChegadaValue;
             }
         });
+
+// --- NOVA SUGESTÃO: RELATÓRIO EM LOTES (100% NO NAVEGADOR) ---
+
+    // Função auxiliar para escapar valores para o formato CSV
+    function escapeCsvValue(value) {
+        if (value === null || value === undefined) return '';
+        const stringValue = String(value);
+        if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+            return `"${stringValue.replace(/"/g, '""')}"`;
+        }
+        return stringValue;
+    }
+
+    // Função auxiliar para iniciar o download do arquivo
+    function triggerCsvDownload(csvContent, filename) {
+        const bom = new Uint8Array([0xEF, 0xBB, 0xBF]); // Para garantir a codificação UTF-8 correta no Excel
+        const blob = new Blob([bom, csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+// --- LÓGICA DE RELATÓRIO ATUALIZADA PARA P4 ---
+    async function handleDownloadCsvInBatches() {
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        if (!startDate || !endDate) {
+            showWarning('Por favor, selecione a data de início e a data de fim.');
+            return;
+        }
+
+        const button = document.getElementById('download-csv-detailed');
+        const progressElement = document.getElementById('csv-progress');
+        const originalText = button.textContent;
+        
+        button.disabled = true;
+        progressElement.classList.remove('hidden');
+        progressElement.textContent = 'Iniciando a busca...';
+        let batchCounter = 1;
+
+        try {
+            const BATCH_SIZE = 200;
+            let allCsvRows = [];
+            let lastVisibleDoc = null;
+            let totalProcessed = 0;
+
+            while (true) {
+                const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
+                
+                let q = query(
+                    lancamentosRef,
+                    where("data", ">=", startDate),
+                    where("data", "<=", endDate),
+                    orderBy("data"),
+                    limit(BATCH_SIZE)
+                );
+                
+                if (lastVisibleDoc) {
+                    q = query(q, startAfter(lastVisibleDoc));
+                }
+
+                const querySnapshot = await getDocs(q);
+                const batchDocs = querySnapshot.docs;
+
+                if (batchDocs.length === 0) break;
+                
+                const batchRows = batchDocs.map(doc => {
+                    const item = doc.data();
+
+                    // Mapeia todos os dados extras de P2, P3 e P4
+                    const s2 = item.solicitantes_extras?.[0] || '';
+                    const s3 = item.solicitantes_extras?.[1] || '';
+                    const s4 = item.solicitantes_extras?.[2] || '';
+
+                    const p2 = item.passageiros_extras?.[0]?.nome || '';
+                    const p3 = item.passageiros_extras?.[1]?.nome || '';
+                    const p4 = item.passageiros_extras?.[2]?.nome || '';
+                    
+                    const o2 = item.origens_extras?.[0]?.origem || '';
+                    const o3 = item.origens_extras?.[1]?.origem || '';
+                    const o4 = item.origens_extras?.[2]?.origem || '';
+
+                    const pa2 = item.origens_extras?.[0]?.partida || '';
+                    const pa3 = item.origens_extras?.[1]?.partida || '';
+                    const pa4 = item.origens_extras?.[2]?.partida || '';
+                    
+                    const dest2 = item.destinos_extras?.[0]?.destino || '';
+                    const ch2 = item.destinos_extras?.[0]?.chegada || '';
+                    const val2 = item.destinos_extras?.[0]?.valor?.toFixed(2).replace('.', ',') || '0,00';
+                    const valEx2 = item.destinos_extras?.[0]?.valorExtra?.toFixed(2).replace('.', ',') || '0,00';
+                    
+                    const dest3 = item.destinos_extras?.[1]?.destino || '';
+                    const ch3 = item.destinos_extras?.[1]?.chegada || '';
+                    const val3 = item.destinos_extras?.[1]?.valor?.toFixed(2).replace('.', ',') || '0,00';
+                    const valEx3 = item.destinos_extras?.[1]?.valorExtra?.toFixed(2).replace('.', ',') || '0,00';
+
+                    const dest4 = item.destinos_extras?.[2]?.destino || '';
+                    const ch4 = item.destinos_extras?.[2]?.chegada || '';
+                    const val4 = item.destinos_extras?.[2]?.valor?.toFixed(2).replace('.', ',') || '0,00';
+                    const valEx4 = item.destinos_extras?.[2]?.valorExtra?.toFixed(2).replace('.', ',') || '0,00';
+                    
+                    // Constrói a linha na ordem exata até P4
+                    const rowData = [
+                        item.data, item.motorista, item.bordero, item.solicitante, item.transportado, 
+                        item.origem, item.partida, item.destino, item.chegada_destino,
+                        item.valor?.toFixed(2).replace('.', ',') || '0,00',
+                        item.valorExtra?.toFixed(2).replace('.', ',') || '0,00',
+                        s2, p2, o2, pa2, dest2, ch2, val2, valEx2, // Dados P2
+                        s3, p3, o3, pa3, dest3, ch3, val3, valEx3, // Dados P3
+                        s4, p4, o4, pa4, dest4, ch4, val4, valEx4  // Dados P4
+                    ];
+                    return rowData.map(escapeCsvValue).join(',');
+                });
+
+                allCsvRows.push(...batchRows);
+                
+                totalProcessed += batchDocs.length;
+                progressElement.textContent = `Processando lote ${batchCounter}... ${totalProcessed} registros encontrados.`;
+                batchCounter++;
+
+                lastVisibleDoc = batchDocs[batchDocs.length - 1];
+                if (batchDocs.length < BATCH_SIZE) break;
+            }
+            
+            if (allCsvRows.length === 0) {
+                showWarning('Nenhum lançamento encontrado para o período selecionado.');
+                return;
+            }
+
+            // Define os cabeçalhos na ordem exata até P4
+            const headers = [
+                'data', 'motorista', 'bordero', 'solicitante', 'passageiros', 'origem', 'partida',
+                'destino', 'chegada', 'valor', 'valor extra', 
+                'solicitante (P2)', 'passageiro (P2)', 'origem (P2)', 'partida (P2)', 'destino (P2)', 'chegada (P2)', 'valor (P2)', 'valor extra (P2)',
+                'solicitante (P3)', 'passageiro (P3)', 'origem (P3)', 'partida (P3)', 'destino (P3)', 'chegada (P3)', 'valor (P3)', 'valor extra (P3)',
+                'solicitante (P4)', 'passageiro (P4)', 'origem (P4)', 'partida (P4)', 'destino (P4)', 'chegada (P4)', 'valor (P4)', 'valor extra (P4)'
+            ].join(',');
+            
+            const csvContent = [headers, ...allCsvRows].join('\n');
+            const filename = `relatorio_completo_${startDate}_a_${endDate}.csv`;
+            
+            progressElement.textContent = 'Gerando arquivo para download...';
+            triggerCsvDownload(csvContent, filename);
+
+        } catch (error) {
+            console.error("Erro ao gerar relatório CSV:", error);
+            showWarning("Ocorreu um erro ao gerar o relatório.");
+        } finally {
+            button.disabled = false;
+            button.textContent = originalText;
+            progressElement.classList.add('hidden');
+        }
+    }
+
+// Associa a nova função ao botão de relatório completo
+    document.getElementById('download-csv-detailed').addEventListener('click', handleDownloadCsvInBatches);
 
     </script>
 </body>
