@@ -450,12 +450,20 @@
                         class="absolute top-0 right-0 text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
                         <label for="filter-date" class="block text-sm font-medium text-gray-700">Filtrar por
                             Data:</label>
                         <input type="date" id="filter-date"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
+                    </div>
+
+                        <div id="motorista-filter-wrapper" class="hidden"> <label for="filter-motorista" class="block text-sm font-medium text-gray-700">Filtrar por
+                            Motorista:</label>
+                        <select id="filter-motorista"
+                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
+                            <option value="">Todos os Motoristas</option>
+                            </select>
                     </div>
                     <div class="flex items-end">
                         <button id="filter-lancamentos-btn"
@@ -1013,6 +1021,7 @@
                 usersData.sort((a, b) => sortOrder === 'asc' ? a.nome.localeCompare(b.nome) : b.nome.localeCompare(a.nome));
                 renderMotoristasList();
                 populateMotoristasDatalist();
+                populateMotoristasFilterDropdown();
             }
             // === FUNÇÕES DE VALIDAÇÃO E INTERFACE ===
 
@@ -2073,6 +2082,7 @@
                 tableBody.innerHTML = '<tr><td colspan="15" class="text-center p-4">Carregando...</td></tr>';
 
                 const selectedDate = document.getElementById('filter-date').value;
+                const selectedMotorista = document.getElementById('filter-motorista').value;
 
                 if (!selectedDate) {
                     tableBody.innerHTML = '<tr><td colspan="15" class="text-center p-4">Selecione uma data para ver os lançamentos.</td></tr>';
@@ -2095,6 +2105,10 @@
                     // Filtra no lado do cliente caso o usuário não seja admin
                     if (!currentUser.isAdmin) {
                         dataToShow = dataToShow.filter(lanc => lanc.createdBy === currentUser.username);
+                    }
+
+                    if (selectedMotorista) { // Se um motorista foi selecionado (não é "Todos")
+                        dataToShow = dataToShow.filter(lanc => lanc.motorista === selectedMotorista);
                     }
 
                     renderLancamentosTable(dataToShow); // Chama a função para popular a tabela
@@ -2152,10 +2166,21 @@
                 });
             }
 
-            document.getElementById('open-lancamentos-modal').addEventListener('click', () => {
+document.getElementById('open-lancamentos-modal').addEventListener('click', () => {
                 // Define a data do filtro para o dia atual
                 const today = new Date().toISOString().split('T')[0];
                 document.getElementById('filter-date').value = today;
+
+                // ▼▼▼ ADICIONADO ▼▼▼
+                // Mostra ou esconde o filtro de motorista baseado no status de admin
+                const motoristaFilter = document.getElementById('motorista-filter-wrapper');
+                if (currentUser.isAdmin) {
+                    motoristaFilter.classList.remove('hidden');
+                } else {
+                    motoristaFilter.classList.add('hidden');
+                    document.getElementById('filter-motorista').value = ''; // Garante que o filtro seja limpo
+                }
+                // ▲▲▲ FIM DA ADIÇÃO ▲▲▲
 
                 // Busca e exibe os lançamentos do dia atual
                 fetchAndRenderLancamentos();
@@ -2852,6 +2877,25 @@
                     showWarning('Erro ao conectar com o banco de dados.');
                 }
             });
+
+// --- COLE ESTA NOVA FUNÇÃO ABAIXO DE 'populateMotoristasDatalist' ---
+            function populateMotoristasFilterDropdown() {
+                const select = document.getElementById('filter-motorista');
+                if (!select) return; // Se o elemento não existir, para aqui
+                
+                // Guarda a opção "Todos" e limpa o resto
+                const firstOption = select.options[0];
+                select.innerHTML = '';
+                select.appendChild(firstOption);
+
+                // Adiciona cada motorista da lista global
+                usersData.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.nome;
+                    option.textContent = item.nome;
+                    select.appendChild(option);
+                });
+            }
 
 
             // LÓGICA DE ADICIONAR MOTORISTA ATUALIZADA
