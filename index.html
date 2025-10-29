@@ -805,6 +805,48 @@
             <option value="Vitoria Vale"></option>
         </datalist>
 
+        <datalist id="solicitantes-list">
+            <option value="Adriano da Silva Lopes"></option>
+            <option value="Alex Augusto de Camargo"></option>
+            <option value="Alex Sandro Ramos da Cruz"></option>
+            <option value="Anderson de Oliveira Ferreira"></option>
+            <option value="Augusto Gabriel Galhote Silva"></option>
+            <option value="Cícero Vilaça de Sousa"></option>
+            <option value="Clodoaldo Martins do Nascimento Junior"></option>
+            <option value="Danilo Pavret Ramos"></option>
+            <option value="Diomedes Guimarães Correa Jr."></option>
+            <option value="Edmilson do Patrocínio"></option>
+            <option value="Edson Luiz Galioti Vitorino"></option>
+            <option value="Erick C. S. Toledo"></option>
+            <option value="Evaldo Lucio de Alvarenga"></option>
+            <option value="Fabio Rodrigues De Lima"></option>
+            <option value="Felipe Egídio de Miranda"></option>
+            <option value="Felipe Leite Pestana"></option>
+            <option value="Glaucia Maria de Souza Farias"></option>
+            <option value="Hudson Dias Gomes"></option>
+            <option value="João Valdeci da Silva"></option>
+            <option value="Kleber Batista dos Santos"></option>
+            <option value="Luis Claudio Ramos"></option>
+            <option value="Marcelo do Amaral"></option>
+            <option value="Marcos Antonio Moreira"></option>
+            <option value="Marcos Cid Pereta"></option>
+            <option value="Marina Evangelista de Paula"></option>
+            <option value="Mauricio Paulo da Silva"></option>
+            <option value="Mauro Rocha dos Santos"></option>
+            <option value="Moisés Vitorino dos Santos"></option>
+            <option value="Natan Batista dos Santos Jr."></option>
+            <option value="Rafael Camargo"></option>
+            <option value="Rafael Florentino"></option>
+            <option value="Raniere Da Silva Almeida"></option>
+            <option value="Ricardo Beltrame Rocha"></option>
+            <option value="Rodrigo Américo Araújo"></option>
+            <option value="Rodrigo Peretta Carneiro"></option>
+            <option value="Rudge Nunes de Assis"></option>
+            <option value="Titilo Prado"></option>
+            <option value="Wagner Bonelli"></option>
+            <option value="William Rodrigues Watanabe"></option>
+        </datalist>        
+
         <script type="module">
             // IMPORTAÇÕES
             import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -1397,6 +1439,7 @@
                 <div class="flex-grow">
                     <label for="solicitante-${index}" class="block text-sm font-medium text-gray-700">${labelText}</label>
                     <input type="text" id="solicitante-${index}" name="solicitantes[]"
+                        list="solicitantes-list"
                         onfocus="this.classList.remove('error-border')"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                 </div>
@@ -2311,12 +2354,19 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 <div class="flex-grow">
                     <label for="edit-${inputName}-${index}" class="block text-sm font-medium text-gray-700">${baseLabel} (P${pNum}):</label>
                     <input type="text" id="edit-${inputName}-${index}" name="edit-${inputName}s[]" value="${value}"
+                        ${inputName === 'solicitante' ? 'list="solicitantes-list"' : ''}
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 </div>
                 <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-dynamic-btn ${isP1 ? 'hidden' : ''}">
                     -
                 </button>
             `;
+
+                if (inputName === 'solicitante') {
+                const input = fieldset.querySelector('input[type="text"]');
+                input.setAttribute('list', 'solicitantes-list');
+            }
+
                 if (!isP1) {
                     const removeBtn = fieldset.querySelector('.remove-edit-dynamic-btn');
                     removeBtn.onclick = () => {
