@@ -6,8 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Lançamento de Corridas</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');    
+                    
 
             body {
                 font-family: 'Inter', sans-serif;
@@ -509,7 +511,7 @@
                                      Bairro(s)</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Partida</th>
+                                    Horário da Solicitação</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Valor Total</th>
@@ -1798,11 +1800,10 @@ function createDestinoInput(index, isRequired = true) {
 
 function createOrigemInput(index, isRequired = true) {
                 const fieldset = document.createElement('div');
-                // Alterado de volta para 2 colunas
                 fieldset.className = 'dynamic-row grid grid-cols-2 gap-4 md:gap-6';
                 const pNum = document.querySelectorAll(`#origem-campos-container .dynamic-row`).length + 1;
                 const labelOrigem = isRequired ? 'Origem:' : `Origem (P${pNum}):`;
-                const labelPartida = isRequired ? 'Partida:' : `Partida (P${pNum}):`;
+                const labelPartida = isRequired ? 'Horário da Solicitação:' : `Horário da Solicitação (P${pNum}):`;
 
                 fieldset.innerHTML = `
                 <div class="form-row-align">
@@ -1932,10 +1933,10 @@ function createOrigemInput(index, isRequired = true) {
 function createEditOrigemInput(origemValue = '', partidaValue = '') {
                 const containerId = 'edit-origem-campos-container';
                 const fieldset = document.createElement('div');
-                // Alterado de volta para 2 colunas
                 fieldset.className = 'edit-dynamic-row grid grid-cols-2 gap-4';
                 const pNum = document.querySelectorAll(`#${containerId} .edit-dynamic-row`).length + 1;
                 const isP1 = pNum === 1;
+                const labelPartida = `Horário da Solicitação (P${pNum}):`;
 
                 fieldset.innerHTML = `
             <div class="form-row-align">
@@ -1950,7 +1951,8 @@ function createEditOrigemInput(origemValue = '', partidaValue = '') {
             </div>
             <div class="form-row-align">
                 <div class="flex-grow">
-                    <label class="block text-sm font-medium text-gray-700">Partida (P${pNum}):</label>
+                    
+                    <label class="block text-sm font-medium text-gray-700">${labelPartida}</label>
                     <input type="time" name="edit-partidas[]" value="${partidaValue}"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 </div>
@@ -3625,34 +3627,16 @@ document.getElementById('add-transportado').addEventListener('click', async () =
                 }
             });
 
-
-
-
-            function escapeCsvValue(value) {
-                if (value === null || value === undefined) return '';
-                const stringValue = String(value);
-                if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
-                    return `"${stringValue.replace(/"/g, '""')}"`;
+            function triggerXlsxDownload(workbook, filename) {
+                try {
+                    XLSX.writeFile(workbook, filename, { bookType: "xlsx", type: "binary" });
+                } catch (error) {
+                    console.error("Erro ao gerar arquivo XLSX:", error);
+                    showWarning("Erro ao gerar arquivo Excel.");
                 }
-                return stringValue;
             }
 
-
-            function triggerCsvDownload(csvContent, filename) {
-                const bom = new Uint8Array([0xEF, 0xBB, 0xBF]); // Para garantir a codificação UTF-8 correta no Excel
-                const blob = new Blob([bom, csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement("a");
-                const url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", filename);
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            }
-
-
+// ▼▼▼ SUBSTITUA ESTA FUNÇÃO INTEIRA ▼▼▼
 
             async function handleDownloadDriversCsv() {
                 const startDate = document.getElementById('start-date').value;
@@ -3670,7 +3654,6 @@ document.getElementById('add-transportado').addEventListener('click', async () =
                 progressElement.classList.remove('hidden');
                 progressElement.textContent = 'Iniciando busca de lançamentos...';
 
-
                 const driverSummary = new Map();
 
                 try {
@@ -3678,34 +3661,26 @@ document.getElementById('add-transportado').addEventListener('click', async () =
                     let lastVisibleDoc = null;
                     let totalProcessed = 0;
 
-
                     while (true) {
                         const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
-
-                        let q = query(
-                            lancamentosRef,
+                        let q = query(lancamentosRef,
                             where("data", ">=", startDate),
                             where("data", "<=", endDate),
                             orderBy("data"),
                             limit(BATCH_SIZE)
                         );
-
                         if (lastVisibleDoc) {
                             q = query(q, startAfter(lastVisibleDoc));
                         }
 
                         const querySnapshot = await getDocs(q);
                         const batchDocs = querySnapshot.docs;
-
                         if (batchDocs.length === 0) break;
-
 
                         batchDocs.forEach(doc => {
                             const item = doc.data();
                             const motorista = item.motorista;
-
                             if (!motorista) return;
-
 
                             let valorViagem = (item.valor || 0) + (item.valorExtra || 0);
                             if (item.destinos_extras && item.destinos_extras.length > 0) {
@@ -3714,63 +3689,85 @@ document.getElementById('add-transportado').addEventListener('click', async () =
                                 });
                             }
 
-
-                            const summary = driverSummary.get(motorista) || {
-                                totalValor: 0,
-                                totalViagens: 0
-                            };
-
+                            const summary = driverSummary.get(motorista) || { totalValor: 0, totalViagens: 0 };
                             summary.totalValor += valorViagem;
-                            summary.totalViagens += 1; // Cada 'item' é uma viagem
-
+                            summary.totalViagens += 1;
                             driverSummary.set(motorista, summary);
                         });
 
                         totalProcessed += batchDocs.length;
                         progressElement.textContent = `Processando... ${totalProcessed} lançamentos verificados.`;
-
                         lastVisibleDoc = batchDocs[batchDocs.length - 1];
                         if (batchDocs.length < BATCH_SIZE) break;
                     }
 
                     progressElement.textContent = 'Combinando com dados dos motoristas...';
 
-
-                    const allCsvRows = [];
-
+                    const headers = ['NOME', 'VALOR TOTAL', 'TOTAL VIAGENS'];
+                    let dataForSheet = [headers];
 
                     usersData.forEach(user => {
                         const summary = driverSummary.get(user.nome) || { totalValor: 0, totalViagens: 0 };
-
-
-
+                        
                         const rowData = [
                             user.nome || '',
-                            summary.totalValor.toFixed(2).replace('.', ','),
+                            summary.totalValor,
                             summary.totalViagens
                         ];
-                        
-                        allCsvRows.push(rowData.map(escapeCsvValue).join(';'));
+                        dataForSheet.push(rowData);
                     });
                     
-                    if (allCsvRows.length === 0) {
+                    if (dataForSheet.length <= 1) {
                          showWarning('Nenhum dado de motorista encontrado.');
                          return;
                     }
+                    
+                    progressElement.textContent = 'Formatando o arquivo Excel...';
 
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.aoa_to_sheet(dataForSheet);
 
+                    ws['!cols'] = [
+                        { wch: 30 }, // A (Nome)
+                        { wch: 20 }, // B (Valor Total)
+                        { wch: 15 }  // C (Total Viagens)
+                    ];
 
-                    const headers = [
-                        'NOME',
-                        'VALOR TOTAL',
-                        'TOTAL VIAGENS'
-                    ].join(';').toUpperCase();
+                    // --- INÍCIO DA CORREÇÃO ---
+                    const currencyFormat = 'R$ #,##0.00';
+                    const range = XLSX.utils.decode_range(ws['!ref']); // Pega o range (ex: A1:C10)
 
-                    const csvContent = [headers, ...allCsvRows].join('\n');
-                    const filename = `relatorio_motoristas_${startDate}_a_${endDate}.csv`;
+                    for (let R = range.s.r; R <= range.e.r; ++R) { // Loop de Linha (Row)
+                        for (let C = range.s.c; C <= range.e.c; ++C) { // Loop de Coluna (Col)
+                            const cell_address = XLSX.utils.encode_cell({ r: R, c: C });
+                            
+                            // 1. Se a célula não existir (vazia), cria um objeto 's' (string) vazio para ela
+                            if (!ws[cell_address]) ws[cell_address] = { t: 's', v: '' };
 
+                            const cell = ws[cell_address];
+                            
+                            // 2. Garante que o objeto de estilo (.s) exista
+                            if (!cell.s) cell.s = {};
+                            
+                            // 3. Aplica o alinhamento
+                            cell.s.alignment = { horizontal: "center", vertical: "center" };
+                            
+                            // 4. Formato de moeda (Pula a linha 0, o cabeçalho)
+                            if (R > 0) { // R > 0 significa "não na primeira linha"
+                                if (C === 1) { // Coluna B (Valor Total)
+                                    cell.z = currencyFormat;
+                                }
+                            }
+                        }
+                    }
+                    // --- FIM DA CORREÇÃO ---
+
+                    XLSX.utils.book_append_sheet(wb, ws, "Relatório Motoristas");
+
+                    const filename = `relatorio_motoristas_${startDate}_a_${endDate}.xlsx`;
                     progressElement.textContent = 'Gerando arquivo para download...';
-                    triggerCsvDownload(csvContent, filename);
+
+                    triggerXlsxDownload(wb, filename);
 
                 } catch (error) {
                     console.error("Erro ao gerar relatório de motoristas:", error);
@@ -3781,6 +3778,8 @@ document.getElementById('add-transportado').addEventListener('click', async () =
                     progressElement.classList.add('hidden');
                 }
             }
+
+// ▼▼▼ SUBSTITUA ESTA FUNÇÃO INTEIRA ▼▼▼
 
             async function handleDownloadCsvInBatches() {
                 const startDate = document.getElementById('start-date').value;
@@ -3801,170 +3800,160 @@ document.getElementById('add-transportado').addEventListener('click', async () =
 
                 try {
                     const BATCH_SIZE = 200;
-                    let allCsvRows = [];
                     let lastVisibleDoc = null;
                     let totalProcessed = 0;
+                    
+                    const headers = [
+                        'RE', 'PASSAGEIRO', 'SOLICITANTE', 'BORDERO', 'MOTORISTA', 'DATA', 
+                        'HORÁRIO DA SOLICITAÇÃO', 'DESEMBARQUE', 'ORIGEM', 'DESTINO', 'BAIRRO', 
+                        'VALOR', 'VALOR EXTRA', 'OBSERVAÇÕES'
+                    ];
+                    
+                    let dataForSheet = [headers];
 
                     while (true) {
                         const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
-
-                        let q = query(
-                            lancamentosRef,
+                        let q = query(lancamentosRef,
                             where("data", ">=", startDate),
                             where("data", "<=", endDate),
                             orderBy("data"),
                             limit(BATCH_SIZE)
                         );
-
                         if (lastVisibleDoc) {
                             q = query(q, startAfter(lastVisibleDoc));
                         }
 
                         const querySnapshot = await getDocs(q);
                         const batchDocs = querySnapshot.docs;
-
                         if (batchDocs.length === 0) break;
-                        
-                        const batchRows = batchDocs.flatMap(doc => {
+
+                        batchDocs.forEach(doc => {
                             const item = doc.data();
-                            const generatedRows = []; 
-
-                            const passengerBlocks = [];
-
-
-                            passengerBlocks.push({
-                                id: 'P1',
-                                solicitante: item.solicitante,
-                                re: item.re,
-                                passageiro: item.transportado,
-                                origem: item.origem,
-                                partida: item.partida,
-                                destino: item.destino,
-                                chegada: item.chegada_destino,
-                                bairro: item.bairro,
-                                valor: item.valor,
-                                valorExtra: item.valorExtra
-                            });
-
-
-                            passengerBlocks.push({
-                                id: 'P2',
-                                solicitante: item.solicitantes_extras?.[0],
-                                re: item.passageiros_extras?.[0]?.re,
-                                passageiro: item.passageiros_extras?.[0]?.nome,
-                                origem: item.origens_extras?.[0]?.origem,
-                                partida: item.origens_extras?.[0]?.partida,
-                                destino: item.destinos_extras?.[0]?.destino,
-                                chegada: item.destinos_extras?.[0]?.chegada,
-                                bairro: item.destinos_extras?.[0]?.bairro,
-                                valor: item.destinos_extras?.[0]?.valor,
-                                valorExtra: item.destinos_extras?.[0]?.valorExtra
-                            });
-
-
-                            passengerBlocks.push({
-                                id: 'P3',
-                                solicitante: item.solicitantes_extras?.[1],
-                                re: item.passageiros_extras?.[1]?.re,
-                                passageiro: item.passageiros_extras?.[1]?.nome,
-                                origem: item.origens_extras?.[1]?.origem,
-                                partida: item.origens_extras?.[1]?.partida,
-                                destino: item.destinos_extras?.[1]?.destino,
-                                chegada: item.destinos_extras?.[1]?.chegada,
-                                bairro: item.destinos_extras?.[1]?.bairro,
-                                valor: item.destinos_extras?.[1]?.valor,
-                                valorExtra: item.destinos_extras?.[1]?.valorExtra
-                            });
-
-
-                            passengerBlocks.push({
-                                id: 'P4',
-                                solicitante: item.solicitantes_extras?.[2],
-                                re: item.passageiros_extras?.[2]?.re,
-                                passageiro: item.passageiros_extras?.[2]?.nome,
-                                origem: item.origens_extras?.[2]?.origem,
-                                partida: item.origens_extras?.[2]?.partida,
-                                destino: item.destinos_extras?.[2]?.destino,
-                                chegada: item.destinos_extras?.[2]?.chegada,
-                                bairro: item.destinos_extras?.[2]?.bairro,
-                                valor: item.destinos_extras?.[2]?.valor,
-                                valorExtra: item.destinos_extras?.[2]?.valorExtra
-                            });
+                            const passengerBlocks = [
+                                {
+                                    re: item.re, passageiro: item.transportado, solicitante: item.solicitante,
+                                    origem: item.origem, partida: item.partida, destino: item.destino,
+                                    chegada: item.chegada_destino, bairro: item.bairro,
+                                    valor: item.valor, valorExtra: item.valorExtra
+                                },
+                                {
+                                    re: item.passageiros_extras?.[0]?.re, passageiro: item.passageiros_extras?.[0]?.nome, solicitante: item.solicitantes_extras?.[0],
+                                    origem: item.origens_extras?.[0]?.origem, partida: item.origens_extras?.[0]?.partida,
+                                    destino: item.destinos_extras?.[0]?.destino, chegada: item.destinos_extras?.[0]?.chegada, bairro: item.destinos_extras?.[0]?.bairro,
+                                    valor: item.destinos_extras?.[0]?.valor, valorExtra: item.destinos_extras?.[0]?.valorExtra
+                                },
+                                {
+                                    re: item.passageiros_extras?.[1]?.re, passageiro: item.passageiros_extras?.[1]?.nome, solicitante: item.solicitantes_extras?.[1],
+                                    origem: item.origens_extras?.[1]?.origem, partida: item.origens_extras?.[1]?.partida,
+                                    destino: item.destinos_extras?.[1]?.destino, chegada: item.destinos_extras?.[1]?.chegada, bairro: item.destinos_extras?.[1]?.bairro,
+                                    valor: item.destinos_extras?.[1]?.valor, valorExtra: item.destinos_extras?.[1]?.valorExtra
+                                },
+                                {
+                                    re: item.passageiros_extras?.[2]?.re, passageiro: item.passageiros_extras?.[2]?.nome, solicitante: item.solicitantes_extras?.[2],
+                                    origem: item.origens_extras?.[2]?.origem, partida: item.origens_extras?.[2]?.partida,
+                                    destino: item.destinos_extras?.[2]?.destino, chegada: item.destinos_extras?.[2]?.chegada, bairro: item.destinos_extras?.[2]?.bairro,
+                                    valor: item.destinos_extras?.[2]?.valor, valorExtra: item.destinos_extras?.[2]?.valorExtra
+                                }
+                            ];
 
                             for (const block of passengerBlocks) {
-                                
                                 if (block.re) {
-                                    
-                                    // ▼▼▼ MUDANÇA 1: Formata os valores ▼▼▼
-                                    const valorFmt = (block.valor || 0).toFixed(2).replace('.', ',');
-                                    const valorExtraFmt = (block.valorExtra || 0).toFixed(2).replace('.', ',');
-
-                                    // ▼▼▼ MUDANÇA 2: Adiciona os valores na linha ▼▼▼
                                     const rowData = [
-                                        block.re,                   // RE
-                                        block.passageiro || '',     // passageiro
-                                        block.solicitante || '',    // solicitante
-                                        item.bordero,               // bordero (do 'item')
-                                        item.motorista,             // motorista (do 'item')
-                                        item.data,                  // data (do 'item')
-                                        block.partida || '',        // embarque (do 'block')
-                                        block.chegada || '',        // desembarque (do 'block')
-                                        block.origem || '',         // origem (do 'block')
-                                        block.destino || '',        // destino (do 'block')
-                                        block.bairro || '',         // bairro
-                                        valorFmt,                   // <-- NOVO
-                                        valorExtraFmt,              // <-- NOVO
-                                        item.observacao || ''       // observações
+                                        block.re,
+                                        block.passageiro || '',
+                                        block.solicitante || '',
+                                        item.bordero,
+                                        item.motorista,
+                                        item.data,
+                                        block.partida || '',
+                                        block.chegada || '',
+                                        block.origem || '',
+                                        block.destino || '',
+                                        block.bairro || '',
+                                        block.valor || 0,
+                                        block.valorExtra || 0,
+                                        item.observacao || ''
                                     ];
-                                    
-                                    generatedRows.push(rowData.map(escapeCsvValue).join(';'));
+                                    dataForSheet.push(rowData);
                                 }
                             }
-                            
-                            return generatedRows; 
                         });
-
-                        allCsvRows.push(...batchRows);
 
                         totalProcessed += batchDocs.length;
                         progressElement.textContent = `Processando lote ${batchCounter}... ${totalProcessed} lançamentos verificados.`;
                         batchCounter++;
-
                         lastVisibleDoc = batchDocs[batchDocs.length - 1];
                         if (batchDocs.length < BATCH_SIZE) break;
                     }
 
-                    if (allCsvRows.length === 0) {
+                    if (dataForSheet.length <= 1) { 
                         showWarning('Nenhum lançamento encontrado para o período selecionado.');
                         return;
                     }
 
-                    // ▼▼▼ MUDANÇA 3: Adiciona os cabeçalhos ▼▼▼
-                    const headers = [
-                        'RE',
-                        'PASSAGEIRO',
-                        'SOLICITANTE',
-                        'BORDERO',
-                        'MOTORISTA',
-                        'DATA',
-                        'EMBARQUE',
-                        'DESEMBARQUE',
-                        'ORIGEM',
-                        'DESTINO',
-                        'BAIRRO',
-                        'VALOR',
-                        'VALOR EXTRA',
-                        'OBSERVAÇÕES'
-                    ].join(';').toUpperCase();
+                    progressElement.textContent = 'Formatando o arquivo Excel...';
 
-                    const csvContent = [headers, ...allCsvRows].join('\n');
-                    const filename = `relatorio_detalhado_${startDate}_a_${endDate}.csv`;
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.aoa_to_sheet(dataForSheet);
 
+                    ws['!cols'] = [
+                        { wch: 10 }, // A (RE)
+                        { wch: 30 }, // B (Passageiro)
+                        { wch: 20 }, // C (Solicitante)
+                        { wch: 10 }, // D (Borderô)
+                        { wch: 20 }, // E (Motorista)
+                        { wch: 12 }, // F (Data)
+                        { wch: 25 }, // G (Solicitação)
+                        { wch: 15 }, // H (Desembarque)
+                        { wch: 25 }, // I (Origem)
+                        { wch: 25 }, // J (Destino)
+                        { wch: 20 }, // K (Bairro)
+                        { wch: 15 }, // L (Valor)
+                        { wch: 15 }, // M (Valor Extra)
+                        { wch: 40 }  // N (Observações)
+                    ];
+
+                    // --- INÍCIO DA CORREÇÃO ---
+                    const currencyFormat = 'R$ #,##0.00';
+                    const range = XLSX.utils.decode_range(ws['!ref']); // Pega o range (ex: A1:N50)
+
+                    for (let R = range.s.r; R <= range.e.r; ++R) { // Loop de Linha (Row)
+                        for (let C = range.s.c; C <= range.e.c; ++C) { // Loop de Coluna (Col)
+                            const cell_address = XLSX.utils.encode_cell({ r: R, c: C });
+                            
+                            // 1. Se a célula não existir (vazia), cria um objeto 's' (string) vazio para ela
+                            if (!ws[cell_address]) ws[cell_address] = { t: 's', v: '' };
+
+                            const cell = ws[cell_address];
+                            
+                            // 2. Garante que o objeto de estilo (.s) exista
+                            if (!cell.s) cell.s = {};
+
+                            // 3. Aplica o alinhamento centralizado
+                            cell.s.alignment = { horizontal: "center", vertical: "center" };
+                            
+                            // 4. Aplica o formato de moeda (Pula a linha 0, que é o cabeçalho)
+                            if (R > 0) { // R > 0 significa "não na primeira linha"
+                                if (C === 11) { // Coluna L (Valor)
+                                    cell.z = currencyFormat;
+                                }
+                                if (C === 12) { // Coluna M (Valor Extra)
+                                    cell.z = currencyFormat;
+                                }
+                            }
+                        }
+                    }
+                    // --- FIM DA CORREÇÃO ---
+
+                    XLSX.utils.book_append_sheet(wb, ws, "Relatório Detalhado");
+
+                    const filename = `relatorio_detalhado_${startDate}_a_${endDate}.xlsx`;
                     progressElement.textContent = 'Gerando arquivo para download...';
-                    triggerCsvDownload(csvContent, filename);
+                    
+                    triggerXlsxDownload(wb, filename);
 
                 } catch (error) {
-                    console.error("Erro ao gerar relatório CSV:", error);
+                    console.error("Erro ao gerar relatório XLSX:", error);
                     showWarning("Ocorreu um erro ao gerar o relatório.");
                 } finally {
                     button.disabled = false;
