@@ -264,6 +264,10 @@
                         class="flex-1 px-6 py-3 bg-cyan-500 text-white font-bold rounded-lg shadow-lg hover:bg-cyan-600 focus:outline-none focus:ring-4 focus:ring-cyan-400 focus:ring-opacity-50 transition duration-150 ease-in-out">
                         Gerar Relatório Completo
                     </button>
+                   <button type="button" id="download-csv-drivers"
+                        class="flex-1 px-6 py-3 bg-green-600 text-white font-bold rounded-lg shadow-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
+                        Gerar Relatório Total Motoristas
+                    </button> 
                 </div>
                 <p id="csv-progress" class="text-center text-sm text-gray-600 mt-4 hidden"></p>
             </div>
@@ -502,6 +506,9 @@
                                     Destino(s)</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                     Bairro(s)</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Partida</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -732,7 +739,6 @@
         <div id="autocomplete-suggestions-container"></div>
 
         <datalist id="locais-list">
-            <option value="Aeroporto de Guarulhos (GRU)"></option>
             <option value="Aldeias da Serra"></option>
             <option value="Altos da Borda"></option>
             <option value="Bairro Grama"></option>
@@ -781,7 +787,7 @@
             <option value="Sapé 1"></option>
             <option value="Sapé 2"></option>
             <option value="São José dos Campos"></option>
-            <option value="São Monica"></option>
+            <option value="Santa Monica"></option>
             <option value="Tatauba"></option>
             <option value="Taubaté"></option>
             <option value="Terras do Vale"></option>
@@ -848,11 +854,11 @@
         </datalist>        
 
         <script type="module">
-            // IMPORTAÇÕES
+
             import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
             import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
             import { getFirestore, addDoc, deleteDoc, onSnapshot, collection, doc, query, where, getDocs, getDoc, updateDoc, serverTimestamp, orderBy, limit, startAfter, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-            // CONFIGURAÇÃO FIREBASE
+
             const firebaseConfig = {
                 apiKey: "AIzaSyDmqvcKtIsga4ZQWNDg4_2k493dqMQCDVg",
                 authDomain: "teste-ebf38.firebaseapp.com",
@@ -862,6 +868,7 @@
                 appId: "1:741884776297:web:a23450b4909581a1b237f8",
                 measurementId: "G-2MD5CFD51E"
             };
+
             const app = initializeApp(firebaseConfig);
             const db = getFirestore(app);
             const auth = getAuth(app);
@@ -883,7 +890,194 @@
                 isAdmin: false,
             };
 
-            // ELEMENTOS DOM
+
+
+
+            const precoLookup = {
+
+                "NOVA CAÇAPAVA": { base: 32.00, plus4: 38.00 },
+                "VITORIA VALE": { base: 32.00, plus4: 38.00 },
+                "BORDA DA MATA": { base: 32.00, plus4: 38.00 },
+                "ALTOS DA BORDA": { base: 32.00, plus4: 38.00 },
+                "BORDA DO CAMPO": { base: 32.00, plus4: 38.00 },
+                "SAPÉ 2": { base: 32.00, plus4: 38.00 },
+                "JARDIM MARIA CÂNDIDA": { base: 32.00, plus4: 38.00 },
+                "MARIA ELMIRA": { base: 32.00, plus4: 38.00 },
+                "VILA SANTA ISABEL": { base: 32.00, plus4: 38.00 },
+                "BAIRRO GRAMA": { base: 32.00, plus4: 38.00 },
+                "RESIDENCIAL ESPERANÇA": { base: 32.00, plus4: 38.00 },
+                "TERRAS DO VALE": { base: 32.00, plus4: 38.00 },
+                "VILLAGE DAS FLORES": { base: 32.00, plus4: 38.00 },
+                "JARDIM PRIMAVERA": { base: 32.00, plus4: 38.00 },
+                "JARDIM AMALIA": { base: 32.00, plus4: 38.00 },
+                "JARDIM CAMPO GRANDE": { base: 32.00, plus4: 38.00 },
+                "VILA SÃO JOÃO": { base: 32.00, plus4: 38.00 },
+                "VILA RESENDE": { base: 32.00, plus4: 38.00 },
+                "CENTRO": { base: 32.00, plus4: 38.00 },
+                "RODOVIA DE CAÇAPAVA": { base: 32.00, plus4: 38.00 },
+                "VERA CRUZ": { base: 32.00, plus4: 38.00 },
+                "VILA GALVÃO": { base: 32.00, plus4: 38.00 },
+                "JARDIM CAÇAPAVA": { base: 32.00, plus4: 38.00 },
+                "VILA ANTONIO AUGUSTO": { base: 32.00, plus4: 38.00 },
+                "VILA PARAISO": { base: 32.00, plus4: 38.00 },
+                "PARQUE DO MUSEU": { base: 32.00, plus4: 38.00 },
+                "JARDIM RAFAEL": { base: 32.00, plus4: 38.00 },
+                "JARDIM SÃO JOSE": { base: 32.00, plus4: 38.00 },
+                "VILA PANTALEÃO": { base: 32.00, plus4: 38.00 },
+
+                "ALDEIAS DA SERRA": { base: 35.00, plus4: 40.00 },
+                "CHACARA IPES": { base: 35.00, plus4: 40.00 },
+                "JARDIM PANORAMA": { base: 35.00, plus4: 40.00 },
+                "ELDORADO": { base: 35.00, plus4: 40.00 },
+                "REAL PARK": { base: 35.00, plus4: 40.00 },
+                "RESIDENCIAL JEQUITIBA": { base: 35.00, plus4: 40.00 },
+                "VILA QUIRINO": { base: 35.00, plus4: 40.00 },
+                "VILA ANDRE MARTINS": { base: 35.00, plus4: 40.00 },
+                "CHACARA SANTO ANTONIO": { base: 35.00, plus4: 40.00 },
+                "VILA MENINO JESUS": { base: 35.00, plus4: 40.00 },
+
+                "CAÇAPAVA VELHA": { base: 41.00, plus4: 45.00 },
+                "GERMANA": { base: 41.00, plus4: 45.00 },
+                "VILA VELHA": { base: 41.00, plus4: 45.00 },
+                "VILA VELHA 2 - TAUBATE": { base: 41.00, plus4: 45.00 },
+                "TIJUCO PRETO": { base: 41.00, plus4: 45.00 },
+                "PORTAL VILA RICA": { base: 41.00, plus4: 45.00 },
+                "SAPÉ 1": { base: 41.00, plus4: 45.00 },
+                "CHACARA BELA VISTA": { base: 41.00, plus4: 45.00 },
+                "GUARAMIRIM": { base: 41.00, plus4: 45.00 },
+                "LOT. PEDRO RIZZO 1": { base: 41.00, plus4: 45.00 },
+                "PADRE MARCELO": { base: 41.00, plus4: 45.00 },
+                "PAIOL": { base: 41.00, plus4: 45.00 },
+                "VILA FAVORINO": { base: 41.00, plus4: 45.00 },
+                "PERINHO": { base: 41.00, plus4: 45.00 },
+                "TATAUBA": { base: 41.00, plus4: 45.00 },
+                "PINUS": { base: 41.00, plus4: 45.00 },
+                "PINUS 2": { base: 41.00, plus4: 45.00 },
+                "BOA VISTA": { base: 41.00, plus4: 45.00 },
+                "RECREIO MANTIQUEIRA": { base: 41.00, plus4: 45.00 },
+                "SANTA MONICA": { base: 41.00, plus4: 45.00 },
+                "PIEDADE": { base: 41.00, plus4: 45.00 },
+
+                "CIDADE TAUBATÉ": { base: 53.00, plus4: 53.00 },
+                "CIDADE JACAREI": { base: 71.00, plus4: 71.00 },
+                "CIDADE TREMEMBÉ": { base: 73.00, plus4: 73.00 },
+                "CIDADE SJC - (EUG.MELO)": { base: 32.00, plus4: 32.00 },
+                "CIDADE SJC - (GB)": { base: 32.00, plus4: 32.00 },               
+                "CIDADE SJC - CENTRAL": { base: 45.00, plus4: 45.00 },
+                "CIDADE SJC - EXTREMOS (LONGES)": { base: 60.00, plus4: 60.00 },
+                "CIDADE DE PINDAMONHAGABA": { base: 75.00, plus4: 75.00 }
+            };
+
+            let masterLocaisList = [];
+
+            function normalizeString(str) {
+                if (!str) return '';
+                return str.trim().toUpperCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remove acentos
+                    .replace(/Ç/g, "C"); // Converte Ç para C
+            }
+
+
+
+
+function updateValoresAutomaticamente(formId) {
+                const formElement = document.getElementById(formId);
+                if (!formElement) return;
+
+
+                let totalPassageiros = 0;
+                if (formId === 'edit-lancamento-form') {
+
+                    const p1Input = formElement.querySelector('#edit-re');
+                    const extraRows = formElement.querySelectorAll('.edit-passageiro-row');
+                    
+
+                    const p1TemRE = p1Input && p1Input.value.trim() !== '';
+                    totalPassageiros = (p1TemRE ? 1 : 0) + extraRows.length;
+
+                } else {
+
+                    const passageiroRows = formElement.querySelectorAll('.passageiro-row');
+                    totalPassageiros = 0;
+
+                    passageiroRows.forEach(row => {
+                        const reInput = row.querySelector('input[name="res[]"]');
+                        if (reInput && reInput.value.trim() !== '') {
+                            totalPassageiros++;
+                        }
+                    });
+                }
+                
+                const usePlus4Price = totalPassageiros >= 4;
+
+                // REVERTIDO: Container do Bairro está no 'destino'
+                const destinoContainerId = formId === 'edit-lancamento-form' ? 'edit-destino-campos-container' : 'destino-campos-container';
+                const valorContainerId = formId === 'edit-lancamento-form' ? 'edit-valor-campos-container' : 'valor-campos-container';
+                
+                // REVERTIDO: O 'bairroRow' não existe mais, pegamos tudo do 'destinoRows'
+                const destinoRows = formElement.querySelectorAll(`#${destinoContainerId} .dynamic-row, #${destinoContainerId} .edit-dynamic-row`);
+                const valorRows = formElement.querySelectorAll(`#${valorContainerId} .valor-row, #${valorContainerId} .edit-dynamic-row`);
+
+
+
+
+                const precosJaPreenchidos = new Set();
+                
+
+                const normalizedPrecoLookup = new Map();
+                Object.keys(precoLookup).forEach(key => {
+                    normalizedPrecoLookup.set(normalizeString(key), precoLookup[key]);
+                });
+
+
+                destinoRows.forEach((destinoRow, index) => {
+                    // REVERTIDO: Bairro é pego da linha de Destino
+                    const destinoInput = destinoRow.querySelector('input[name*="destinos"]');
+                    const bairroInput = destinoRow.querySelector('input[name*="bairros"]');
+                    
+                    const valorRow = valorRows[index];
+                    if (!valorRow) return; 
+                    
+                    const valorInput = valorRow.querySelector('input[name*="valores[]"]');
+                    if (!valorInput) return;
+
+
+                    const destinoValNorm = normalizeString(destinoInput ? destinoInput.value : '');
+                    const bairroValNorm = normalizeString(bairroInput ? bairroInput.value : '');
+
+                    let precoInfo = null;
+                    
+
+                    if (bairroValNorm && normalizedPrecoLookup.has(bairroValNorm)) {
+                        precoInfo = normalizedPrecoLookup.get(bairroValNorm);
+                    } else if (!precoInfo && destinoValNorm && normalizedPrecoLookup.has(destinoValNorm)) {
+
+                        precoInfo = normalizedPrecoLookup.get(destinoValNorm);
+                    }
+
+                    // ▼▼▼ LÓGICA ATUALIZADA AQUI ▼▼▼
+                    if (precoInfo) {
+                        const precoFinal = usePlus4Price ? precoInfo.plus4 : precoInfo.base;
+                        
+                        if (!precosJaPreenchidos.has(precoFinal)) {
+                            valorInput.value = precoFinal.toFixed(2).replace('.', ',');
+                            valorInput.classList.remove('error-border');
+                            precosJaPreenchidos.add(precoFinal);
+                        }
+                    } else {
+                        // NOVO: Se não achou preço (campo vazio ou não existe), limpa o valor
+                        valorInput.value = '0,00';
+                        valorInput.classList.remove('error-border');
+                    }
+                    // ▲▲▲ FIM DA LÓGICA ▲▲▲
+                    
+                    valorInput.readOnly = false;
+                    valorInput.classList.remove('bg-gray-200');
+                });
+
+            }
+
+
             const loginForm = document.getElementById('login-form');
             const loginPage = document.getElementById('login-page');
             const appPage = document.getElementById('app-page');
@@ -916,7 +1110,7 @@
             const resetPasswordMessage = document.getElementById('reset-password-message');
             const motoristasTable = document.getElementById('motoristas-table');
 
-            // --- LÓGICA PARA ALTERAR A PRÓPRIA SENHAa ---
+
 
             openChangePasswordBtn.addEventListener('click', () => {
                 changePasswordForm.reset();
@@ -939,7 +1133,7 @@
                 const newPassword = document.getElementById('new-password').value;
                 const confirmNewPassword = document.getElementById('confirm-new-password').value;
 
-                // Validações
+
                 if (!currentPassword || !newPassword || !confirmNewPassword) {
                     changePasswordMessage.innerText = 'Todos os campos são obrigatórios.';
                     changePasswordMessage.classList.remove('hidden');
@@ -951,7 +1145,7 @@
                     return;
                 }
 
-                // Verifica a senha atual
+
                 const storedUserData = JSON.parse(localStorage.getItem('loggedInUserData'));
                 if (storedUserData.password !== currentPassword) {
                     changePasswordMessage.innerText = 'A senha atual está incorreta.';
@@ -972,7 +1166,7 @@
                         password: newPassword
                     });
 
-                    // ATUALIZA O LOCALSTORAGE TAMBÉM!
+
                     const updatedUserData = { ...storedUserData, password: newPassword };
                     localStorage.setItem('loggedInUserData', JSON.stringify(updatedUserData));
 
@@ -987,7 +1181,7 @@
             });
 
 
-            // --- LÓGICA PARA ADMIN REDEFINIR SENHA ---
+
 
             motoristasTable.addEventListener('click', (event) => {
                 const resetButton = event.target.closest('.reset-password-btn');
@@ -1037,7 +1231,7 @@
                 }
             });
 
-            // === DADOS GLOBAIS ===
+
             let transportadosData = [];
             let usersData = []; // Substituído motoristasData por usersData
             let lancamentosData = [];
@@ -1065,7 +1259,7 @@
                 populateMotoristasDatalist();
                 populateMotoristasFilterDropdown();
             }
-            // === FUNÇÕES DE VALIDAÇÃO E INTERFACE ===
+
 
             function showWarning(message) {
                 document.getElementById('message-content').innerText = message;
@@ -1076,7 +1270,7 @@
                 document.getElementById('message-modal').classList.add('hidden');
             }
 
-            // NOVA FUNÇÃO para configurar a interface com base nos dados do usuário do Firestore
+
             function setMotoristaFromData(userData) {
                 currentUser.username = userData.username;
                 currentUser.isAdmin = userData.is_admin || false;
@@ -1143,19 +1337,19 @@
             }
 
 
-            // ===============================================
-            // ▼▼▼ NOVA LÓGICA DE AUTOCOMPLETE ▼▼▼
-            // ===============================================
+
+
+
 
             function closeAllAutocompleteLists() {
                 const container = document.getElementById('autocomplete-suggestions-container');
                 container.innerHTML = '';
             }
 
-            function showAutocompleteSuggestions(inputElement, filterType) {
+function showAutocompleteSuggestions(inputElement, filterType) {
                 const val = inputElement.value;
                 closeAllAutocompleteLists();
-                if (!val || val.length < 2) { // Só busca a partir de 2 caracteres
+                if (!val) { // Busca a partir de 1 caractere
                     return false;
                 }
 
@@ -1170,14 +1364,39 @@
                 container.style.top = `${rect.bottom + window.scrollY}px`;
                 container.style.width = `${rect.width}px`;
 
-                const normalizedVal = val.toLowerCase();
+                const normalizedVal = normalizeString(val); // Normaliza a entrada do usuário
                 let suggestions = [];
 
-                // USA A LISTA LOCAL "transportadosData" - RÁPIDO E SEM CUSTO DE LEITURA
-                if (filterType === 're') {
-                    suggestions = transportadosData.filter(item => item.re && item.re.toLowerCase().includes(normalizedVal));
-                } else { // 'nome'
-                    suggestions = transportadosData.filter(item => item.nome && item.nome.toLowerCase().includes(normalizedVal));
+                if (filterType === 're' || filterType === 'nome') {
+                    // Lógica original para Passageiros
+                    const searchKey = filterType === 're' ? 're' : 'nome';
+                    const normalizedInputForPassageiros = val.toLowerCase();
+                    
+                    suggestions = transportadosData
+                        .filter(item => item[searchKey] && item[searchKey].toLowerCase().includes(normalizedInputForPassageiros))
+                        .map(item => ({ item, display: `<strong>${item.re}</strong> - ${item.nome}` }));
+
+                } else if (filterType === 'bairro' || filterType === 'origem' || filterType === 'destino') {
+                    
+                    // ▼▼▼ LÓGICA ATUALIZADA AQUI ▼▼▼
+                    let sourceList = [];
+                    const precoLocais = Object.keys(precoLookup); // Lista SÓ de locais com preço
+
+                    if (filterType === 'bairro') {
+                        // O campo "Bairro" SÓ vai sugerir locais da lista de preços
+                        sourceList = precoLocais;
+                        
+                    } else {
+                        // "Origem" e "Destino" vão sugerir a lista completa
+                        const datalistLocais = Array.from(document.querySelectorAll('#locais-list option')).map(opt => opt.value);
+                        const combinedSet = new Set([...precoLocais, ...datalistLocais].filter(Boolean)); 
+                        sourceList = Array.from(combinedSet); // A lista mestra completa
+                    }
+                    // ▲▲▲ FIM DA LÓGICA ATUALIZADA ▲▲▲
+
+                    suggestions = sourceList
+                        .filter(local => normalizeString(local).includes(normalizedVal))
+                        .map(local => ({ item: { localName: local }, display: local }));
                 }
 
                 if (suggestions.length === 0) {
@@ -1185,22 +1404,48 @@
                     return;
                 }
 
-                // Limita o número de sugestões para não poluir a tela
-                suggestions.slice(0, 7).forEach(item => {
+                // Limita o número de sugestões
+                suggestions.slice(0, 7).forEach(sug => {
+                    const { item, display } = sug;
                     const suggestionItem = document.createElement('div');
-                    suggestionItem.innerHTML = `<strong>${item.re}</strong> - ${item.nome}`;
+                    suggestionItem.innerHTML = display;
+                    
                     suggestionItem.addEventListener('click', function () {
-                        // Ao clicar, preenche os campos da linha correta
-                        const parentRow = inputElement.closest('.passageiro-row');
-                        const reInput = parentRow.querySelector('input[name="res[]"]');
-                        const nomeInput = parentRow.querySelector('input[name="transportados[]"]');
-
-                        reInput.value = item.re;
-                        nomeInput.value = item.nome;
-
+                        if (filterType === 're' || filterType === 'nome') {
+                            // Preenche RE e Nome para Passageiros
+                            const parentRow = inputElement.closest('.passageiro-row, .edit-passageiro-row');
+                            if (parentRow) {
+                                const reInput = parentRow.querySelector('input[name*="res[]"]');
+                                const nomeInput = parentRow.querySelector('input[name*="transportados[]"]');
+                                if (reInput) reInput.value = item.re;
+                                if (nomeInput) nomeInput.value = item.nome;
+                                
+                                if (parentRow.classList.contains('passageiro-row')) {
+                                    setTimeout(() => checkPassageiroDuplicidade(inputElement), 50);
+                                } else {
+                                    setTimeout(() => checkEditPassageiroDuplicidade(), 50);
+                                }
+                            } else {
+                                const p1RE = document.getElementById('edit-re');
+                                const p1Nome = document.getElementById('edit-transportado');
+                                if (p1RE && p1Nome) {
+                                    p1RE.value = item.re;
+                                    p1Nome.value = item.nome;
+                                    setTimeout(() => checkEditPassageiroDuplicidade(), 50);
+                                }
+                            }
+                            
+                        } else if (filterType === 'bairro' || filterType === 'origem' || filterType === 'destino') {
+                            // Preenche o campo de Bairro, Origem ou Destino
+                            inputElement.value = item.localName;
+                            
+                            if (filterType === 'bairro' || filterType === 'destino') {
+                                const formId = inputElement.closest('form').id;
+                                updateValoresAutomaticamente(formId); 
+                            }
+                        }
+                        
                         closeAllAutocompleteLists();
-                        // Dispara a checagem de duplicidade
-                        setTimeout(() => checkPassageiroDuplicidade(inputElement), 50);
                     });
                     suggestionsDiv.appendChild(suggestionItem);
                 });
@@ -1245,29 +1490,29 @@
                 for (const p of passageiros) {
                     if (!p.re || !p.nome) continue; // Pula se dados incompletos
 
-                    // 1. Verifica se o RE já existe na lista LOCAL (rápido, 0 leituras)
+
                     const reExistsLocal = transportadosData.some(item => item.re === p.re);
                     
                     if (!reExistsLocal) {
                         try {
-                            // 2. O RE não está na lista local. ANTES DE SALVAR,
-                            //    vamos confirmar no servidor (gasta 1 leitura).
+
+
                             const q = query(transportadosRef, where("re", "==", p.re));
                             const querySnapshot = await getDocs(q);
 
-                            // 3. Se a consulta voltar vazia, ninguém salvou esse RE ainda.
+
                             if (querySnapshot.empty) {
                                 console.log(`Adicionando novo transportado: RE ${p.re}, Nome ${p.nome}`);
                                 
-                                // Adiciona o novo transportado no Firestore
+
                                 const newDoc = await addDoc(transportadosRef, { re: p.re, nome: p.nome });
                                 
-                                // Adiciona na lista local também
+
                                 transportadosData.push({ re: p.re, nome: p.nome, id: newDoc.id });
                                 novosAdicionados++;
                             } else {
-                                // Alguém já salvou esse RE. Apenas adicionamos
-                                // o dado que veio do servidor na nossa lista local.
+
+
                                 const docData = querySnapshot.docs[0].data();
                                 transportadosData.push({ id: querySnapshot.docs[0].id, ...docData });
                                 console.warn(`Conflito evitado: RE ${p.re} já existe no banco.`);
@@ -1280,25 +1525,25 @@
                 }
 
                 if (novosAdicionados > 0) {
-                    // Reconstrói os lookups para o autocomplete
+
                     rebuildTransportadosLookups();
                     console.log(`${novosAdicionados} novo(s) transportado(s) salvo(s).`);
                 }
             }
 
 
-// SUBSTITUA A FUNÇÃO INTEIRA POR ISTO:
+
             function checkEditPassageiroDuplicidade() {
                 const reSeen = new Map();
                 let isDuplicated = false;
 
-                // 1. Pega todos os inputs de RE e Nome do modal de edição
+
                 const p1REInput = document.getElementById('edit-re');
                 const p1NomeInput = document.getElementById('edit-transportado');
                 const extraREInputs = document.querySelectorAll('#edit-passageiros-extras-container input[name="edit-res[]"]');
                 const extraNomeInputs = document.querySelectorAll('#edit-passageiros-extras-container input[name="edit-transportados[]"]');
 
-                // 2. Combina todos em uma lista de "pares"
+
                 const allPassengerInputs = [
                     { reInput: p1REInput, nomeInput: p1NomeInput }
                 ];
@@ -1306,19 +1551,19 @@
                     allPassengerInputs.push({ reInput: reInput, nomeInput: extraNomeInputs[i] });
                 });
                 
-                // 3. Reseta as bordas de erro
+
                 allPassengerInputs.forEach(pair => {
                     pair.reInput.classList.remove('error-border');
                     pair.nomeInput.classList.remove('error-border');
                 });
 
-                // 4. Itera e verifica duplicidade apenas pelo RE
+
                 allPassengerInputs.forEach(pair => {
                     const re = pair.reInput.value.trim();
                     const nome = pair.nomeInput.value.trim();
 
                     if (re === '') {
-                        // Não checa RE vazio, mas marca erro se o nome estiver preenchido
+
                         if (nome !== '') pair.reInput.classList.add('error-border');
                         return; 
                     }
@@ -1327,11 +1572,11 @@
 
                     if (reSeen.has(key)) {
                         isDuplicated = true;
-                        // Marca a linha atual como duplicada
+
                         pair.reInput.classList.add('error-border');
                         pair.nomeInput.classList.add('error-border');
 
-                        // Marca a primeira linha encontrada com o mesmo RE
+
                         const firstSeenPair = reSeen.get(key);
                         firstSeenPair.reInput.classList.add('error-border');
                         firstSeenPair.nomeInput.classList.add('error-border');
@@ -1365,7 +1610,7 @@
                 return parseFloat(value.replace(/\./g, '').replace(',', '.'));
             }
 
-            // --- Lógica Solicitante/Destino/Valor Dinâmico (Página Principal) ---
+
 
             function updateDynamicLabels(containerId, inputName, baseLabel) {
                 const rows = document.querySelectorAll(`#${containerId} .dynamic-row`);
@@ -1457,25 +1702,25 @@
                 return fieldset;
             }
 
-            function createDestinoInput(index, isRequired = true) {
+function createDestinoInput(index, isRequired = true) {
                 const fieldset = document.createElement('div');
-                fieldset.className = 'dynamic-row grid grid-cols-2 gap-4 md:gap-6';
+                // Alterado de volta para 3 colunas
+                fieldset.className = 'dynamic-row grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6';
                 fieldset.dataset.pNum = (document.querySelectorAll(`#destino-campos-container .dynamic-row`).length + 1);
 
                 const pNum = fieldset.dataset.pNum;
                 const labelText = isRequired ? 'Destino:' : `Destino (P${pNum}):`;
                 const labelTime = isRequired ? 'Chegada (Horário):' : `Chegada (P${pNum}):`;
+                const labelBairro = isRequired ? 'Bairro:' : `Bairro (P${pNum}):`; // <-- BAIRRO VOLTA PARA CÁ
+
                 fieldset.innerHTML = `
                 <div class="form-row-align">
                     <div class="flex-grow">
                         <label for="destino-${index}" class="block text-sm font-medium text-gray-700">${labelText}</label>
-                        <input type="text" id="destino-${index}" name="destinos[]" list="locais-list"
+                        <input type="text" id="destino-${index}" name="destinos[]" autocomplete="off"
                             onfocus="this.classList.remove('error-border')"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                     </div>
-                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-dynamic-btn ${isRequired ? 'hidden' : ''}">
-                        -
-                    </button>
                 </div>
                 <div class="form-row-align">
                     <div class="flex-grow">
@@ -1485,12 +1730,24 @@
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                     </div>
                 </div>
+                <div class="form-row-align">
+                    <div class="flex-grow">
+                        <label for="bairro-${index}" class="block text-sm font-medium text-gray-700">${labelBairro}</label>
+                        <input type="text" id="bairro-${index}" name="bairros[]"
+                            autocomplete="off"
+                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                    </div>
+                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-dynamic-btn ${isRequired ? 'hidden' : ''}">
+                        -
+                    </button>
+                </div>
             `;
                 const removeBtn = fieldset.querySelector('.remove-dynamic-btn');
                 if (removeBtn && !isRequired) {
                     removeBtn.onclick = () => {
                         fieldset.remove();
                         updateDynamicLabels('destino-campos-container', 'destino', 'Destino');
+                        updateValoresAutomaticamente('form-corrida'); // Recalcula
                     };
                 }
                 return fieldset;
@@ -1539,9 +1796,9 @@
                 return fieldset;
             }
 
-            function createOrigemInput(index, isRequired = true) {
+function createOrigemInput(index, isRequired = true) {
                 const fieldset = document.createElement('div');
-                // Alterado para usar grid, igual ao destino
+                // Alterado de volta para 2 colunas
                 fieldset.className = 'dynamic-row grid grid-cols-2 gap-4 md:gap-6';
                 const pNum = document.querySelectorAll(`#origem-campos-container .dynamic-row`).length + 1;
                 const labelOrigem = isRequired ? 'Origem:' : `Origem (P${pNum}):`;
@@ -1551,7 +1808,7 @@
                 <div class="form-row-align">
                     <div class="flex-grow">
                         <label class="block text-sm font-medium text-gray-700">${labelOrigem}</label>
-                        <input type="text" name="origens[]" list="locais-list" onfocus="this.classList.remove('error-border')"
+                        <input type="text" name="origens[]" autocomplete="off" onfocus="this.classList.remove('error-border')"
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
                     </div>
                     <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-dynamic-btn ${isRequired ? 'hidden' : ''}">
@@ -1645,7 +1902,7 @@
             }
             addValorBtn.addEventListener('click', () => addDynamicRow('valor-campos-container', 'valor', 'Valor', false));
 
-            // --- Lógica Passageiros (Transportados) ---
+
             function updatePassageiroLabels() {
                 const rows = document.querySelectorAll('#passageiros-campos-container .passageiro-row');
                 rows.forEach((row, index) => {
@@ -1665,15 +1922,17 @@
                             removeBtn.onclick = () => {
                                 row.remove();
                                 updatePassageiroLabels();
+                                updateValoresAutomaticamente('form-corrida');
                             };
                         }
                     }
                 });
             }
 
-            function createEditOrigemInput(origemValue = '', partidaValue = '') {
+function createEditOrigemInput(origemValue = '', partidaValue = '') {
                 const containerId = 'edit-origem-campos-container';
                 const fieldset = document.createElement('div');
+                // Alterado de volta para 2 colunas
                 fieldset.className = 'edit-dynamic-row grid grid-cols-2 gap-4';
                 const pNum = document.querySelectorAll(`#${containerId} .edit-dynamic-row`).length + 1;
                 const isP1 = pNum === 1;
@@ -1682,7 +1941,7 @@
             <div class="form-row-align">
                 <div class="flex-grow">
                     <label class="block text-sm font-medium text-gray-700">Origem (P${pNum}):</label>
-                    <input type="text" name="edit-origens[]" value="${origemValue}" list="locais-list"
+                    <input type="text" name="edit-origens[]" value="${origemValue}" autocomplete="off"
                         class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                 </div>
                 <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-dynamic-btn ${isP1 ? 'hidden' : ''}">
@@ -1729,7 +1988,7 @@
                     </button>
                 </div>
             `;
-                // A div de sugestões será adicionada aqui via JS
+
                 return fieldset;
             }
 
@@ -1738,11 +1997,12 @@
                 const newRow = createPassageiroInput(newIndex, isRequired);
                 passageirosContainer.appendChild(newRow);
                 updatePassageiroLabels();
+                setTimeout(() => updateValoresAutomaticamente('form-corrida'), 50);
             }
 
 
-            // --- INICIALIZAÇÃO E EVENTOS GLOBAIS ---
-            window.onload = () => {
+
+window.onload = () => {
                 const loggedInUserData = localStorage.getItem('loggedInUserData');
                 if (loggedInUserData) {
                     try {
@@ -1751,7 +2011,6 @@
                         appPage.classList.remove('hidden');
                         setMotoristaFromData(userData); // Usa a nova função
                     } catch (e) {
-                        // Se os dados estiverem corrompidos, limpa e força o login
                         localStorage.removeItem('loggedInUser');
                         localStorage.removeItem('loggedInUserData');
                         loginPage.classList.remove('hidden');
@@ -1765,37 +2024,79 @@
                 addDynamicRow('origem-campos-container', 'origem', 'Origem', true);
                 document.getElementById('add-origem-btn').addEventListener('click', () => addDynamicRow('origem-campos-container', 'origem', 'Origem', false));
 
-                // VERSÃO ATUALIZADA COM AUTOSUGGEST
-                function bindPassageiroListeners() {
-                    passageirosContainer.addEventListener('input', (event) => {
-                        const input = event.target;
-                        if (input.matches('input[name="res[]"]')) {
-                            showAutocompleteSuggestions(input, 're');
-                        } else if (input.matches('input[name="transportados[]"]')) {
-                            showAutocompleteSuggestions(input, 'nome');
-                        }
-                    });
+function bindPassageiroListeners(passageirosContainer, destinoContainer, origemContainer) {
+                passageirosContainer.addEventListener('input', (event) => {
+                    const input = event.target;
+                    if (input.matches('input[name="res[]"]')) {
+                        showAutocompleteSuggestions(input, 're');
+                    } else if (input.matches('input[name="transportados[]"]')) {
+                        showAutocompleteSuggestions(input, 'nome');
+                    }
+                });
 
-                    // Adiciona um listener para fechar as sugestões se clicar fora
-                    document.addEventListener('click', function (e) {
-                        const container = document.getElementById('autocomplete-suggestions-container');
-                        if (e.target !== container && !container.contains(e.target) && !e.target.matches('input[name="res[]"]') && !e.target.matches('input[name="transportados[]"]')) {
-                            closeAllAutocompleteLists();
-                        }
-                    });
-                }
+                // ATUALIZADO: Listener para BAIRROS e DESTINOS
+                destinoContainer.addEventListener('input', (event) => {
+                    const input = event.target;
+                    if (input.matches('input[name="bairros[]"]')) {
+                        showAutocompleteSuggestions(input, 'bairro');
+                    } else if (input.matches('input[name="destinos[]"]')) { // <-- ADICIONADO
+                        showAutocompleteSuggestions(input, 'destino');
+                    }
+                });
+                
+                // NOVO LISTENER para ORIGENS no form principal
+                origemContainer.addEventListener('input', (event) => {
+                    const input = event.target;
+                    if (input.matches('input[name="origens[]"]')) { // <-- ADICIONADO
+                        showAutocompleteSuggestions(input, 'origem');
+                    }
+                });
+
+                document.addEventListener('click', function (e) {
+                    const container = document.getElementById('autocomplete-suggestions-container');
+                    
+                    // ATUALIZADO: Condição para não fechar
+                    if (e.target !== container && !container.contains(e.target) && 
+                        !e.target.matches('input[name="res[]"]') && 
+                        !e.target.matches('input[name="transportados[]"]') &&
+                        !e.target.matches('input[name="bairros[]"]') &&
+                        !e.target.matches('input[name="destinos[]"]') && // <-- ADICIONADO
+                        !e.target.matches('input[name="origens[]"]')    // <-- ADICIONADO
+                    ) {
+                        closeAllAutocompleteLists();
+                    }
+                });
+            }
 
                 addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', true);
                 addDynamicRow('destino-campos-container', 'destino', 'Destino', true);
                 addDynamicRow('valor-campos-container', 'valor', 'Valor', true);
                 addPassageiroRow(true);
 
-                bindPassageiroListeners();
+                const precoLocais = Object.keys(precoLookup);
+            const datalistLocais = Array.from(document.querySelectorAll('#locais-list option')).map(opt => opt.value);
+            // Combina as duas listas, filtra valores vazios e remove duplicatas
+            const combinedSet = new Set([...precoLocais, ...datalistLocais].filter(Boolean)); 
+            masterLocaisList = Array.from(combinedSet).sort(); // Salva na variável global
+            console.log(`Lista mestra de locais criada: ${masterLocaisList.length} locais.`);
+            const origemContainer = document.getElementById('origem-campos-container');
+                // A linha abaixo já existia no seu arquivo como uma variável global, mas vamos garantir
+                const destinoContainer = document.getElementById('destino-campos-container'); 
+                bindPassageiroListeners(passageirosContainer, destinoContainer, origemContainer);
                 addPassageiroBtn.addEventListener('click', () => addPassageiroRow(false));
                 addSolicitanteBtn.addEventListener('click', () => addDynamicRow('solicitante-campos-container', 'solicitante', 'Solicitante', false));
                 addDestinoBtn.addEventListener('click', () => {
                     addDynamicRow('destino-campos-container', 'destino', 'Destino', false);
                 });
+
+
+
+                document.getElementById('app-page').addEventListener('blur', (event) => {
+
+                    if (event.target.matches('input[name="bairros[]"]') || event.target.matches('input[name="destinos[]"]')) {
+                        updateValoresAutomaticamente('form-corrida');
+                    }
+                }, true); // O 'true' ajuda a capturar o evento de forma mais confiável
 
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
@@ -1808,9 +2109,10 @@
                     }
                 });
                 signInAnonymously(auth).catch((error) => console.error("Erro no login anônimo:", error));
+                populateBairrosDatalist();
             };
 
-            // LÓGICA DE LOGIN ATUALIZADA
+
             loginForm.addEventListener('submit', async function (event) {
                 event.preventDefault();
                 const username = document.getElementById('username').value;
@@ -1851,7 +2153,7 @@
                 });
             });
 
-            // NOVA FUNÇÃO para tornar linhas de tabela clicáveis
+
             function makeTableRowsClickable(tableId) {
                 const table = document.getElementById(tableId);
                 if (!table) return;
@@ -1872,13 +2174,13 @@
                 });
             }
 
-            // LISTENERS DO FIRESTORE ATUALIZADOS
-            // LISTENERS DO FIRESTORE ATUALIZADOS PARA USAR getDocs (MAIS EFICIENTE)
-            // ▼▼▼ ESTA É A FUNÇÃO 3 (VERSÃO LIMPA) ▼▼▼
-            // (Cole esta no lugar da função que você acabou de me enviar)
+
+
+
+
 
             async function startFirestoreListeners() {
-                // --- Carrega Transportados (uma única vez) ---
+
                 try {
                     const transportadosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'transportados');
                     const transportadosSnapshot = await getDocs(transportadosRef);
@@ -1890,7 +2192,7 @@
                     showWarning("Não foi possível carregar a lista de transportados.");
                 }
 
-                // --- Carrega Usuários/Motoristas (uma única vez) ---
+
                 try {
                     const usersRef = collection(db, 'users');
                     const usersSnapshot = await getDocs(usersRef);
@@ -1902,11 +2204,11 @@
                     showWarning("Não foi possível carregar a lista de motoristas.");
                 }
 
-                // Ativa a funcionalidade de clique nas tabelas
+
                 makeTableRowsClickable('motoristas-table');
             }
-            document.getElementById('form-corrida').addEventListener('submit', async function (event) {
-                // A PRIMEIRA COISA a se fazer é impedir o recarregamento da página.
+document.getElementById('form-corrida').addEventListener('submit', async function (event) {
+
                 event.preventDefault();
 
                 const form = event.target;
@@ -1917,6 +2219,7 @@
                 const solicitantesInputs = document.querySelectorAll('#solicitante-campos-container input[name="solicitantes[]"]');
                 const destinosInputs = document.querySelectorAll('#destino-campos-container input[name="destinos[]"]');
                 const chegadasDestinoInputs = document.querySelectorAll('#destino-campos-container input[name="chegadas_destino[]"]');
+                const bairrosInputs = document.querySelectorAll('#destino-campos-container input[name="bairros[]"]'); // <-- NOVO
                 const valoresInputs = document.querySelectorAll('#valor-campos-container input[name="valores[]"]');
                 const valoresExtraInputs = document.querySelectorAll('#valor-campos-container input[name="valores_extra[]"]');
                 const resInputs = document.querySelectorAll('#passageiros-campos-container input[name="res[]"]');
@@ -1955,12 +2258,16 @@
 
                 const destinosData = [];
                 const chegadasDestinoData = [];
+                const bairrosData = []; // <-- NOVO
                 for (let i = 0; i < destinosInputs.length; i++) {
                     const destino = destinosInputs[i].value.trim();
                     const chegada = chegadasDestinoInputs[i].value.trim();
-                    if (destino || chegada) {
+                    const bairro = bairrosInputs[i] ? bairrosInputs[i].value.trim() : ''; // <-- NOVO
+
+                    if (destino || chegada || bairro) { // <-- CONDIÇÃO ATUALIZADA
                         destinosData.push(destino);
                         chegadasDestinoData.push(chegada);
+                        bairrosData.push(bairro); // <-- NOVO
                     }
                 }
 
@@ -1974,8 +2281,7 @@
                 }
 
                 const passageirosData = [];
-                const reSet = new Set(); //
-// SUBSTITUA O 'for' LOOP INTEIRO POR ISTO:
+                const reSet = new Set();
                 for (let i = 0; i < resInputs.length; i++) {
                     const reInput = resInputs[i];
                     const nomeInput = transportadosInputs[i];
@@ -1987,19 +2293,17 @@
 
                     if (re !== '' && nome !== '') {
                         
-                        // VERIFICAÇÃO DE RE DUPLICADO
                         if (reSet.has(re)) { 
                             isFormValid = false;
                             reInput.classList.add('error-border');
-                            nomeInput.classList.add('error-border'); // Marca ambos os campos
+                            nomeInput.classList.add('error-border');
                             showWarning(`Matrícula (RE) duplicada neste lançamento: ${re}.`);
-                            return; // Para o envio
+                            return;
                         }
-                        reSet.add(re); // Adiciona o RE ao set para verificar os próximos
+                        reSet.add(re);
                         
                         passageirosData.push({ re: re, nome: nome });
                     } else if (re !== '' || nome !== '') {
-                        // Se um estiver preenchido e o outro não
                         isFormValid = false;
                         if (re === '') reInput.classList.add('error-border');
                         if (nome === '') nomeInput.classList.add('error-border');
@@ -2022,6 +2326,7 @@
                     destinosExtras.push({
                         destino: destinosData[i],
                         chegada: chegadasDestinoData[i],
+                        bairro: bairrosData[i] || '', // <-- NOVO
                         valor: valoresData[i] || 0,
                         valorExtra: valoresExtraData[i] || 0
                     });
@@ -2042,6 +2347,7 @@
                     origens_extras: origensData.slice(1).map((origem, i) => ({ origem: origem, partida: partidasData[i + 1] || '' })),
                     destino: destinosData[0] || '',
                     chegada_destino: chegadasDestinoData[0] || '',
+                    bairro: bairrosData[0] || '', // <-- NOVO
                     valor: valoresData[0] || 0,
                     valorExtra: valoresExtraData[0] || 0,
                     destinos_extras: destinosExtras,
@@ -2084,6 +2390,17 @@
                 return result;
             }
 
+            function formatExtrasByKey(principal, extras, key) {
+                let result = principal || '';
+                if (extras && extras.length > 0) {
+                    const extraList = extras.map(e => e[key]).filter(val => val);
+                    if (extraList.length > 0) {
+                        result += ' (' + extraList.join(', ') + ')';
+                    }
+                }
+                return result;
+            }
+
             function formatDestinosChegadas(principalDestino, principalChegada, extras) {
                 let result = principalDestino || '';
                 if (principalChegada) {
@@ -2119,23 +2436,23 @@
                 return total;
             }
 
-            // NOVA FUNÇÃO PARA BUSCAR E RENDERIZAR OS DADOS SOB DEMANDA
+
             async function fetchAndRenderLancamentos() {
                 const tableBody = document.querySelector('#lancamentos-table tbody');
-                tableBody.innerHTML = '<tr><td colspan="15" class="text-center p-4">Carregando...</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="16" class="text-center p-4">Carregando...</td></tr>';
 
                 const selectedDate = document.getElementById('filter-date').value;
                 const selectedMotorista = document.getElementById('filter-motorista').value;
 
                 if (!selectedDate) {
-                    tableBody.innerHTML = '<tr><td colspan="15" class="text-center p-4">Selecione uma data para ver os lançamentos.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="16" class="text-center p-4">Selecione uma data para ver os lançamentos.</td></tr>';
                     return;
                 }
 
                 try {
                     const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
 
-                    // CRIA A CONSULTA AO FIREBASE (SEM O LIMITE DE 15)
+
                     const q = query(
                         lancamentosRef,
                         where("data", "==", selectedDate), // Filtra pela data selecionada
@@ -2145,7 +2462,7 @@
                     const snapshot = await getDocs(q);
                     let dataToShow = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-                    // Filtra no lado do cliente caso o usuário não seja admin
+
                     if (!currentUser.isAdmin) {
                         dataToShow = dataToShow.filter(lanc => lanc.createdBy === currentUser.username);
                     }
@@ -2158,16 +2475,16 @@
 
                 } catch (error) {
                     console.error("Erro ao buscar lançamentos:", error);
-                    tableBody.innerHTML = '<tr><td colspan="15" class="text-center p-4 text-red-500">Ocorreu um erro ao carregar os dados.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="16" class="text-center p-4 text-red-500">Ocorreu um erro ao carregar os dados.</td></tr>';
                 }
             }
-            // NOVA FUNÇÃO DEDICADA APENAS A POPULAR A TABELA HTML
+
             function renderLancamentosTable(dataToShow) {
                 const tableBody = document.querySelector('#lancamentos-table tbody');
                 tableBody.innerHTML = '';
 
                 if (dataToShow.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="15" class="text-center p-4">Nenhum lançamento encontrado para esta data.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="16" class="text-center p-4">Nenhum lançamento encontrado para esta data.</td></tr>';
                     return;
                 }
 
@@ -2180,7 +2497,9 @@
                     const transportadoFull = formatMultipleValues(item.transportado, item.passageiros_extras, true);
                     const solicitanteFull = formatMultipleValues(item.solicitante, item.solicitantes_extras, false);
                     const destinoFull = formatDestinosChegadas(item.destino, item.chegada_destino, item.destinos_extras);
+                    const bairroFull = formatExtrasByKey(item.bairro, item.destinos_extras, 'bairro');
                     const statusText = item.editedBy ? `<span class="text-xs text-gray-500">Editado por ${item.editedBy}</span>` : '';
+
 
                     row.innerHTML = `
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 hidden">${item.id || ''}</td>
@@ -2191,6 +2510,7 @@
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${transportadoFull}</td>
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.origem || ''}</td>
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${destinoFull}</td>
+                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${bairroFull}</td>
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.partida || ''}</td>
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ ${totalValue.toFixed(2).replace('.', ',')}</td>
                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ ${totalExtraValue.toFixed(2).replace('.', ',')}</td>
@@ -2210,12 +2530,12 @@
             }
 
 document.getElementById('open-lancamentos-modal').addEventListener('click', () => {
-                // Define a data do filtro para o dia atual
+
                 const today = new Date().toISOString().split('T')[0];
                 document.getElementById('filter-date').value = today;
 
-                // ▼▼▼ ADICIONADO ▼▼▼
-                // Mostra ou esconde o filtro de motorista baseado no status de admin
+
+
                 const motoristaFilter = document.getElementById('motorista-filter-wrapper');
                 if (currentUser.isAdmin) {
                     motoristaFilter.classList.remove('hidden');
@@ -2223,9 +2543,9 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                     motoristaFilter.classList.add('hidden');
                     document.getElementById('filter-motorista').value = ''; // Garante que o filtro seja limpo
                 }
-                // ▲▲▲ FIM DA ADIÇÃO ▲▲▲
 
-                // Busca e exibe os lançamentos do dia atual
+
+
                 fetchAndRenderLancamentos();
 
                 document.getElementById('lancamentos-modal').classList.remove('hidden');
@@ -2235,23 +2555,23 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 document.getElementById('lancamentos-modal').classList.add('hidden');
             });
 
-            // O botão de filtro agora chama a nova função
+
             document.getElementById('filter-lancamentos-btn').addEventListener('click', fetchAndRenderLancamentos);
 
 
-// SUBSTITUA O LISTENER INTEIRO POR ISTO:
+
             document.getElementById('lancamentos-table').addEventListener('click', async function (event) {
                 const editButton = event.target.closest('.edit-lancamento-btn');
                 const deleteButton = event.target.closest('.delete-lancamento-btn');
 
-                // Se clicou no botão de editar, edita
+
                 if (editButton) {
                     const lancamentoId = editButton.dataset.id;
                     openEditLancamentoModal(lancamentoId);
                     return; // Para a execução
                 }
 
-                // Se clicou no botão de excluir, exclui
+
                 if (deleteButton) {
                     const lancamentoId = deleteButton.dataset.id;
                     if (confirm('Tem certeza que deseja excluir este lançamento? Esta ação não pode ser desfeita.')) {
@@ -2268,10 +2588,10 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                     return; // Para a execução
                 }
 
-                // Se não clicou em nenhum botão, significa que clicou na linha
+
                 const row = event.target.closest('tr');
                 if (row) {
-                    // Pega o ID de edição a partir do botão escondido na linha
+
                     const rowEditButton = row.querySelector('.edit-lancamento-btn');
                     if (rowEditButton) {
                         const lancamentoId = rowEditButton.dataset.id;
@@ -2280,7 +2600,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 }
             });
 
-            // --- Lógica Solicitante/Destino Dinâmico (Modal de Edição) ---
+
 
             function updateEditDynamicLabels(containerId, inputName, baseLabel) {
                 const rows = document.querySelectorAll(`#${containerId} .edit-dynamic-row`);
@@ -2377,23 +2697,156 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 return fieldset;
             }
 
-            function createEditDestinoChegadaInput(destinoValue = '', chegadaValue = '') {
-                const containerId = 'edit-destino-campos-container';
+            
+
+            function createEditPassageiroInput(pNum, re = '', nome = '') {
                 const fieldset = document.createElement('div');
-                fieldset.className = 'edit-dynamic-row grid grid-cols-2 gap-4';
-                const index = Date.now();
-                const pNum = document.querySelectorAll(`#${containerId} .edit-dynamic-row`).length + 1;
-                const isP1 = pNum === 1;
+                fieldset.className = 'edit-passageiro-row grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 relative';
+                fieldset.dataset.pNum = pNum;
+                const index = Date.now(); // Para IDs únicos
+
                 fieldset.innerHTML = `
+                <div>
+                    <label for="edit-re-${index}" class="block text-sm font-medium text-gray-700">RE (P${pNum}):</label>
+                    <input type="text" id="edit-re-${index}" name="edit-res[]" value="${re}"
+                        autocomplete="off" 
+                        class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm">
+                </div>
+                <div class="flex items-end">
+                    <div class="flex-grow">
+                        <label for="edit-transportado-${index}" class="block text-sm font-medium text-gray-700">Transportado (P${pNum}):</label>
+                        <input type="text" id="edit-transportado-${index}" name="edit-transportados[]" value="${nome}"
+                            autocomplete="off"
+                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-passageiro-btn">
+                    -
+                    </button>
+                </div>
+                `;
+
+                // Adiciona a lógica ao botão de remover
+                const removeBtn = fieldset.querySelector('.remove-edit-passageiro-btn');
+                removeBtn.onclick = () => {
+                    fieldset.remove();
+                    updateEditPassageiroLabels(); // Chama a função que estamos prestes a criar
+                    updateValoresAutomaticamente('edit-lancamento-form'); // Recalcula preços
+                };
+                
+                return fieldset;
+            }
+
+            
+            // ▼▼▼ ADICIONE ESTA FUNÇÃO QUE ESTÁ FALTANDO ▼▼▼
+            // (Cole por volta da linha 1968, após o fim da 'createEditPassageiroInput')
+
+            function updateEditPassageiroLabels() {
+                const extrasContainer = document.getElementById('edit-passageiros-extras-container');
+                const rows = extrasContainer.querySelectorAll('.edit-passageiro-row');
+                
+                rows.forEach((row, index) => {
+                    const pNum = index + 2; // Começa do P2
+                    row.dataset.pNum = pNum;
+
+                    const reLabel = row.querySelector('label[for^="edit-re-"]');
+                    const transportadoLabel = row.querySelector('label[for^="edit-transportado-"]');
+
+                    if (reLabel) reLabel.textContent = `RE (P${pNum}):`;
+                    // CORREÇÃO: Adicionadas as crases (`) que faltavam na minha sugestão anterior
+                    if (transportadoLabel) transportadoLabel.textContent = `Transportado (P${pNum}):`; 
+                });
+            }
+
+
+            function createEditValorInput(pNum, valorValue = '0,00', valorExtraValue = '0,00') {
+                const fieldset = document.createElement('div');
+                // Usamos 'edit-dynamic-row' para consistência
+                fieldset.className = 'edit-dynamic-row grid grid-cols-2 gap-4 md:gap-6'; 
+                fieldset.dataset.pNum = pNum;
+                const isP1 = pNum === 1;
+                const labelValor = `Valor P${pNum}:`;
+                const labelValorExtra = `Valor Extra P${pNum}:`;
+                const inputIdValor = `edit-valor-${pNum}`;
+                const inputIdValorExtra = `edit-valor-extra-${pNum}`;
+
+                fieldset.innerHTML = `
+                <div>
+                    <label for="${inputIdValor}" class="block text-sm font-medium text-gray-700">${labelValor}</label>
+                    <div class="relative mt-1">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pr-2 text-gray-400">R$</span>
+                        <input type="text" id="${inputIdValor}" name="edit-valores[]" value="${valorValue}"
+                            class="block w-full px-3 py-2 pl-9 bg-gray-50 border border-gray-300 rounded-lg shadow-sm text-right">
+                    </div>
+                </div>
                 <div class="form-row-align">
                     <div class="flex-grow">
-                        <label for="edit-destino-${index}" class="block text-sm font-medium text-gray-700">Destino (P${pNum}):</label>
-                        <input type="text" id="edit-destino-${index}" name="edit-destinos[]" value="${destinoValue}" list="locais-list"
-                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
+                        <label for="${inputIdValorExtra}" class="block text-sm font-medium text-gray-700">${labelValorExtra}</label>
+                        <div class="relative mt-1">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pr-2 text-gray-400">R$</span>
+                            <input type="text" id="${inputIdValorExtra}" name="edit-valores_extra[]" value="${valorExtraValue}"
+                                class="block w-full px-3 py-2 pl-9 bg-gray-50 border border-gray-300 rounded-lg shadow-sm text-right">
+                        </div>
                     </div>
                     <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-dynamic-btn ${isP1 ? 'hidden' : ''}">
                         -
                     </button>
+                </div>
+                `;
+
+                // Adiciona os listeners de formatação de moeda
+                const valorInput = fieldset.querySelector(`input[name="edit-valores[]"]`);
+                const valorExtraInput = fieldset.querySelector(`input[name="edit-valores_extra[]"]`);
+                
+                [valorInput, valorExtraInput].forEach(input => {
+                    input.addEventListener('input', () => formatCurrencyInput(input));
+                    input.addEventListener('focus', () => { if (input.value === '0,00') input.value = ''; });
+                    input.addEventListener('blur', () => { if (input.value === '') input.value = '0,00'; });
+                });
+
+                // Adiciona a lógica ao botão de remover
+                const removeBtn = fieldset.querySelector('.remove-edit-dynamic-btn');
+                if (removeBtn && !isP1) {
+                    removeBtn.onclick = () => {
+                        fieldset.remove();
+                        // Precisamos remover também o destino/chegada/bairro
+                        const destinoRow = document.querySelector(`#edit-destino-campos-container .edit-dynamic-row[data-p-num="${pNum}"]`);
+                        if (destinoRow) destinoRow.remove();
+                        
+                        updateEditDynamicLabels('edit-valor-campos-container', 'valor', 'Valor');
+                        updateEditDynamicLabels('edit-destino-campos-container', 'destino', 'Destino');
+                    };
+                }
+                return fieldset;
+            }
+
+            // ▼▼▼ ADICIONE ESTA SEGUNDA NOVA FUNÇÃO ▼▼▼
+
+            function removeEditValueRow(pNumToRemove) {
+                // Encontra a linha de VALOR com o mesmo 'data-p-num'
+                const rowToRemove = document.querySelector(`#edit-valor-campos-container .edit-dynamic-row[data-p-num="${pNumToRemove}"]`);
+                if (rowToRemove) {
+                    rowToRemove.remove();
+                    // Reorganiza os labels (P2, P3, P4...)
+                    updateEditDynamicLabels('edit-valor-campos-container', 'valor', 'Valor');
+                }
+            }
+
+function createEditDestinoChegadaInput(destinoValue = '', chegadaValue = '', bairroValue = '') {
+                const containerId = 'edit-destino-campos-container';
+                const fieldset = document.createElement('div');
+                // Alterado de volta para 3 colunas
+                fieldset.className = 'edit-dynamic-row grid grid-cols-1 md:grid-cols-3 gap-4';
+                const index = Date.now();
+                const pNum = document.querySelectorAll(`#${containerId} .edit-dynamic-row`).length + 1;
+                const isP1 = pNum === 1;
+
+                fieldset.innerHTML = `
+                <div class="form-row-align">
+                    <div class="flex-grow">
+                        <label for="edit-destino-${index}" class="block text-sm font-medium text-gray-700">Destino (P${pNum}):</label>
+                        <input type="text" id="edit-destino-${index}" name="edit-destinos[]" value="${destinoValue}" autocomplete="off"
+                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
+                    </div>
                 </div>
                 <div class="form-row-align">
                     <div class="flex-grow">
@@ -2402,6 +2855,17 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                             class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
                     </div>
                 </div>
+                <div class="form-row-align">
+                    <div class="flex-grow">
+                        <label for="edit-bairro-${index}" class="block text-sm font-medium text-gray-700">Bairro (P${pNum}):</label>
+                        <input type="text" id="edit-bairro-${index}" name="edit-bairros[]" value="${bairroValue}"
+                            autocomplete="off"
+                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
+                    </div>
+                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-dynamic-btn ${isP1 ? 'hidden' : ''}">
+                        -
+                    </button>
+                </div>
             `;
                 if (!isP1) {
                     const removeBtn = fieldset.querySelector('.remove-edit-dynamic-btn');
@@ -2409,141 +2873,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                         fieldset.remove();
                         updateEditDynamicLabels(containerId, 'destino', 'Destino');
                         removeEditValueRow(pNum);
-                    };
-                }
-                return fieldset;
-            }
-
-
-            function createEditValorInput(pNum, valorValue = '0,00', valorExtraValue = '0,00') {
-                const fieldset = document.createElement('div');
-                fieldset.className = 'edit-dynamic-row grid grid-cols-2 gap-4 valor-row';
-                fieldset.dataset.pNum = pNum;
-
-                const labelValor = pNum === 1 ? 'Valor P1:' : `Valor P${pNum}:`;
-                const labelValorExtra = pNum === 1 ? 'Valor Extra P1:' : `Valor Extra P${pNum}:`;
-                const inputIdValor = pNum === 1 ? 'edit-valor' : `edit-valor-${pNum}`;
-                const inputIdValorExtra = pNum === 1 ? 'edit-valor-extra' : `edit-valor-extra-${pNum}`;
-                fieldset.innerHTML = `
-                <div>
-                    <label for="${inputIdValor}" class="block text-sm font-medium text-gray-700">${labelValor}</label>
-                    <div class="relative mt-1">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pr-2 text-gray-400">R$</span>
-                        <input type="text" id="${inputIdValor}" name="edit-valores[]" value="${valorValue}"
-                            class="block w-full px-3 py-2 pl-9 bg-gray-50 border border-gray-300 rounded-lg text-right">
-                    </div>
-                </div>
-                <div>
-                    <label for="${inputIdValorExtra}" class="block text-sm font-medium text-gray-700">${labelValorExtra}</label>
-                    <div class="relative mt-1">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pr-2 text-gray-400">R$</span>
-                        <input type="text" id="${inputIdValorExtra}" name="edit-valores_extra[]" value="${valorExtraValue}"
-                            class="block w-full px-3 py-2 pl-9 bg-gray-50 border border-gray-300 rounded-lg text-right">
-                    </div>
-                </div>
-            `;
-                const valorInput = fieldset.querySelector('input[name="edit-valores[]"]');
-                const valorExtraInput = fieldset.querySelector('input[name="edit-valores_extra[]"]');
-                if (valorInput) {
-                    valorInput.addEventListener('input', () => formatCurrencyInput(valorInput));
-                    valorInput.addEventListener('blur', () => { if (valorInput.value === '') valorInput.value = '0,00'; });
-                }
-                if (valorExtraInput) {
-                    valorExtraInput.addEventListener('input', () => formatCurrencyInput(valorExtraInput));
-                    valorExtraInput.addEventListener('blur', () => { if (valorExtraInput.value === '') valorExtraInput.value = '0,00'; });
-                }
-                return fieldset;
-            }
-
-            function removeEditValueRow(pNumToRemove) {
-                const rowToRemove = document.querySelector(`#edit-valor-campos-container .valor-row[data-p-num="${pNumToRemove}"]`);
-                if (rowToRemove) {
-                    rowToRemove.remove();
-                    updateEditDynamicLabels('edit-valor-campos-container', 'valor', 'Valor');
-                }
-            }
-
-            function addEditDynamicRow(containerId, inputName, baseLabel, value = '', value2 = null, value3 = 0, value4 = 0) {
-                const container = document.getElementById(containerId);
-                let newRow;
-                if (inputName === 'destino') {
-                    newRow = createEditDestinoChegadaInput(value, value2);
-                } else if (inputName === 'solicitante') {
-                    newRow = createEditDynamicInput(containerId, inputName, baseLabel, value);
-                } else if (inputName === 'valor') {
-                    const pNum = document.querySelectorAll(`#${containerId} .edit-dynamic-row`).length + 1;
-                    const valorFmt = (value || 0).toFixed(2).replace('.', ',');
-                    const valorExtraFmt = (value2 || 0).toFixed(2).replace('.', ',');
-                    newRow = createEditValorInput(pNum, valorFmt, valorExtraFmt);
-                }
-
-                if (newRow) {
-                    container.appendChild(newRow);
-                    updateEditDynamicLabels(containerId, inputName, baseLabel);
-                }
-            }
-
-            document.getElementById('add-edit-solicitante-btn').addEventListener('click', () => addEditDynamicRow('edit-solicitante-campos-container', 'solicitante', 'Solicitante'));
-            document.getElementById('add-edit-destino-btn').addEventListener('click', () => addEditDynamicRow('edit-destino-campos-container', 'destino', 'Destino', '', ''));
-            document.getElementById('add-edit-valor-btn').addEventListener('click', () => addEditDynamicRow('edit-valor-campos-container', 'valor', 'Valor', 0, 0));
-            document.getElementById('add-edit-origem-btn').addEventListener('click', () => {
-                const container = document.getElementById('edit-origem-campos-container');
-                container.appendChild(createEditOrigemInput());
-            });
-
-            function updateEditPassageiroLabels() {
-                const container = document.getElementById('edit-passageiros-extras-container');
-                const p1REInput = document.getElementById('edit-re');
-                const p1NomeInput = document.getElementById('edit-transportado');
-                const p1RELabel = p1REInput.previousElementSibling;
-                const p1NomeLabel = p1NomeInput.previousElementSibling;
-                if (p1RELabel) p1RELabel.textContent = `RE (P1):`;
-                if (p1NomeLabel) p1NomeLabel.textContent = `Transportado (P1):`;
-
-                const extraRows = container.querySelectorAll('.edit-passageiro-row');
-                extraRows.forEach((row, index) => {
-                    const pNum = index + 2;
-                    const reLabel = row.querySelector('label');
-                    const transportadoLabel = row.querySelector('.flex-grow label');
-                    const removeBtn = row.querySelector('.remove-edit-passageiro-btn');
-                    if (reLabel) reLabel.textContent = `RE (P${pNum}):`;
-                    if (transportadoLabel) transportadoLabel.textContent = `Transportado (P${pNum}):`;
-                    if (removeBtn) removeBtn.dataset.pNum = pNum;
-                });
-            }
-
-            function createEditPassageiroInput(pNum, reValue = '', nomeValue = '') {
-                const fieldset = document.createElement('div');
-                fieldset.className = 'edit-passageiro-row grid grid-cols-1 md:grid-cols-2 gap-4';
-                fieldset.dataset.pNum = pNum;
-                const isP1 = pNum === 1;
-                fieldset.innerHTML = `
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">RE (P${pNum}):</label>
-                    <input type="text" name="edit-res[]" list="transportados-re-list" value="${reValue}"
-                        class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
-                </div>
-                <div class="flex items-end">
-                    <div class="flex-grow">
-                        <label class="block text-sm font-medium text-gray-700">Transportado (P${pNum}):</label>
-                        <input type="text" name="edit-transportados[]" list="transportados-nome-list" value="${nomeValue}"
-                            class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg">
-                    </div>
-                    <button type="button" class="ml-2 px-3 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-400 remove-edit-passageiro-btn ${isP1 ? 'hidden' : ''}" data-p-num="${pNum}">-</button>
-                </div>
-            `;
-                const reInput = fieldset.querySelector('input[name="edit-res[]"]');
-                const nomeInput = fieldset.querySelector('input[name="edit-transportados[]"]');
-                if (reInput && nomeInput) {
-                    reInput.addEventListener('blur', () => handleAutofillDynamic(reInput, nomeInput, 're'));
-                    nomeInput.addEventListener('blur', () => handleAutofillDynamic(nomeInput, reInput, 'nome'));
-                }
-                const removeBtn = fieldset.querySelector('.remove-edit-passageiro-btn');
-                if (removeBtn) {
-                    removeBtn.onclick = () => {
-                        fieldset.remove();
-                        updateEditPassageiroLabels();
-                        checkEditPassageiroDuplicidade();
+                        updateValoresAutomaticamente('edit-lancamento-form');
                     };
                 }
                 return fieldset;
@@ -2557,14 +2887,14 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 const newRow = createEditPassageiroInput(pNum, re, nome);
                 extrasContainer.appendChild(newRow);
                 updateEditPassageiroLabels();
+                setTimeout(() => updateValoresAutomaticamente('edit-lancamento-form'), 50);
             }
 
             document.getElementById('add-edit-passageiro-btn').addEventListener('click', () => addEditPassageiroRow());
 
-            async function openEditLancamentoModal(id) {
+async function openEditLancamentoModal(id) {
                 let lancamento;
                 try {
-                    // Busca o lançamento específico no banco de dados pelo ID
                     const docRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos', id);
                     const docSnap = await getDoc(docRef);
 
@@ -2582,19 +2912,27 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
 
                 if (!lancamento) return;
 
-                // O restante da função continua exatamente como antes
                 document.getElementById('edit-lancamento-id').value = id;
                 document.getElementById('edit-data').value = lancamento.data;
                 document.getElementById('edit-bordero').value = lancamento.bordero || '';
                 document.getElementById('edit-observacao').value = lancamento.observacao || '';
+                
+                // === LÓGICA DE ORIGEM REVERTIDA ===
                 const editOrigemContainer = document.getElementById('edit-origem-campos-container');
-                editOrigemContainer.innerHTML = ''; // Limpa o container
-                editOrigemContainer.appendChild(createEditOrigemInput(lancamento.origem || '', lancamento.partida || ''));
+                editOrigemContainer.innerHTML = ''; 
+                // Agora passa 2 valores: origem, partida
+                editOrigemContainer.appendChild(
+                    createEditOrigemInput(lancamento.origem || '', lancamento.partida || '')
+                );
+                
                 if (lancamento.origens_extras && lancamento.origens_extras.length > 0) {
                     lancamento.origens_extras.forEach(o => {
-                        editOrigemContainer.appendChild(createEditOrigemInput(o.origem || '', o.partida || ''));
+                        editOrigemContainer.appendChild(
+                            createEditOrigemInput(o.origem || '', o.partida || '')
+                        );
                     });
                 }
+                // === FIM DA LÓGICA DE ORIGEM ===
 
                 const motoristaInput = document.getElementById('edit-motorista');
                 motoristaInput.value = lancamento.motorista;
@@ -2608,23 +2946,46 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
 
                 const editSolicitanteContainer = document.getElementById('edit-solicitante-campos-container');
                 editSolicitanteContainer.innerHTML = '';
-                addEditDynamicRow('edit-solicitante-campos-container', 'solicitante', 'Solicitante', lancamento.solicitante || '');
+                
+                editSolicitanteContainer.appendChild(
+                    createEditDynamicInput('edit-solicitante-campos-container', 'solicitante', 'Solicitante', lancamento.solicitante || '')
+                );
+                
                 if (lancamento.solicitantes_extras && lancamento.solicitantes_extras.length > 0) {
                     lancamento.solicitantes_extras.forEach((s) => {
-                        addEditDynamicRow('edit-solicitante-campos-container', 'solicitante', 'Solicitante', s);
+                        editSolicitanteContainer.appendChild(
+                            createEditDynamicInput('edit-solicitante-campos-container', 'solicitante', 'Solicitante', s)
+                        );
                     });
                 }
                 updateEditDynamicLabels('edit-solicitante-campos-container', 'solicitante', 'Solicitante');
 
+                // === LÓGICA DE DESTINO REVERTIDA ===
                 const editDestinoContainer = document.getElementById('edit-destino-campos-container');
                 editDestinoContainer.innerHTML = '';
-                const destinosParaEdicao = [{ destino: lancamento.destino || '', chegada: lancamento.chegada_destino || '' }];
+                
+                // Array para carregar destinos (agora com bairro)
+                const destinosParaEdicao = [{ 
+                    destino: lancamento.destino || '', 
+                    chegada: lancamento.chegada_destino || '', 
+                    bairro: lancamento.bairro || '' 
+                }];
+
                 if (lancamento.destinos_extras && lancamento.destinos_extras.length > 0) {
-                    lancamento.destinos_extras.forEach(d => destinosParaEdicao.push({ destino: d.destino || '', chegada: d.chegada || '' }));
+                    lancamento.destinos_extras.forEach(d => destinosParaEdicao.push({ 
+                        destino: d.destino || '', 
+                        chegada: d.chegada || '',
+                        bairro: d.bairro || ''
+                    }));
                 }
+                
+                // Carrega todos os destinos (P1, P2...) com 3 valores
                 destinosParaEdicao.forEach(d => {
-                    addEditDynamicRow('edit-destino-campos-container', 'destino', 'Destino', d.destino, d.chegada);
+                    editDestinoContainer.appendChild(
+                        createEditDestinoChegadaInput(d.destino, d.chegada, d.bairro || '')
+                    );
                 });
+                // === FIM DA LÓGICA DE DESTINO ===
 
                 const editValorContainer = document.getElementById('edit-valor-campos-container');
                 editValorContainer.innerHTML = '';
@@ -2652,9 +3013,83 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 }
                 updateEditPassageiroLabels();
                 document.getElementById('edit-lancamento-modal').classList.remove('hidden');
+                setTimeout(() => updateValoresAutomaticamente('edit-lancamento-form'), 100);
             }
-            function setupEditModalAutofill() {
+
+
+    function setupEditModalAutofill() {
                 const modal = document.getElementById('edit-lancamento-modal');
+
+                document.getElementById('add-edit-solicitante-btn').addEventListener('click', () => {
+                const container = document.getElementById('edit-solicitante-campos-container');
+                const newRow = createEditDynamicInput('edit-solicitante-campos-container', 'solicitante', 'Solicitante', '');
+                container.appendChild(newRow);
+                updateEditDynamicLabels('edit-solicitante-campos-container', 'solicitante', 'Solicitante');
+            });
+
+            document.getElementById('add-edit-origem-btn').addEventListener('click', () => {
+                const container = document.getElementById('edit-origem-campos-container');
+                // Passa 3 valores vazios para (origem, partida, bairro_origem)
+                const newRow = createEditOrigemInput('', '', ''); 
+                container.appendChild(newRow);
+            });
+
+            document.getElementById('add-edit-destino-btn').addEventListener('click', () => {
+                const container = document.getElementById('edit-destino-campos-container');
+                const newRow = createEditDestinoChegadaInput('', '', '');
+                container.appendChild(newRow);
+                updateEditDynamicLabels('edit-destino-campos-container', 'destino', 'Destino');
+            });
+
+            document.getElementById('add-edit-valor-btn').addEventListener('click', () => {
+                const container = document.getElementById('edit-valor-campos-container');
+                const pNum = container.querySelectorAll('.edit-dynamic-row').length + 1;
+                const newRow = createEditValorInput(pNum, '0,00', '0,00');
+                container.appendChild(newRow);
+                // Não precisa de updateEditDynamicLabels aqui, pois createEditValorInput já define o P-num
+            });
+
+                // Listener para o CÁLCULO DE PREÇO (quando sai do campo)
+                modal.addEventListener('blur', (event) => {
+                    const input = event.target;
+                    if (input.matches('input[name="edit-bairros[]"]') || input.matches('input[name="edit-destinos[]"]')) {
+                        updateValoresAutomaticamente('edit-lancamento-form');
+                    }
+                }, true);
+                
+                // Listener para as SUGESTÕES DE AUTOCOMPLETE (enquanto digita)
+                modal.addEventListener('input', (event) => {
+                    const input = event.target;
+                    
+                    // Lógica para Bairros
+                    if (input.matches('input[name="edit-bairros[]"]')) {
+                        showAutocompleteSuggestions(input, 'bairro');
+                    }
+                    
+                    // ▼▼▼ ADICIONADO ▼▼▼
+                    // Lógica para Origens
+                    if (input.matches('input[name="edit-origens[]"]')) {
+                        showAutocompleteSuggestions(input, 'origem');
+                    }
+                    
+                    // Lógica para Destinos
+                    if (input.matches('input[name="edit-destinos[]"]')) {
+                        showAutocompleteSuggestions(input, 'destino');
+                    }
+                    // ▲▲▲ FIM DA ADIÇÃO ▲▲▲
+
+                    // Lógica para Passageiros (RE)
+                    if (input.matches('input[name="edit-res[]"]') || input.id === 'edit-re') {
+                        showAutocompleteSuggestions(input, 're');
+                    }
+                    
+                    // Lógica para Passageiros (Nome)
+                    if (input.matches('input[name="edit-transportados[]"]') || input.id === 'edit-transportado') {
+                        showAutocompleteSuggestions(input, 'nome');
+                    }
+                });
+
+                // Listener para o PREENCHIMENTO AUTOMÁTICO (quando sai do campo)
                 modal.addEventListener('blur', (event) => {
                     const input = event.target;
 
@@ -2685,6 +3120,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                     }
                 }, true);
             }
+
             setupEditModalAutofill();
 
             document.getElementById('close-edit-lancamento-modal').addEventListener('click', () => {
@@ -2693,6 +3129,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
             document.getElementById('cancel-edit-btn').addEventListener('click', () => {
                 document.getElementById('edit-lancamento-modal').classList.add('hidden');
             });
+
             document.getElementById('edit-lancamento-form').addEventListener('submit', async function (event) {
                 event.preventDefault();
 
@@ -2712,16 +3149,22 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 const resExtras = Array.from(document.querySelectorAll('#edit-passageiros-extras-container input[name="edit-res[]"]')).map(input => input.value.trim());
                 const nomesExtras = Array.from(document.querySelectorAll('#edit-passageiros-extras-container input[name="edit-transportados[]"]')).map(input => input.value.trim());
                 const passageirosExtras = resExtras.map((re, i) => ({ re: re, nome: nomesExtras[i] })).filter(p => p.re && p.nome);
+                
                 const destinosInputs = document.querySelectorAll('#edit-destino-campos-container input[name="edit-destinos[]"]');
                 const chegadasInputs = document.querySelectorAll('#edit-destino-campos-container input[name="edit-chegadas_destino[]"]');
+                const bairrosInputs = document.querySelectorAll('#edit-destino-campos-container input[name="edit-bairros[]"]'); // <-- NOVO
+                
                 const valoresInputs = document.querySelectorAll('#edit-valor-campos-container input[name="edit-valores[]"]');
                 const valoresExtraInputs = document.querySelectorAll('#edit-valor-campos-container input[name="edit-valores_extra[]"]');
+                
                 const destinosArray = [];
                 destinosInputs.forEach((destinoInput, i) => {
                     const destino = destinoInput.value.trim();
                     const chegada = chegadasInputs[i] ? chegadasInputs[i].value.trim() : '';
-                    if (destino || chegada) {
-                        destinosArray.push({ destino, chegada });
+                    const bairro = bairrosInputs[i] ? bairrosInputs[i].value.trim() : ''; // <-- NOVO
+                    
+                    if (destino || chegada || bairro) { // <-- CONDIÇÃO ATUALIZADA
+                        destinosArray.push({ destino, chegada, bairro }); // <-- ATUALIZADO
                     }
                 });
 
@@ -2732,11 +3175,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                     valoresArray.push({ valor, valorExtra });
                 });
 
-                // ...
                 const id = document.getElementById('edit-lancamento-id').value;
-                // ... (código para coletar solicitantes, passageiros, etc.)
-
-                // 1. PRIMEIRO, COLETAMOS OS DADOS DA ORIGEM (MOVIDO PARA CÁ)
                 const origensEditInputs = document.querySelectorAll('#edit-origem-campos-container input[name="edit-origens[]"]');
                 const partidasEditInputs = document.querySelectorAll('#edit-origem-campos-container input[name="edit-partidas[]"]');
                 const origensEdit = [];
@@ -2748,7 +3187,6 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                     }
                 });
 
-                // 2. DEPOIS, CRIAMOS O OBJETO USANDO OS DADOS COLETADOS
                 const updatedData = {
                     motorista: document.getElementById('edit-motorista').value,
                     data: document.getElementById('edit-data').value,
@@ -2761,31 +3199,28 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                     re: p1RE,
                     transportado: p1Nome,
                     passageiros_extras: passageirosExtras,
-
-                    // Campos de Origem Corrigidos
                     origem: origensEdit.length > 0 ? origensEdit[0].origem : '',
                     partida: origensEdit.length > 0 ? origensEdit[0].partida : '',
                     origens_extras: origensEdit.slice(1),
-
-                    // Campos de Destino
                     destino: destinosArray.length > 0 ? destinosArray[0].destino : '',
                     chegada_destino: destinosArray.length > 0 ? destinosArray[0].chegada : '',
-
-                    // Campos de Valor
+                    bairro: destinosArray.length > 0 ? destinosArray[0].bairro : '', // <-- NOVO
                     valor: valoresArray.length > 0 ? valoresArray[0].valor : 0,
                     valorExtra: valoresArray.length > 0 ? valoresArray[0].valorExtra : 0,
-                    destinos_extras: [], // Será preenchido abaixo
+                    destinos_extras: [], 
                 };
 
                 const totalExtras = Math.max(destinosArray.length, valoresArray.length) - 1;
                 if (totalExtras > 0) {
                     for (let i = 1; i <= totalExtras; i++) {
-                        const destinoInfo = destinosArray[i] || { destino: '', chegada: '' };
+                        const destinoInfo = destinosArray[i] || { destino: '', chegada: '', bairro: '' }; // <-- ATUALIZADO
                         const valorInfo = valoresArray[i] || { valor: 0, valorExtra: 0 };
-                        if (destinoInfo.destino || valorInfo.valor > 0 || valorInfo.valorExtra > 0) {
+                        
+                        if (destinoInfo.destino || destinoInfo.chegada || destinoInfo.bairro || valorInfo.valor > 0 || valorInfo.valorExtra > 0) { // <-- CONDIÇÃO ATUALIZADA
                             updatedData.destinos_extras.push({
                                 destino: destinoInfo.destino,
                                 chegada: destinoInfo.chegada,
+                                bairro: destinoInfo.bairro, // <-- NOVO
                                 valor: valorInfo.valor,
                                 valorExtra: valorInfo.valorExtra
                             });
@@ -2800,14 +3235,14 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 fetchAndRenderLancamentos();
             });
 
-// SUBSTITUA A FUNÇÃO 'renderTransportadosList' INTEIRA
+
             function renderTransportadosList() {
                 const tableBody = document.querySelector('#transportados-table tbody');
                 tableBody.innerHTML = '';
                 transportadosData.forEach(item => {
                     const row = document.createElement('tr');
                     row.className = 'bg-white hover:bg-gray-50';
-                    // Armazena o ID e os dados originais na própria linha
+
                     row.dataset.id = item.id;
                     row.dataset.re = item.re;
                     row.dataset.nome = item.nome;
@@ -2836,20 +3271,20 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 populateTransportadosDatalist();
             }
 
-            // ATUALIZADO para usar 'usersData'
-            // ATUALIZADO para usar 'usersData' e adicionar botão de redefinir senha
+
+
             function renderMotoristasList() {
                 const tableBody = document.querySelector('#motoristas-table tbody');
                 const tableHead = document.querySelector('#motoristas-table thead tr');
 
-                // Adiciona o cabeçalho "Ações" se ainda não existir
+
                 if (!tableHead.querySelector('.th-actions')) {
                     tableHead.innerHTML += `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider th-actions">Ações</th>`;
                 }
 
                 tableBody.innerHTML = '';
                 usersData.forEach(item => {
-                    // Não mostra o botão para o próprio admin logado
+
                     const disableButton = item.username === currentUser.username;
                     const buttonHtml = disableButton ?
                         `<span class="text-gray-400 text-sm">Próprio Usuário</span>` :
@@ -2881,15 +3316,23 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 });
             }
 
-            // ATUALIZADO para usar 'usersData'
             function populateMotoristasDatalist() {
                 const datalist = document.getElementById('motoristas-list');
                 datalist.innerHTML = '';
                 usersData.forEach(item => datalist.innerHTML += `<option value="${item.nome}">`);
             }
 
-// SUBSTITUA A FUNÇÃO 'add-transportado' INTEIRA POR ISTO:
-            document.getElementById('add-transportado').addEventListener('click', async () => {
+            function populateBairrosDatalist() {
+                const locais = Object.keys(precoLookup);
+                const datalist = document.createElement('datalist');
+                datalist.id = 'bairros-e-cidades-list';                
+                locais.forEach(local => {
+                    datalist.innerHTML += `<option value="${local}"></option>`;
+                });
+                document.body.appendChild(datalist);
+            }
+
+document.getElementById('add-transportado').addEventListener('click', async () => {
                 const newRE = document.getElementById('new-re').value.trim();
                 const newNome = document.getElementById('new-nome').value.trim();
 
@@ -2898,29 +3341,37 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                     return;
                 }
 
+
+                const reExistsLocal = transportadosData.some(item => item.re.toUpperCase() === newRE.toUpperCase());
+                if (reExistsLocal) {
+                    showWarning(`Erro: A Matrícula (RE) "${newRE}" já está na lista local.`);
+                    return;
+                }
+                
+
                 const transportadosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'transportados');
 
                 try {
-                    // 1. Gasta 1 leitura para verificar NO BANCO se o RE já existe
                     const q = query(transportadosRef, where("re", "==", newRE));
                     const querySnapshot = await getDocs(q);
 
                     if (!querySnapshot.empty) {
-                        // Se a consulta NÃO voltou vazia, o RE já existe
-                        showWarning(`Erro: A Matrícula (RE) "${newRE}" já está cadastrada. Atualize a página para recarregar a lista.`);
+
+                        showWarning(`Erro: A Matrícula (RE) "${newRE}" já está cadastrada no banco.`);
                         return;
                     }
 
-                    // 2. Se voltou vazia, o RE é novo. Podemos adicionar.
+
                     const newDoc = await addDoc(transportadosRef, { re: newRE, nome: newNome });
                     
-                    // 3. Adiciona na lista local (transportadosData) para o autocomplete funcionar
+
                     transportadosData.push({ re: newRE, nome: newNome, id: newDoc.id });
                     rebuildTransportadosLookups(); // Rebói a lista e o autocomplete
 
                     document.getElementById('new-re').value = '';
                     document.getElementById('new-nome').value = '';
-                    showWarning('Transportado adicionado com sucesso. Atualize a página para recarregar a lista.');
+                    
+
 
                 } catch (error) {
                     console.error("Erro ao adicionar transportado:", error);
@@ -2928,17 +3379,16 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 }
             });
 
-// --- COLE ESTA NOVA FUNÇÃO ABAIXO DE 'populateMotoristasDatalist' ---
             function populateMotoristasFilterDropdown() {
                 const select = document.getElementById('filter-motorista');
                 if (!select) return; // Se o elemento não existir, para aqui
                 
-                // Guarda a opção "Todos" e limpa o resto
+
                 const firstOption = select.options[0];
                 select.innerHTML = '';
                 select.appendChild(firstOption);
 
-                // Adiciona cada motorista da lista global
+
                 usersData.forEach(item => {
                     const option = document.createElement('option');
                     option.value = item.nome;
@@ -2948,7 +3398,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
             }
 
 
-            // LÓGICA DE ADICIONAR MOTORISTA ATUALIZADA
+
             document.getElementById('add-motorista').addEventListener('click', async () => {
                 const nome = document.getElementById('new-motorista-nome').value.trim();
                 const username = document.getElementById('new-motorista-username').value.trim().toLowerCase();
@@ -2983,23 +3433,23 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 }
             });
 
-            // LÓGICA DE EXCLUIR MOTORISTA ATUALIZADA
+
             document.getElementById('delete-selected-motoristas').addEventListener('click', async () => {
                 const checkboxes = document.querySelectorAll('#motoristas-table .motorista-checkbox:checked');
                 if (checkboxes.length === 0) {
                     showWarning('Selecione ao menos um motorista.');
                     return;
                 }
-                // Usa a coleção 'users'
+
                 const promises = Array.from(checkboxes).map(cb => deleteDoc(doc(db, 'users', cb.dataset.id)));
                 await Promise.all(promises);
                 showWarning(`${checkboxes.length} usuários/motoristas excluídos.`);
             });
 
-            // --- Eventos de UI restantes ---
+
             document.getElementById('close-modal').addEventListener('click', hideWarning);
 
-// NOVO LISTENER PARA A TABELA DE TRANSPORTADOS (EDITAR/SALVAR/CANCELAR/DELETAR)
+
             document.getElementById('transportados-table').addEventListener('click', async (event) => {
                 const button = event.target.closest('button');
                 if (!button) return;
@@ -3007,50 +3457,50 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 const row = button.closest('tr');
                 const id = row.dataset.id;
 
-                // --- AÇÃO: CLICOU EM EDITAR (LÁPIS) ---
+
                 if (button.classList.contains('edit-transportado-btn')) {
                     const reCell = row.cells[0];
                     const nomeCell = row.cells[1];
                     const currentRE = row.dataset.re;
                     const currentNome = row.dataset.nome;
 
-                    // Transforma em inputs
+
                     reCell.innerHTML = `<input type="text" value="${currentRE}" class="w-full border border-blue-500 rounded px-1 py-0.5">`;
                     nomeCell.innerHTML = `<input type="text" value="${currentNome}" class="w-full border border-blue-500 rounded px-1 py-0.5">`;
 
-                    // Alterna os botões
+
                     row.querySelector('.edit-transportado-btn').classList.add('hidden');
                     row.querySelector('.delete-transportado-btn').classList.add('hidden');
                     row.querySelector('.save-transportado-btn').classList.remove('hidden');
                     row.querySelector('.cancel-transportado-btn').classList.remove('hidden');
                 }
 
-                // --- AÇÃO: CLICOU EM CANCELAR (X) ---
+
                 if (button.classList.contains('cancel-transportado-btn')) {
-                    // Reverte para o texto original
+
                     row.cells[0].innerHTML = row.dataset.re;
                     row.cells[1].innerHTML = row.dataset.nome;
 
-                    // Alterna os botões
+
                     row.querySelector('.edit-transportado-btn').classList.remove('hidden');
                     row.querySelector('.delete-transportado-btn').classList.remove('hidden');
                     row.querySelector('.save-transportado-btn').classList.add('hidden');
                     row.querySelector('.cancel-transportado-btn').classList.add('hidden');
                 }
 
-                // --- AÇÃO: CLICOU EM EXCLUIR (LIXEIRA) ---
+
                 if (button.classList.contains('delete-transportado-btn')) {
                     if (confirm(`Tem certeza que deseja excluir "${row.dataset.nome}"?`)) {
                         try {
                             await deleteDoc(doc(db, 'artifacts', globalAppId, 'public', 'data', 'transportados', id));
                             
-                            // Remove da lista local e reconstrói
+
                             const index = transportadosData.findIndex(item => item.id === id);
                             if (index > -1) transportadosData.splice(index, 1);
                             rebuildTransportadosLookups();
                             
                             showWarning('Transportado excluído com sucesso.');
-                            // Não precisa de onSnapshot, apenas remove a linha da tela
+
                             row.remove(); 
                         } catch (error) {
                             showWarning('Erro ao excluir transportado.');
@@ -3058,7 +3508,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                     }
                 }
 
-                // --- AÇÃO: CLICOU EM SALVAR (CHECK) ---
+
                 if (button.classList.contains('save-transportado-btn')) {
                     const reInput = row.cells[0].querySelector('input');
                     const nomeInput = row.cells[1].querySelector('input');
@@ -3070,9 +3520,9 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                         return;
                     }
 
-                    // Verifica se o RE mudou
+
                     if (newRE !== row.dataset.re) {
-                        // Se mudou, precisamos verificar se o NOVO RE já existe
+
                         const transportadosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'transportados');
                         const q = query(transportadosRef, where("re", "==", newRE));
                         const querySnapshot = await getDocs(q);
@@ -3083,7 +3533,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                         }
                     }
 
-                    // Se a validação passou, salva no banco
+
                     try {
                         const docRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'transportados', id);
                         await updateDoc(docRef, {
@@ -3091,7 +3541,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                             nome: newNome
                         });
 
-                        // Atualiza a lista local e reconstrói o autocomplete
+
                         const index = transportadosData.findIndex(item => item.id === id);
                         if (index > -1) {
                             transportadosData[index].re = newRE;
@@ -3099,7 +3549,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                         }
                         rebuildTransportadosLookups();
 
-                        // Atualiza os dados da linha e reverte para o modo de visualização
+
                         row.dataset.re = newRE;
                         row.dataset.nome = newNome;
                         row.cells[0].innerHTML = newRE;
@@ -3119,12 +3569,12 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
             });
             
             document.getElementById('open-transportados-modal').addEventListener('click', () => {
-                // Reconstrói a lista com a ordenação atual toda vez que abre
+
                 rebuildTransportadosLookups(
                     document.getElementById('sort-transportados-key').value, 
                     document.getElementById('sort-transportados-order').value
                 );
-                // Mostra o modal
+
                 document.getElementById('transportados-modal').classList.remove('hidden');
             });
 
@@ -3132,19 +3582,19 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
             document.getElementById('open-motoristas-modal').addEventListener('click', () => document.getElementById('motoristas-modal').classList.remove('hidden'));
             document.getElementById('close-motoristas-modal').addEventListener('click', () => document.getElementById('motoristas-modal').classList.add('hidden'));
             
-            // A linha abaixo estava faltando a "função" ao redor dela
+
             document.getElementById('sort-transportados-key').addEventListener('change', function () {
                 rebuildTransportadosLookups(this.value, document.getElementById('sort-transportados-order').value);
             });
             
-            // Esta função também estava faltando no seu print
+
             document.getElementById('sort-transportados-order').addEventListener('change', function () {
                 rebuildTransportadosLookups(document.getElementById('sort-transportados-key').value, this.value);
             });
             document.getElementById('sort-motoristas-order').addEventListener('change', function () {
                 rebuildMotoristasLookups(this.value);
             });
-            // --- LÓGICA DOS BOTÕES DE PREENCHIMENTO AUTOMÁTICO ---
+
             document.getElementById('fill-partidas-btn').addEventListener('click', () => {
                 const partidaInputs = document.querySelectorAll('input[name="partidas[]"]');
                 if (partidaInputs.length < 2) return; // Só faz sentido se houver mais de um campo
@@ -3175,9 +3625,9 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 }
             });
 
-            // --- NOVA SUGESTÃO: RELATÓRIO EM LOTES (100% NO NAVEGADOR) ---
 
-            // Função auxiliar para escapar valores para o formato CSV
+
+
             function escapeCsvValue(value) {
                 if (value === null || value === undefined) return '';
                 const stringValue = String(value);
@@ -3187,7 +3637,7 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 return stringValue;
             }
 
-            // Função auxiliar para iniciar o download do arquivo
+
             function triggerCsvDownload(csvContent, filename) {
                 const bom = new Uint8Array([0xEF, 0xBB, 0xBF]); // Para garantir a codificação UTF-8 correta no Excel
                 const blob = new Blob([bom, csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -3202,7 +3652,136 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 URL.revokeObjectURL(url);
             }
 
-            // --- LÓGICA DE RELATÓRIO ATUALIZADA PARA P4 ---
+
+
+            async function handleDownloadDriversCsv() {
+                const startDate = document.getElementById('start-date').value;
+                const endDate = document.getElementById('end-date').value;
+                if (!startDate || !endDate) {
+                    showWarning('Por favor, selecione a data de início e a data de fim.');
+                    return;
+                }
+
+                const button = document.getElementById('download-csv-drivers');
+                const progressElement = document.getElementById('csv-progress');
+                const originalText = button.textContent;
+
+                button.disabled = true;
+                progressElement.classList.remove('hidden');
+                progressElement.textContent = 'Iniciando busca de lançamentos...';
+
+
+                const driverSummary = new Map();
+
+                try {
+                    const BATCH_SIZE = 200;
+                    let lastVisibleDoc = null;
+                    let totalProcessed = 0;
+
+
+                    while (true) {
+                        const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
+
+                        let q = query(
+                            lancamentosRef,
+                            where("data", ">=", startDate),
+                            where("data", "<=", endDate),
+                            orderBy("data"),
+                            limit(BATCH_SIZE)
+                        );
+
+                        if (lastVisibleDoc) {
+                            q = query(q, startAfter(lastVisibleDoc));
+                        }
+
+                        const querySnapshot = await getDocs(q);
+                        const batchDocs = querySnapshot.docs;
+
+                        if (batchDocs.length === 0) break;
+
+
+                        batchDocs.forEach(doc => {
+                            const item = doc.data();
+                            const motorista = item.motorista;
+
+                            if (!motorista) return;
+
+
+                            let valorViagem = (item.valor || 0) + (item.valorExtra || 0);
+                            if (item.destinos_extras && item.destinos_extras.length > 0) {
+                                item.destinos_extras.forEach(extra => {
+                                    valorViagem += (extra.valor || 0) + (extra.valorExtra || 0);
+                                });
+                            }
+
+
+                            const summary = driverSummary.get(motorista) || {
+                                totalValor: 0,
+                                totalViagens: 0
+                            };
+
+                            summary.totalValor += valorViagem;
+                            summary.totalViagens += 1; // Cada 'item' é uma viagem
+
+                            driverSummary.set(motorista, summary);
+                        });
+
+                        totalProcessed += batchDocs.length;
+                        progressElement.textContent = `Processando... ${totalProcessed} lançamentos verificados.`;
+
+                        lastVisibleDoc = batchDocs[batchDocs.length - 1];
+                        if (batchDocs.length < BATCH_SIZE) break;
+                    }
+
+                    progressElement.textContent = 'Combinando com dados dos motoristas...';
+
+
+                    const allCsvRows = [];
+
+
+                    usersData.forEach(user => {
+                        const summary = driverSummary.get(user.nome) || { totalValor: 0, totalViagens: 0 };
+
+
+
+                        const rowData = [
+                            user.nome || '',
+                            summary.totalValor.toFixed(2).replace('.', ','),
+                            summary.totalViagens
+                        ];
+                        
+                        allCsvRows.push(rowData.map(escapeCsvValue).join(';'));
+                    });
+                    
+                    if (allCsvRows.length === 0) {
+                         showWarning('Nenhum dado de motorista encontrado.');
+                         return;
+                    }
+
+
+
+                    const headers = [
+                        'NOME',
+                        'VALOR TOTAL',
+                        'TOTAL VIAGENS'
+                    ].join(';').toUpperCase();
+
+                    const csvContent = [headers, ...allCsvRows].join('\n');
+                    const filename = `relatorio_motoristas_${startDate}_a_${endDate}.csv`;
+
+                    progressElement.textContent = 'Gerando arquivo para download...';
+                    triggerCsvDownload(csvContent, filename);
+
+                } catch (error) {
+                    console.error("Erro ao gerar relatório de motoristas:", error);
+                    showWarning("Ocorreu um erro ao gerar o relatório.");
+                } finally {
+                    button.disabled = false;
+                    button.textContent = originalText;
+                    progressElement.classList.add('hidden');
+                }
+            }
+
             async function handleDownloadCsvInBatches() {
                 const startDate = document.getElementById('start-date').value;
                 const endDate = document.getElementById('end-date').value;
@@ -3245,59 +3824,110 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                         const batchDocs = querySnapshot.docs;
 
                         if (batchDocs.length === 0) break;
-
-                        const batchRows = batchDocs.map(doc => {
+                        
+                        const batchRows = batchDocs.flatMap(doc => {
                             const item = doc.data();
+                            const generatedRows = []; 
 
-                            // Mapeia todos os dados extras de P2, P3 e P4
-                            const s2 = item.solicitantes_extras?.[0] || '';
-                            const s3 = item.solicitantes_extras?.[1] || '';
-                            const s4 = item.solicitantes_extras?.[2] || '';
+                            const passengerBlocks = [];
 
-                            const p2 = item.passageiros_extras?.[0]?.nome || '';
-                            const p3 = item.passageiros_extras?.[1]?.nome || '';
-                            const p4 = item.passageiros_extras?.[2]?.nome || '';
 
-                            const o2 = item.origens_extras?.[0]?.origem || '';
-                            const o3 = item.origens_extras?.[1]?.origem || '';
-                            const o4 = item.origens_extras?.[2]?.origem || '';
+                            passengerBlocks.push({
+                                id: 'P1',
+                                solicitante: item.solicitante,
+                                re: item.re,
+                                passageiro: item.transportado,
+                                origem: item.origem,
+                                partida: item.partida,
+                                destino: item.destino,
+                                chegada: item.chegada_destino,
+                                bairro: item.bairro,
+                                valor: item.valor,
+                                valorExtra: item.valorExtra
+                            });
 
-                            const pa2 = item.origens_extras?.[0]?.partida || '';
-                            const pa3 = item.origens_extras?.[1]?.partida || '';
-                            const pa4 = item.origens_extras?.[2]?.partida || '';
 
-                            const dest2 = item.destinos_extras?.[0]?.destino || '';
-                            const ch2 = item.destinos_extras?.[0]?.chegada || '';
-                            const val2 = item.destinos_extras?.[0]?.valor?.toFixed(2).replace('.', ',') || '0,00';
-                            const valEx2 = item.destinos_extras?.[0]?.valorExtra?.toFixed(2).replace('.', ',') || '0,00';
+                            passengerBlocks.push({
+                                id: 'P2',
+                                solicitante: item.solicitantes_extras?.[0],
+                                re: item.passageiros_extras?.[0]?.re,
+                                passageiro: item.passageiros_extras?.[0]?.nome,
+                                origem: item.origens_extras?.[0]?.origem,
+                                partida: item.origens_extras?.[0]?.partida,
+                                destino: item.destinos_extras?.[0]?.destino,
+                                chegada: item.destinos_extras?.[0]?.chegada,
+                                bairro: item.destinos_extras?.[0]?.bairro,
+                                valor: item.destinos_extras?.[0]?.valor,
+                                valorExtra: item.destinos_extras?.[0]?.valorExtra
+                            });
 
-                            const dest3 = item.destinos_extras?.[1]?.destino || '';
-                            const ch3 = item.destinos_extras?.[1]?.chegada || '';
-                            const val3 = item.destinos_extras?.[1]?.valor?.toFixed(2).replace('.', ',') || '0,00';
-                            const valEx3 = item.destinos_extras?.[1]?.valorExtra?.toFixed(2).replace('.', ',') || '0,00';
 
-                            const dest4 = item.destinos_extras?.[2]?.destino || '';
-                            const ch4 = item.destinos_extras?.[2]?.chegada || '';
-                            const val4 = item.destinos_extras?.[2]?.valor?.toFixed(2).replace('.', ',') || '0,00';
-                            const valEx4 = item.destinos_extras?.[2]?.valorExtra?.toFixed(2).replace('.', ',') || '0,00';
+                            passengerBlocks.push({
+                                id: 'P3',
+                                solicitante: item.solicitantes_extras?.[1],
+                                re: item.passageiros_extras?.[1]?.re,
+                                passageiro: item.passageiros_extras?.[1]?.nome,
+                                origem: item.origens_extras?.[1]?.origem,
+                                partida: item.origens_extras?.[1]?.partida,
+                                destino: item.destinos_extras?.[1]?.destino,
+                                chegada: item.destinos_extras?.[1]?.chegada,
+                                bairro: item.destinos_extras?.[1]?.bairro,
+                                valor: item.destinos_extras?.[1]?.valor,
+                                valorExtra: item.destinos_extras?.[1]?.valorExtra
+                            });
 
-                            // Constrói a linha na ordem exata até P4
-                            const rowData = [
-                                item.data, item.motorista, item.bordero, item.solicitante, item.transportado,
-                                item.origem, item.partida, item.destino, item.chegada_destino,
-                                item.valor?.toFixed(2).replace('.', ',') || '0,00',
-                                item.valorExtra?.toFixed(2).replace('.', ',') || '0,00',
-                                s2, p2, o2, pa2, dest2, ch2, val2, valEx2, // Dados P2
-                                s3, p3, o3, pa3, dest3, ch3, val3, valEx3, // Dados P3
-                                s4, p4, o4, pa4, dest4, ch4, val4, valEx4  // Dados P4
-                            ];
-                            return rowData.map(escapeCsvValue).join(';');
+
+                            passengerBlocks.push({
+                                id: 'P4',
+                                solicitante: item.solicitantes_extras?.[2],
+                                re: item.passageiros_extras?.[2]?.re,
+                                passageiro: item.passageiros_extras?.[2]?.nome,
+                                origem: item.origens_extras?.[2]?.origem,
+                                partida: item.origens_extras?.[2]?.partida,
+                                destino: item.destinos_extras?.[2]?.destino,
+                                chegada: item.destinos_extras?.[2]?.chegada,
+                                bairro: item.destinos_extras?.[2]?.bairro,
+                                valor: item.destinos_extras?.[2]?.valor,
+                                valorExtra: item.destinos_extras?.[2]?.valorExtra
+                            });
+
+                            for (const block of passengerBlocks) {
+                                
+                                if (block.re) {
+                                    
+                                    // ▼▼▼ MUDANÇA 1: Formata os valores ▼▼▼
+                                    const valorFmt = (block.valor || 0).toFixed(2).replace('.', ',');
+                                    const valorExtraFmt = (block.valorExtra || 0).toFixed(2).replace('.', ',');
+
+                                    // ▼▼▼ MUDANÇA 2: Adiciona os valores na linha ▼▼▼
+                                    const rowData = [
+                                        block.re,                   // RE
+                                        block.passageiro || '',     // passageiro
+                                        block.solicitante || '',    // solicitante
+                                        item.bordero,               // bordero (do 'item')
+                                        item.motorista,             // motorista (do 'item')
+                                        item.data,                  // data (do 'item')
+                                        block.partida || '',        // embarque (do 'block')
+                                        block.chegada || '',        // desembarque (do 'block')
+                                        block.origem || '',         // origem (do 'block')
+                                        block.destino || '',        // destino (do 'block')
+                                        block.bairro || '',         // bairro
+                                        valorFmt,                   // <-- NOVO
+                                        valorExtraFmt,              // <-- NOVO
+                                        item.observacao || ''       // observações
+                                    ];
+                                    
+                                    generatedRows.push(rowData.map(escapeCsvValue).join(';'));
+                                }
+                            }
+                            
+                            return generatedRows; 
                         });
 
                         allCsvRows.push(...batchRows);
 
                         totalProcessed += batchDocs.length;
-                        progressElement.textContent = `Processando lote ${batchCounter}... ${totalProcessed} registros encontrados.`;
+                        progressElement.textContent = `Processando lote ${batchCounter}... ${totalProcessed} lançamentos verificados.`;
                         batchCounter++;
 
                         lastVisibleDoc = batchDocs[batchDocs.length - 1];
@@ -3309,17 +3939,26 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                         return;
                     }
 
-                    // Define os cabeçalhos na ordem exata até P4
+                    // ▼▼▼ MUDANÇA 3: Adiciona os cabeçalhos ▼▼▼
                     const headers = [
-                        'data', 'motorista', 'bordero', 'solicitante', 'passageiros', 'origem', 'partida',
-                        'destino', 'chegada', 'valor', 'valor extra',
-                        'solicitante (P2)', 'passageiro (P2)', 'origem (P2)', 'partida (P2)', 'destino (P2)', 'chegada (P2)', 'valor (P2)', 'valor extra (P2)',
-                        'solicitante (P3)', 'passageiro (P3)', 'origem (P3)', 'partida (P3)', 'destino (P3)', 'chegada (P3)', 'valor (P3)', 'valor extra (P3)',
-                        'solicitante (P4)', 'passageiro (P4)', 'origem (P4)', 'partida (P4)', 'destino (P4)', 'chegada (P4)', 'valor (P4)', 'valor extra (P4)'
-                    ].join(';');
+                        'RE',
+                        'PASSAGEIRO',
+                        'SOLICITANTE',
+                        'BORDERO',
+                        'MOTORISTA',
+                        'DATA',
+                        'EMBARQUE',
+                        'DESEMBARQUE',
+                        'ORIGEM',
+                        'DESTINO',
+                        'BAIRRO',
+                        'VALOR',
+                        'VALOR EXTRA',
+                        'OBSERVAÇÕES'
+                    ].join(';').toUpperCase();
 
                     const csvContent = [headers, ...allCsvRows].join('\n');
-                    const filename = `relatorio_completo_${startDate}_a_${endDate}.csv`;
+                    const filename = `relatorio_detalhado_${startDate}_a_${endDate}.csv`;
 
                     progressElement.textContent = 'Gerando arquivo para download...';
                     triggerCsvDownload(csvContent, filename);
@@ -3334,13 +3973,14 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                 }
             }
 
-            // Associa a nova função ao botão de relatório completo
-            document.getElementById('download-csv-detailed').addEventListener('click', handleDownloadCsvInBatches);
 
-// --- NOVA FUNÇÃO: FECHAR MODAIS COM "ESC" ---
+            document.getElementById('download-csv-detailed').addEventListener('click', handleDownloadCsvInBatches);
+            document.getElementById('download-csv-drivers').addEventListener('click', handleDownloadDriversCsv);
+
+
             document.addEventListener('keydown', function(event) {
                 if (event.key === 'Escape') {
-                    // Lista de todos os seus modais
+
                     const modalIds = [
                         'transportados-modal',
                         'motoristas-modal',
@@ -3358,13 +3998,15 @@ document.getElementById('open-lancamentos-modal').addEventListener('click', () =
                         }
                     });
 
-                    // Também fecha a caixa de autocomplete
+
                     closeAllAutocompleteLists();
                 }
             });
 
 
-        </script>
+
+            
+            </script>
     </body>
 
     </html>
