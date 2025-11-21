@@ -448,13 +448,16 @@
         <div id="lancamentos-modal"
             class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4">
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl modal-content modal-lg max-h-[90vh] flex flex-col">
-                <div class="flex justify-between items-center mb-4 relative">
-                    <div class="flex-grow flex justify-center">
-                        <h2 class="text-xl md:text-2xl font-bold text-gray-800">Gerenciar Lançamentos</h2>
-                    </div>
-                    <button id="close-lancamentos-modal"
-                        class="absolute top-0 right-0 text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
-                </div>
+<div class="flex justify-between items-center mb-4 relative">
+    <div class="flex-grow flex justify-center items-center gap-2">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-800">Gerenciar Lançamentos</h2>
+        <span id="total-lancamentos-badge" class="hidden text-sm font-bold text-blue-800 bg-blue-100 px-3 py-1 rounded-full">
+            0
+        </span>
+    </div>
+    <button id="close-lancamentos-modal"
+        class="absolute top-0 right-0 text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
+</div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
@@ -755,7 +758,7 @@
             <option value="Chacara Bela Vista"></option>
             <option value="Chacara Ipes"></option>
             <option value="Chacara Santo Antonio"></option>
-            <option value="Eldorado"></option>
+            <option value="Pq. Eldorado"></option>
             <option value="Germana"></option>
             <option value="Guaramirim"></option>
             <option value="Jardim Amalia"></option>
@@ -908,6 +911,56 @@
                 isAdmin: false,
             };
 
+            let solicitantesCache = new Set();
+
+function loadHardcodedSolicitantes() {
+    const dataList = document.getElementById('solicitantes-list');
+    if(!dataList) return;
+    
+    const options = dataList.querySelectorAll('option');
+    options.forEach(opt => {
+        if(opt.value) solicitantesCache.add(opt.value.trim());
+    });
+    console.log(`Solicitantes fixos (código) carregados: ${solicitantesCache.size}`);
+}
+
+function updateSolicitantesDatalist() {
+    const dataList = document.getElementById('solicitantes-list');
+    dataList.innerHTML = ''; // Limpa
+    
+    const sortedList = Array.from(solicitantesCache).sort();
+    
+    sortedList.forEach(nome => {
+        const option = document.createElement('option');
+        option.value = nome;
+        dataList.appendChild(option);
+    });
+}
+
+async function saveNewSolicitante(nome) {
+    if (!nome) return;
+    const nomeTrimmed = nome.trim();
+
+    const existe = Array.from(solicitantesCache).some(s => s.toLowerCase() === nomeTrimmed.toLowerCase());
+
+    if (!existe) {
+        try {
+
+            const solicitantesRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'solicitantes');
+            
+            await addDoc(solicitantesRef, { 
+                nome: nomeTrimmed,
+                createdAt: serverTimestamp()
+            });
+            
+            solicitantesCache.add(nomeTrimmed);
+            updateSolicitantesDatalist(); 
+            console.log(`Novo solicitante salvo no Firestore: ${nomeTrimmed}`);
+        } catch (e) {
+            console.error("Erro ao salvar solicitante:", e);
+        }
+    }
+}
 
 
 
@@ -946,7 +999,7 @@
                 "ALDEIAS DA SERRA": { base: 35.00, plus4: 40.00 },
                 "CHACARA IPES": { base: 35.00, plus4: 40.00 },
                 "JARDIM PANORAMA": { base: 35.00, plus4: 40.00 },
-                "ELDORADO": { base: 35.00, plus4: 40.00 },
+                "PQ. ELDORADO": { base: 35.00, plus4: 40.00 },
                 "REAL PARK": { base: 35.00, plus4: 40.00 },
                 "RESIDENCIAL JEQUITIBA": { base: 35.00, plus4: 40.00 },
                 "VILA QUIRINO": { base: 35.00, plus4: 40.00 },
@@ -2020,8 +2073,10 @@ function createEditOrigemInput(origemValue = '', partidaValue = '') {
 
 
 
-window.onload = () => {
-                const loggedInUserData = localStorage.getItem('loggedInUserData');
+        window.onload = () => {
+            loadHardcodedSolicitantes();
+
+            const loggedInUserData = localStorage.getItem('loggedInUserData');
                 if (loggedInUserData) {
                     try {
                         const userData = JSON.parse(loggedInUserData);
@@ -2199,16 +2254,42 @@ function bindPassageiroListeners(passageirosContainer, destinoContainer, origemC
 
             async function startFirestoreListeners() {
 
+try {
+        const novosSolicitantesRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'solicitantes');
+        const q = query(novosSolicitantesRef, orderBy('nome')); 
+        
+        const snapshot = await getDocs(q);
+        
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.nome) {
+                solicitantesCache.add(data.nome.trim());
+            }
+        });
+        updateSolicitantesDatalist();
+        console.log(`Solicitantes do banco carregados: ${snapshot.size}`);
+        
+    } catch (error) {
+        console.error("Erro ao carregar solicitantes do banco:", error);
+    }
+
                 try {
-                    const transportadosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'transportados');
-                    const transportadosSnapshot = await getDocs(transportadosRef);
-                    transportadosData = transportadosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    rebuildTransportadosLookups();
-                    console.log("Transportados carregados.");
-                } catch (error) {
-                    console.error("Erro ao buscar transportados:", error);
-                    showWarning("Não foi possível carregar a lista de transportados.");
-                }
+        // Busca apenas na coleção de extras
+        const extrasRef = collection(db, 'solicitantes_extras');
+        const q = query(extrasRef, orderBy('nome')); // Opcional: ordenar
+        const snapshot = await getDocs(q);
+        
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.nome) {
+                solicitantesCache.add(data.nome.trim());
+            }
+        });
+        updateSolicitantesDatalist(); // Atualiza a tela combinando HTML + Banco
+        console.log(`Solicitantes extras carregados: ${snapshot.size}`);
+    } catch (error) {
+        console.error("Erro ao carregar solicitantes extras:", error);
+    }
 
 
                 try {
@@ -2339,6 +2420,14 @@ document.getElementById('form-corrida').addEventListener('submit', async functio
                     return;
                 }
 
+    if (solicitantesData[0]) {
+        await saveNewSolicitante(solicitantesData[0]);
+    }
+    if (solicitantesData.length > 1) {
+        for (let i = 1; i < solicitantesData.length; i++) {
+            await saveNewSolicitante(solicitantesData[i]);
+        }
+    }
                 const destinosExtras = [];
                 for (let i = 1; i < destinosData.length; i++) {
                     destinosExtras.push({
@@ -2455,8 +2544,17 @@ document.getElementById('form-corrida').addEventListener('submit', async functio
             }
 
 
-            async function fetchAndRenderLancamentos() {
+async function fetchAndRenderLancamentos() {
+                // 1. DEFINIR A VARIÁVEL PRIMEIRO (Esta linha é essencial)
                 const tableBody = document.querySelector('#lancamentos-table tbody');
+                
+                // 2. Lógica do Badge (Esconder enquanto carrega)
+                const totalBadge = document.getElementById('total-lancamentos-badge');
+                if (totalBadge) {
+                    totalBadge.classList.add('hidden');
+                }
+
+                // 3. Agora podemos usar a variável tableBody com segurança
                 tableBody.innerHTML = '<tr><td colspan="16" class="text-center p-4">Carregando...</td></tr>';
 
                 const selectedDate = document.getElementById('filter-date').value;
@@ -2470,7 +2568,6 @@ document.getElementById('form-corrida').addEventListener('submit', async functio
                 try {
                     const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
 
-
                     const q = query(
                         lancamentosRef,
                         where("data", "==", selectedDate), // Filtra pela data selecionada
@@ -2480,7 +2577,6 @@ document.getElementById('form-corrida').addEventListener('submit', async functio
                     const snapshot = await getDocs(q);
                     let dataToShow = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-
                     if (!currentUser.isAdmin) {
                         dataToShow = dataToShow.filter(lanc => lanc.createdBy === currentUser.username);
                     }
@@ -2489,7 +2585,7 @@ document.getElementById('form-corrida').addEventListener('submit', async functio
                         dataToShow = dataToShow.filter(lanc => lanc.motorista === selectedMotorista);
                     }
 
-                    renderLancamentosTable(dataToShow); // Chama a função para popular a tabela
+                    renderLancamentosTable(dataToShow); // Chama a função para popular a tabela e atualizar o badge
 
                 } catch (error) {
                     console.error("Erro ao buscar lançamentos:", error);
@@ -2500,6 +2596,12 @@ document.getElementById('form-corrida').addEventListener('submit', async functio
             function renderLancamentosTable(dataToShow) {
                 const tableBody = document.querySelector('#lancamentos-table tbody');
                 tableBody.innerHTML = '';
+
+                const totalBadge = document.getElementById('total-lancamentos-badge');
+    if (totalBadge) {
+        totalBadge.textContent = dataToShow.length; // Define o número
+        totalBadge.classList.remove('hidden');      // Mostra a badge
+    }
 
                 if (dataToShow.length === 0) {
                     tableBody.innerHTML = '<tr><td colspan="16" class="text-center p-4">Nenhum lançamento encontrado para esta data.</td></tr>';
@@ -3157,6 +3259,13 @@ async function openEditLancamentoModal(id) {
                 }
                 const solicitantesEdit = Array.from(document.querySelectorAll('#edit-solicitante-campos-container input[name="edit-solicitantes[]"]'))
                     .map(input => input.value.trim()).filter(value => value !== '');
+
+                    if (solicitantesEdit.length > 0) 
+                    { 
+                    for (const nome of solicitantesEdit) {
+                        await saveNewSolicitante(nome);
+                    }
+                }
 
                 const p1RE = document.getElementById('edit-re').value.trim();
                 const p1Nome = document.getElementById('edit-transportado').value.trim();
