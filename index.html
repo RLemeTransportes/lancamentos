@@ -7,6 +7,7 @@
         <title>Lançamento de Corridas</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');    
                     
@@ -268,7 +269,7 @@
                     </button>
                    <button type="button" id="download-csv-drivers"
                         class="flex-1 px-6 py-3 bg-green-600 text-white font-bold rounded-lg shadow-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
-                        Gerar Relatório Total Motoristas
+                        Gerar Relatório Individual dos Motoristas
                     </button> 
                 </div>
                 <p id="csv-progress" class="text-center text-sm text-gray-600 mt-4 hidden"></p>
@@ -3783,11 +3784,18 @@ document.getElementById('add-transportado').addEventListener('click', async () =
 
 // ▼▼▼ SUBSTITUA ESTA FUNÇÃO INTEIRA ▼▼▼
 
-            async function handleDownloadDriversCsv() {
+async function handleDownloadDriversCsv() {
                 const startDate = document.getElementById('start-date').value;
                 const endDate = document.getElementById('end-date').value;
+
                 if (!startDate || !endDate) {
                     showWarning('Por favor, selecione a data de início e a data de fim.');
+                    return;
+                }
+
+                // Verifica se o JSZip foi carregado
+                if (typeof JSZip === 'undefined') {
+                    showWarning('Erro: A biblioteca JSZip não foi carregada. Adicione o script ao cabeçalho.');
                     return;
                 }
 
@@ -3797,15 +3805,24 @@ document.getElementById('add-transportado').addEventListener('click', async () =
 
                 button.disabled = true;
                 progressElement.classList.remove('hidden');
-                progressElement.textContent = 'Iniciando busca de lançamentos...';
+                progressElement.textContent = 'Iniciando busca de dados...';
 
-                const driverSummary = new Map();
+                // Mapa para agrupar linhas por motorista: "Nome do Motorista" -> [Array de Linhas]
+                const driverMap = new Map();
+                
+                // Cabeçalhos (os mesmos do relatório detalhado)
+                const headers = [
+                    'RE', 'PASSAGEIRO', 'SOLICITANTE', 'BORDERO', 'MOTORISTA', 'DATA', 
+                    'HORÁRIO DA SOLICITAÇÃO', 'DESEMBARQUE', 'ORIGEM', 'DESTINO', 'BAIRRO', 
+                    'VALOR', 'VALOR EXTRA', 'OBSERVAÇÕES'
+                ];
 
                 try {
                     const BATCH_SIZE = 200;
                     let lastVisibleDoc = null;
                     let totalProcessed = 0;
 
+                    // 1. Loop de busca no Firestore
                     while (true) {
                         const lancamentosRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'lancamentos');
                         let q = query(lancamentosRef,
@@ -3822,109 +3839,149 @@ document.getElementById('add-transportado').addEventListener('click', async () =
                         const batchDocs = querySnapshot.docs;
                         if (batchDocs.length === 0) break;
 
+                        // 2. Processamento dos dados (Expandir passageiros extras igual ao relatório detalhado)
                         batchDocs.forEach(doc => {
                             const item = doc.data();
-                            const motorista = item.motorista;
-                            if (!motorista) return;
+                            const motoristaNome = item.motorista || 'Sem Motorista';
 
-                            let valorViagem = (item.valor || 0) + (item.valorExtra || 0);
-                            if (item.destinos_extras && item.destinos_extras.length > 0) {
-                                item.destinos_extras.forEach(extra => {
-                                    valorViagem += (extra.valor || 0) + (extra.valorExtra || 0);
-                                });
+                            // Inicializa o array do motorista se não existir
+                            if (!driverMap.has(motoristaNome)) {
+                                driverMap.set(motoristaNome, [headers]); // Adiciona cabeçalho como primeira linha
                             }
 
-                            const summary = driverSummary.get(motorista) || { totalValor: 0, totalViagens: 0 };
-                            summary.totalValor += valorViagem;
-                            summary.totalViagens += 1;
-                            driverSummary.set(motorista, summary);
+                            const passengerBlocks = [
+                                {
+                                    re: item.re, passageiro: item.transportado, solicitante: item.solicitante,
+                                    origem: item.origem, partida: item.partida, destino: item.destino,
+                                    chegada: item.chegada_destino, bairro: item.bairro,
+                                    valor: item.valor, valorExtra: item.valorExtra
+                                },
+                                {
+                                    re: item.passageiros_extras?.[0]?.re, passageiro: item.passageiros_extras?.[0]?.nome, solicitante: item.solicitantes_extras?.[0],
+                                    origem: item.origens_extras?.[0]?.origem, partida: item.origens_extras?.[0]?.partida,
+                                    destino: item.destinos_extras?.[0]?.destino, chegada: item.destinos_extras?.[0]?.chegada, bairro: item.destinos_extras?.[0]?.bairro,
+                                    valor: item.destinos_extras?.[0]?.valor, valorExtra: item.destinos_extras?.[0]?.valorExtra
+                                },
+                                {
+                                    re: item.passageiros_extras?.[1]?.re, passageiro: item.passageiros_extras?.[1]?.nome, solicitante: item.solicitantes_extras?.[1],
+                                    origem: item.origens_extras?.[1]?.origem, partida: item.origens_extras?.[1]?.partida,
+                                    destino: item.destinos_extras?.[1]?.destino, chegada: item.destinos_extras?.[1]?.chegada, bairro: item.destinos_extras?.[1]?.bairro,
+                                    valor: item.destinos_extras?.[1]?.valor, valorExtra: item.destinos_extras?.[1]?.valorExtra
+                                },
+                                {
+                                    re: item.passageiros_extras?.[2]?.re, passageiro: item.passageiros_extras?.[2]?.nome, solicitante: item.solicitantes_extras?.[2],
+                                    origem: item.origens_extras?.[2]?.origem, partida: item.origens_extras?.[2]?.partida,
+                                    destino: item.destinos_extras?.[2]?.destino, chegada: item.destinos_extras?.[2]?.chegada, bairro: item.destinos_extras?.[2]?.bairro,
+                                    valor: item.destinos_extras?.[2]?.valor, valorExtra: item.destinos_extras?.[2]?.valorExtra
+                                }
+                            ];
+
+                            for (const block of passengerBlocks) {
+                                if (block.re) {
+                                    const rowData = [
+                                        block.re,
+                                        block.passageiro || '',
+                                        block.solicitante || '',
+                                        item.bordero,
+                                        item.motorista,
+                                        item.data,
+                                        block.partida || '',
+                                        block.chegada || '',
+                                        block.origem || '',
+                                        block.destino || '',
+                                        block.bairro || '',
+                                        block.valor || 0,
+                                        block.valorExtra || 0,
+                                        item.observacao || ''
+                                    ];
+                                    // Adiciona a linha ao array específico deste motorista
+                                    driverMap.get(motoristaNome).push(rowData);
+                                }
+                            }
                         });
 
                         totalProcessed += batchDocs.length;
-                        progressElement.textContent = `Processando... ${totalProcessed} lançamentos verificados.`;
+                        progressElement.textContent = `Lendo dados... ${totalProcessed} processados.`;
                         lastVisibleDoc = batchDocs[batchDocs.length - 1];
                         if (batchDocs.length < BATCH_SIZE) break;
                     }
 
-                    progressElement.textContent = 'Combinando com dados dos motoristas...';
-
-                    const headers = ['NOME', 'VALOR TOTAL', 'TOTAL VIAGENS'];
-                    let dataForSheet = [headers];
-
-                    usersData.forEach(user => {
-                        const summary = driverSummary.get(user.nome) || { totalValor: 0, totalViagens: 0 };
-                        
-                        const rowData = [
-                            user.nome || '',
-                            summary.totalValor,
-                            summary.totalViagens
-                        ];
-                        dataForSheet.push(rowData);
-                    });
-                    
-                    if (dataForSheet.length <= 1) {
-                         showWarning('Nenhum dado de motorista encontrado.');
-                         return;
+                    if (driverMap.size === 0) {
+                        showWarning('Nenhum dado encontrado para o período.');
+                        return;
                     }
+
+                    // 3. Geração do ZIP
+                    progressElement.textContent = `Gerando arquivos Excel individuais (${driverMap.size} motoristas)...`;
                     
-                    progressElement.textContent = 'Formatando o arquivo Excel...';
-
-                    const wb = XLSX.utils.book_new();
-                    const ws = XLSX.utils.aoa_to_sheet(dataForSheet);
-
-                    ws['!cols'] = [
-                        { wch: 30 }, // A (Nome)
-                        { wch: 20 }, // B (Valor Total)
-                        { wch: 15 }  // C (Total Viagens)
-                    ];
-
-                    // --- INÍCIO DA CORREÇÃO ---
+                    const zip = new JSZip();
                     const currencyFormat = 'R$ #,##0.00';
-                    const range = XLSX.utils.decode_range(ws['!ref']); // Pega o range (ex: A1:C10)
 
-                    for (let R = range.s.r; R <= range.e.r; ++R) { // Loop de Linha (Row)
-                        for (let C = range.s.c; C <= range.e.c; ++C) { // Loop de Coluna (Col)
-                            const cell_address = XLSX.utils.encode_cell({ r: R, c: C });
-                            
-                            // 1. Se a célula não existir (vazia), cria um objeto 's' (string) vazio para ela
-                            if (!ws[cell_address]) ws[cell_address] = { t: 's', v: '' };
+                    // Itera sobre cada motorista encontrado
+                    for (const [motorista, rows] of driverMap) {
+                        // Cria Workbook e Worksheet para este motorista
+                        const wb = XLSX.utils.book_new();
+                        const ws = XLSX.utils.aoa_to_sheet(rows);
 
-                            const cell = ws[cell_address];
-                            
-                            // 2. Garante que o objeto de estilo (.s) exista
-                            if (!cell.s) cell.s = {};
-                            
-                            // 3. Aplica o alinhamento
-                            cell.s.alignment = { horizontal: "center", vertical: "center" };
-                            
-                            // 4. Formato de moeda (Pula a linha 0, o cabeçalho)
-                            if (R > 0) { // R > 0 significa "não na primeira linha"
-                                if (C === 1) { // Coluna B (Valor Total)
+                        // Aplica formatação de largura e moeda (Estilo)
+                        ws['!cols'] = [
+                            { wch: 10 }, { wch: 30 }, { wch: 20 }, { wch: 10 }, 
+                            { wch: 20 }, { wch: 12 }, { wch: 15 }, { wch: 15 }, 
+                            { wch: 20 }, { wch: 20 }, { wch: 20 }, 
+                            { wch: 15 }, { wch: 15 }, { wch: 40 }
+                        ];
+
+                        const range = XLSX.utils.decode_range(ws['!ref']);
+                        for (let R = range.s.r; R <= range.e.r; ++R) {
+                            for (let C = range.s.c; C <= range.e.c; ++C) {
+                                const cell_address = XLSX.utils.encode_cell({ r: R, c: C });
+                                if (!ws[cell_address]) ws[cell_address] = { t: 's', v: '' };
+                                const cell = ws[cell_address];
+                                if (!cell.s) cell.s = {};
+                                cell.s.alignment = { horizontal: "center", vertical: "center" };
+
+                                // Formata colunas de valor (L=11, M=12) ignorando cabeçalho
+                                if (R > 0 && (C === 11 || C === 12)) {
                                     cell.z = currencyFormat;
                                 }
                             }
                         }
+
+                        XLSX.utils.book_append_sheet(wb, ws, "Lançamentos");
+
+                        // Gera o arquivo Excel em memória (ArrayBuffer)
+                        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                        
+                        // Adiciona ao ZIP
+                        // Nome do arquivo: Motorista.xlsx
+                        const safeName = motorista.replace(/[^a-z0-9]/gi, '_').trim();
+                        zip.file(`${safeName}.xlsx`, excelBuffer);
                     }
-                    // --- FIM DA CORREÇÃO ---
 
-                    XLSX.utils.book_append_sheet(wb, ws, "Relatório Motoristas");
-
-                    const filename = `relatorio_motoristas_${startDate}_a_${endDate}.xlsx`;
-                    progressElement.textContent = 'Gerando arquivo para download...';
-
-                    triggerXlsxDownload(wb, filename);
+                    // 4. Download do ZIP final
+                    progressElement.textContent = 'Compactando e baixando...';
+                    
+                    const zipContent = await zip.generateAsync({ type: "blob" });
+                    
+                    // Cria link temporário para download
+                    const url = window.URL.createObjectURL(zipContent);
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = `RELATORIOS INDIVIDUAIS  DE  ${startDate}  A  ${endDate}.zip`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
 
                 } catch (error) {
-                    console.error("Erro ao gerar relatório de motoristas:", error);
-                    showWarning("Ocorreu um erro ao gerar o relatório.");
+                    console.error("Erro ao gerar ZIP de motoristas:", error);
+                    showWarning("Ocorreu um erro ao gerar os relatórios.");
                 } finally {
                     button.disabled = false;
                     button.textContent = originalText;
                     progressElement.classList.add('hidden');
                 }
             }
-
-// ▼▼▼ SUBSTITUA ESTA FUNÇÃO INTEIRA ▼▼▼
 
             async function handleDownloadCsvInBatches() {
                 const startDate = document.getElementById('start-date').value;
@@ -4092,7 +4149,7 @@ document.getElementById('add-transportado').addEventListener('click', async () =
 
                     XLSX.utils.book_append_sheet(wb, ws, "Relatório Detalhado");
 
-                    const filename = `relatorio_detalhado_${startDate}_a_${endDate}.xlsx`;
+                    const filename = `RELATORIO COMPLETO ${startDate} A ${endDate}.xlsx`;
                     progressElement.textContent = 'Gerando arquivo para download...';
                     
                     triggerXlsxDownload(wb, filename);
